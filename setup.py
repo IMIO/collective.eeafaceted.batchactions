@@ -11,10 +11,7 @@ def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 long_description = \
-    read('README.rst') + \
-    read('CHANGES.rst') + \
-    read('docs', 'CONTRIBUTORS.rst') + \
-    read('docs', 'LICENSE.rst')
+    read('README.rst') + read('CHANGES.rst')
 
 setup(
     name='collective.eeafaceted.batchactions',
@@ -40,7 +37,8 @@ setup(
     install_requires=[
         'Plone',
         'setuptools',
-    ],
+        'collective.eeafaceted.z3ctable',
+        ],
     extras_require={
         'test': [
             'plone.app.dexterity',
