@@ -1,11 +1,5 @@
 # -*- coding: utf-8 -*-
 """Base module for unittesting."""
-
-from eea.facetednavigation.layout.interfaces import IFacetedLayout
-from zope import schema
-from z3c.relationfield.schema import RelationChoice, RelationList
-
-from plone import api
 from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -16,13 +10,9 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
-from plone.formwidget.contenttree import ObjPathSourceBinder
-from plone.supermodel import model
 from plone.testing import z2
 
 import collective.eeafaceted.batchactions
-
-import unittest
 
 
 class NakedPloneLayer(PloneSandboxLayer):
@@ -52,7 +42,7 @@ NAKED_PLONE_INTEGRATION = IntegrationTesting(
 )
 
 
-class CollectiveEeafacetedBatchactionsLayer(NakedPloneLayer):
+class CollectiveEeafacetedBatchActionsLayer(NakedPloneLayer):
 
     def setUpPloneSite(self, portal):
         """Set up Plone."""
@@ -66,7 +56,7 @@ class CollectiveEeafacetedBatchactionsLayer(NakedPloneLayer):
         portal.portal_workflow.setDefaultChain('simple_publication_workflow')
 
 
-FIXTURE = CollectiveEeafacetedBacthactionsLayer(
+FIXTURE = CollectiveEeafacetedBatchActionsLayer(
     name="FIXTURE"
 )
 
@@ -87,4 +77,3 @@ ACCEPTANCE = FunctionalTesting(bases=(FIXTURE,
                                       REMOTE_LIBRARY_BUNDLE_FIXTURE,
                                       z2.ZSERVER_FIXTURE),
                                name="ACCEPTANCE")
-

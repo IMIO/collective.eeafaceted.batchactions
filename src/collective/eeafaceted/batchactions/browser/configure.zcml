@@ -6,7 +6,26 @@
 
     <browser:resourceDirectory
         name="collective.eeafaceted.batchactions"
-        directory="static"
-    />
+        directory="static" />
+
+    <browser:viewlet
+        name="batch_actions_viewlet"
+        for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
+        manager="collective.eeafaceted.z3ctable.interfaces.IBottomAboveNavManager"
+        class=".viewlets.BatchActions"
+        permission="zope2.View" />
+
+    <!-- BATCH ACTIONS -->
+    <browser:page
+        for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
+        name="transition-batch-action"
+        class=".views.TransitionBatchActionForm"
+        permission="zope2.View" />
+
+    <browser:page
+        for="collective.eeafaceted.batchactions.interfaces.IBatchActionSpecificMarker"
+        name="transition-batch-action"
+        class=".views.TransitionBatchActionForm2"
+        permission="zope2.View" />
 
 </configure>
