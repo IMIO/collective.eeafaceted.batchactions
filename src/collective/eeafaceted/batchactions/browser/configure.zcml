@@ -9,10 +9,10 @@
         directory="static" />
 
     <browser:viewlet
-        name="batch_actions_viewlet"
+        name="collective.eeafaceted.batchactions"
         for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
         manager="collective.eeafaceted.z3ctable.interfaces.IBottomAboveNavManager"
-        class=".viewlets.BatchActions"
+        class=".viewlets.BatchActionsViewlet"
         permission="zope2.View" />
 
     <!-- BATCH ACTIONS -->

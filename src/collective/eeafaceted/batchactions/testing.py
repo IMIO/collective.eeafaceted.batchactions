@@ -47,7 +47,7 @@ class CollectiveEeafacetedBatchActionsLayer(NakedPloneLayer):
     def setUpPloneSite(self, portal):
         """Set up Plone."""
         # Install into Plone site using portal_setup
-        applyProfile(portal, 'collective.eeafaceted.bactchactions:testing')
+        applyProfile(portal, 'collective.eeafaceted.batchactions:testing')
 
         # Login and create some test content
         setRoles(portal, TEST_USER_ID, ['Manager'])

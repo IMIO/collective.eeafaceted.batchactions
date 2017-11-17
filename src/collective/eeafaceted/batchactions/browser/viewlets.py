@@ -8,7 +8,7 @@ from zope.interface import directlyProvidedBy
 from zope.interface import Interface
 
 
-class BatchActions(ViewletBase):
+class BatchActionsViewlet(ViewletBase):
     ''' '''
 
     index = ViewPageTemplateFile("templates/batch_actions_viewlet.pt")
