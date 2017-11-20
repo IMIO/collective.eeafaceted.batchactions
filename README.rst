@@ -18,7 +18,12 @@ This package gives the possibility to define batch actions on elements displayed
 How it works
 ============
 
-...
+This will display BrowserViews registered for `collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker` or
+an interface subclassing it at the bottom of a eea.facetednavigation dashboard.
+
+Using a `collective.eeafaceted.z3ctable` `CheckBoxColumn`, you will be able to select elements to tigger the batch action on.
+
+Batch actions are overridable from a faceted navigation container to another if necessary.
 
 
 Installation
@@ -27,9 +32,3 @@ Installation
 To install `collective.eeafaceted.batchactions` you simply add ``collective.eeafaceted.batchactions``
 to the list of eggs in your buildout, run buildout and restart Plone.
 Then, install `collective.eeafaceted.batchactions` using the Add-ons control panel.
-
-
-Configuration
-=============
-
-...
