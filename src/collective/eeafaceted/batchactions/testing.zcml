@@ -14,4 +14,10 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
 
+    <browser:page
+        for="collective.eeafaceted.batchactions.tests.interfaces.IBatchActionsSpecificMarker"
+        name="testing-batch-action"
+        class=".tests.views.TestingBatchActionForm"
+        permission="zope2.View" />
+
 </configure>

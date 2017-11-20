@@ -22,10 +22,4 @@
         class=".views.TransitionBatchActionForm"
         permission="zope2.View" />
 
-    <browser:page
-        for="collective.eeafaceted.batchactions.interfaces.IBatchActionSpecificMarker"
-        name="transition-batch-action"
-        class=".views.TransitionBatchActionForm2"
-        permission="zope2.View" />
-
 </configure>
