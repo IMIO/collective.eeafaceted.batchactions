@@ -51,6 +51,30 @@ class TestActions(BaseTestCase):
             [api.content.get_state(self.doc1), api.content.get_state(self.doc2)],
             ['published', 'published'])
 
+    def test_transition_action_uids_can_be_defined_on_request_or_form(self):
+        """'uids' used by the form are retrieved no matter it is defined on
+            self.request or self.request.form."""
+        # set 'uids' in self.request.form
+        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        self.request.form['form.widgets.uids'] = doc_uids
+        form = self.eea_folder.restrictedTraverse('transition-batch-action')
+        # common transitions are shown, here it is the case as docs are in same state
+        form.update()
+        extracted_data, errors = form.extractData()
+        self.assertEqual(
+            extracted_data['uids'], doc_uids)
+        del self.request.form['form.widgets.uids']
+
+        # set 'uids' in self.request
+        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        self.request['uids'] = doc_uids
+        form = self.eea_folder.restrictedTraverse('transition-batch-action')
+        # common transitions are shown, here it is the case as docs are in same state
+        form.update()
+        extracted_data, errors = form.extractData()
+        self.assertEqual(
+            extracted_data['uids'], doc_uids)
+
     def test_transition_action_only_list_common_transitions(self):
         """Only work if there are common transitions for selected elements."""
         # set 'uids' in form
