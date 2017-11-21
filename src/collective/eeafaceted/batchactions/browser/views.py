@@ -7,7 +7,7 @@ from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from plone import api
 from plone.supermodel import model
-from z3c.form.form import Form
+from z3c.form.form import EditForm
 from z3c.form import button
 from z3c.form.field import Fields
 from z3c.form.interfaces import HIDDEN_MODE
@@ -31,7 +31,7 @@ class IBatchActionsFormSchema(model.Schema):
     )
 
 
-class BatchActionForm(Form):
+class BatchActionForm(EditForm):
 
     label = _(u"Batch action form")
     fields = Fields(IBatchActionsFormSchema)
@@ -39,6 +39,10 @@ class BatchActionForm(Form):
     fields['referer'].mode = HIDDEN_MODE
     ignoreContext = True
     brains = []
+
+    def available(self):
+        """Will the action be available for current context?"""
+        return True
 
     def update(self):
         form = self.request.form
@@ -53,9 +57,13 @@ class BatchActionForm(Form):
 
         self.brains = self.brains or brains_from_uids(uids)
 
-#    @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
-#    def handleCancel(self, action):
-#        self.request.response.redirect(self.request.get('HTTP_REFERER'))
+        # sort buttons
+        self._old_buttons = self.buttons
+        self.buttons = self.buttons.select('apply', 'cancel')
+
+    @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
+    def handleCancel(self, action):
+        self.request.response.redirect(self.request.get('HTTP_REFERER'))
 
 
 def brains_from_uids(uids):
