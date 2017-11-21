@@ -13,6 +13,10 @@ class BatchActionsViewlet(ViewletBase):
 
     index = ViewPageTemplateFile("templates/batch_actions_viewlet.pt")
 
+    def available(self):
+        """Global availability of the viewlet."""
+        return True
+
     def _get_marker_interfaces(self):
         """By default views are registered for the IBatchActionsMarker
            interface, but in case it is needed to register different views,
