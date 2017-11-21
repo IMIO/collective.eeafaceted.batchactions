@@ -10,7 +10,6 @@
           collective.eeafaceted.z3ctable.interfaces.IFacetedTable"
      factory="collective.eeafaceted.z3ctable.columns.CheckBoxColumn"
      provides="collective.eeafaceted.z3ctable.interfaces.IFacetedColumn"
-     name="check_box_item"
-  />
+     name="select_row" />
 
 </configure>
