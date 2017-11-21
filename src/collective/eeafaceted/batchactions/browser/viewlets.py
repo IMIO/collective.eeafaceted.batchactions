@@ -33,7 +33,6 @@ class BatchActionsViewlet(ViewletBase):
     def get_batch_action_names(self):
         """We return every views that are registered for
            IBatchActionsMarker and sub interfaces."""
-
         # get the marker interfaces the views are registered for
         # as the viewlet is registered for IBatchActionsMarker, we will at least
         # get this interfaces in _get_marker_interfaces
@@ -48,4 +47,8 @@ class BatchActionsViewlet(ViewletBase):
         # in case a view is registered several times for different interfaces,
         # we have the same name several times and we remove duplicates.
         # When getting the view, the ZCA will do the job
-        return set([action.name for action in registered_actions])
+        registered_actions = set([action.name for action in registered_actions])
+        # now check that action is available
+        registered_actions = [action for action in registered_actions if
+                              self.context.restrictedTraverse(action).available()]
+        return registered_actions
