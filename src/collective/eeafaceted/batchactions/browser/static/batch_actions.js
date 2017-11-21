@@ -3,7 +3,7 @@ collective_batch_actions = {};
 collective_batch_actions.init_button = function () {
 
   if ( $('.faceted-table-results')[0] == undefined ) {
-    $('#dashboard-batch-actions').hide();
+    $('#batch-actions').hide();
   }
 
   $('.batch-action-but').click(function (e) {
