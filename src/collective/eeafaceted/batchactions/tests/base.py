@@ -5,7 +5,7 @@ from collective.eeafaceted.batchactions import testing
 from collective.eeafaceted.batchactions.interfaces import IBatchActionsMarker
 from eea.facetednavigation.layout.interfaces import IFacetedLayout
 from plone import api
-from zope.interface import directlyProvides
+from zope.interface import alsoProvides
 
 
 class BaseTestCase(unittest.TestCase):
@@ -24,7 +24,7 @@ class BaseTestCase(unittest.TestCase):
             title='EEA Folder',
             container=self.portal
         )
-        directlyProvides(eea_folder, IBatchActionsMarker)
+        alsoProvides(eea_folder, IBatchActionsMarker)
         eea_folder.reindexObject()
         eea_folder.restrictedTraverse('@@faceted_subtyper').enable()
         IFacetedLayout(eea_folder).update_layout('faceted-table-items')

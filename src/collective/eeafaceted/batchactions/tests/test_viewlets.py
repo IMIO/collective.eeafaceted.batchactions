@@ -7,7 +7,7 @@ from collective.eeafaceted.batchactions.tests.interfaces import IBatchActionsSpe
 from plone import api
 from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
-from zope.interface import directlyProvides
+from zope.interface import alsoProvides
 from zope.viewlet.interfaces import IViewletManager
 
 
@@ -40,7 +40,7 @@ class TestViewlets(BaseTestCase):
         )
         viewlet = self._get_viewlet(folder)
         self.assertIsNone(viewlet)
-        directlyProvides(folder, IBatchActionsMarker)
+        alsoProvides(folder, IBatchActionsMarker)
         viewlet = self._get_viewlet(folder)
         self.assertEqual(viewlet.__name__, u'collective.eeafaceted.batchactions')
 
@@ -55,7 +55,7 @@ class TestViewlets(BaseTestCase):
         self.assertEqual(viewlet._get_marker_interfaces(), [IBatchActionsMarker])
 
         # if an interface suclassing IBatchActionsMarker is found, it is also returned
-        directlyProvides(self.eea_folder, IBatchActionsSpecificMarker)
+        alsoProvides(self.eea_folder, IBatchActionsSpecificMarker)
         self.assertEqual(
             viewlet._get_marker_interfaces(),
             [IBatchActionsMarker, IBatchActionsSpecificMarker])
@@ -76,7 +76,7 @@ class TestViewlets(BaseTestCase):
     def test_get_batch_action_names_available(self):
         """A method 'available' is evaluated on the action view to check if it is available on context."""
         # mark eea_folder with IBatchActionsSpecificMarker so testing-batch-action is useable
-        directlyProvides(self.eea_folder, IBatchActionsSpecificMarker)
+        alsoProvides(self.eea_folder, IBatchActionsSpecificMarker)
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertTrue('testing-batch-action' in viewlet.get_batch_action_names())
         # 'testing-batch-action' is available if value 'hide_testing_action' not found in request
@@ -92,14 +92,14 @@ class TestViewlets(BaseTestCase):
             title='Folder',
             container=self.portal
         )
-        directlyProvides(folder, IBatchActionsMarker)
+        alsoProvides(folder, IBatchActionsMarker)
         viewlet = self._get_viewlet(folder)
         self.assertEqual(
             viewlet.get_batch_action_names(),
             ['transition-batch-action'])
 
         # mark with IBatchActionsSpecificMarker
-        directlyProvides(folder, IBatchActionsSpecificMarker)
+        alsoProvides(folder, IBatchActionsSpecificMarker)
         self.assertEqual(
             viewlet.get_batch_action_names(),
             ['testing-batch-action', 'transition-batch-action'])
