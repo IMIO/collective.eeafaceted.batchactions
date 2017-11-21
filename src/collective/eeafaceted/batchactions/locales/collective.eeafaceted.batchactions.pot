@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-17 13:31+0000\n"
+"POT-Creation-Date: 2017-11-21 08:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,19 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: collective.eeafaceted.batchactions\n"
 
-#: ./browser/views.py:127
+#: ./browser/views.py:113
 msgid "Apply"
 msgstr ""
 
-#: ./browser/views.py:38
+#: ./browser/views.py:36
 msgid "Batch action form"
 msgstr ""
 
-#: ./browser/views.py:107
+#: ./browser/views.py:93
 msgid "Batch state change"
 msgstr ""
 
-#: ./browser/views.py:121
+#: ./browser/views.py:107
 msgid "Comment"
 msgstr ""
 
@@ -37,11 +37,11 @@ msgstr ""
 msgid "Extension profile for collective.eeafaceted.batchactions."
 msgstr ""
 
-#: ./browser/views.py:117
+#: ./browser/views.py:103
 msgid "No common or available transition. Modify your selection."
 msgstr ""
 
-#: ./browser/views.py:122
+#: ./browser/views.py:108
 msgid "Optional comment to display in history"
 msgstr ""
 
@@ -49,16 +49,8 @@ msgstr ""
 msgid "Steps to ease tests of collective.eeafaceted.batchactions"
 msgstr ""
 
-#: ./browser/views.py:114
+#: ./browser/views.py:100
 msgid "Transition"
-msgstr ""
-
-#: ./browser/views.py:151
-msgid "Transition et tralala"
-msgstr ""
-
-#: ./browser/views.py:82
-msgid "You can't change this field on selected items. Modify your selection."
 msgstr ""
 
 #: ./configure.zcml:28
@@ -67,4 +59,8 @@ msgstr ""
 
 #: ./testing.zcml:15
 msgid "collective.eeafaceted.batchactions tests"
+msgstr ""
+
+#. Default: "Change state"
+msgid "transition-batch-action-but"
 msgstr ""

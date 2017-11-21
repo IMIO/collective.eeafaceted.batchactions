@@ -10,3 +10,6 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: collective.eeafaceted.batchactions\n"
 
+#. Default: "Change state"
+msgid "transition-batch-action-but"
+msgstr ""
