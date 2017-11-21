@@ -66,12 +66,22 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertEqual(
             viewlet.get_batch_action_names(),
-            set(['transition-batch-action']))
+            ['transition-batch-action'])
 
         # returned action names are traversable to get the form
         for action_name in viewlet.get_batch_action_names():
             form = self.eea_folder.restrictedTraverse(action_name)
             self.assertEqual(form.__name__, action_name)
+
+    def test_get_batch_action_names_available(self):
+        """A method 'available' is evaluated on the action view to check if it is available on context."""
+        # mark eea_folder with IBatchActionsSpecificMarker so testing-batch-action is useable
+        directlyProvides(self.eea_folder, IBatchActionsSpecificMarker)
+        viewlet = self._get_viewlet(self.eea_folder)
+        self.assertTrue('testing-batch-action' in viewlet.get_batch_action_names())
+        # 'testing-batch-action' is available if value 'hide_testing_action' not found in request
+        self.request.set('hide_testing_action', True)
+        self.assertFalse('testing-batch-action' in viewlet.get_batch_action_names())
 
     def test_get_batch_action_names_consider_new_action_specific_interface(self):
         """Register a view for IBatchActionsSpecificMarker, get_batch_action_names will
@@ -86,13 +96,13 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(folder)
         self.assertEqual(
             viewlet.get_batch_action_names(),
-            set(['transition-batch-action']))
+            ['transition-batch-action'])
 
         # mark with IBatchActionsSpecificMarker
         directlyProvides(folder, IBatchActionsSpecificMarker)
         self.assertEqual(
             viewlet.get_batch_action_names(),
-            set(['testing-batch-action', 'transition-batch-action']))
+            ['testing-batch-action', 'transition-batch-action'])
         # returned action names are traversable to get the form
         for action_name in viewlet.get_batch_action_names():
             form = folder.restrictedTraverse(action_name)
@@ -102,4 +112,4 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertEqual(
             viewlet.get_batch_action_names(),
-            set(['transition-batch-action']))
+            ['transition-batch-action'])
