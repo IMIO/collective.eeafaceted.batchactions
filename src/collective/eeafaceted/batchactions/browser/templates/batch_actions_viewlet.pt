@@ -1,9 +1,9 @@
 <div i18n:domain="collective.eeafaceted.batchactions"
      id="batch-actions"
-     tal:condition="view/available"
-     tal:repeat="batch_action_name view/get_batch_action_names">
+     tal:condition="view/available">
   <script>collective_batch_actions.init_button()</script>
   <form method="POST"
+        tal:repeat="batch_action_name view/get_batch_action_names"
         tal:attributes="action batch_action_name;
                         id batch_action_name;"
         class="batch-action-form">
