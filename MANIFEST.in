@@ -2,6 +2,7 @@ graft src/collective
 graft docs
 include *.cfg *.rst *.in
 include *.py
+include LICENSE
 include Makefile
 recursive-include docs *.GPL
 recursive-include docs *.rst
