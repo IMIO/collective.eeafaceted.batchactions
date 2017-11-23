@@ -4,7 +4,6 @@ from collective.eeafaceted.batchactions.interfaces import IBatchActionsMarker
 from plone.app.layout.viewlets import ViewletBase
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getGlobalSiteManager
-from zope.interface import directlyProvidedBy
 from zope.interface import Interface
 
 
@@ -23,10 +22,6 @@ class BatchActionsViewlet(ViewletBase):
            it is possible to use a more specific marker interface that inherits
            from IBatchActionsMarker."""
         ifaces = [IBatchActionsMarker]
-        # directly provided
-        if IBatchActionsMarker in directlyProvidedBy(self.context):
-            return ifaces
-
         # check if context is marked with an interface
         # inheriting from IBatchActionsMarker
         for iface in self.context.__provides__:
