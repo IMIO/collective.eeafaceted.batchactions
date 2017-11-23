@@ -6,10 +6,11 @@ python:
 cache:
   pip: true
   directories:
-    - $HOME/buildout-cache
+    - buildout-cache/downloads
+    - buildout-cache/eggs
 
 before_install:
-  - mkdir -p $HOME/buildout-cache/{eggs,downloads}
+  - mkdir -p buildout-cache/{eggs,downloads}
 
 install:
   - python bootstrap.py --version=2.5.3 -c travis.cfg
