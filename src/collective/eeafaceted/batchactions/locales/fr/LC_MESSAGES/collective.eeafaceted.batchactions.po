@@ -24,7 +24,7 @@ msgstr "Batch action form"
 
 #: ./browser/views.py:93
 msgid "Batch state change"
-msgstr "Changer l'état des éléments"
+msgstr "Changer l'état des éléments sélectionnés"
 
 #: ./browser/views.py:107
 msgid "Comment"
