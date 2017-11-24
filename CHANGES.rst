@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.2 (unreleased)
+0.2 (2017-11-24)
 ----------------
 
 - Use `getMultiAdapter` instead `restrictedTraverse` when getting the form
