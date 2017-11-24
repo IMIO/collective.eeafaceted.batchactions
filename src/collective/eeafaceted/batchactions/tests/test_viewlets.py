@@ -60,31 +60,31 @@ class TestViewlets(BaseTestCase):
             viewlet._get_marker_interfaces(),
             [IBatchActionsMarker, IBatchActionsSpecificMarker])
 
-    def test_get_batch_action_names(self):
+    def test_get_batch_actions(self):
         """This will return every found action names.
            We test here classical functionnality with actions registered for IBatchActionsMarker."""
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertEqual(
-            viewlet.get_batch_action_names(),
-            ['transition-batch-action'])
+            viewlet.get_batch_actions(),
+            [{'name': 'transition-batch-action', 'button_with_icon': False}])
 
         # returned action names are traversable to get the form
-        for action_name in viewlet.get_batch_action_names():
-            form = self.eea_folder.restrictedTraverse(action_name)
-            self.assertEqual(form.__name__, action_name)
+        for action in viewlet.get_batch_actions():
+            form = self.eea_folder.restrictedTraverse(action['name'])
+            self.assertEqual(form.__name__, action['name'])
 
-    def test_get_batch_action_names_available(self):
+    def test_get_batch_actions_available(self):
         """A method 'available' is evaluated on the action view to check if it is available on context."""
         # mark eea_folder with IBatchActionsSpecificMarker so testing-batch-action is useable
         alsoProvides(self.eea_folder, IBatchActionsSpecificMarker)
         viewlet = self._get_viewlet(self.eea_folder)
-        self.assertTrue('testing-batch-action' in viewlet.get_batch_action_names())
+        self.assertTrue('testing-batch-action' in [action['name'] for action in viewlet.get_batch_actions()])
         # 'testing-batch-action' is available if value 'hide_testing_action' not found in request
         self.request.set('hide_testing_action', True)
-        self.assertFalse('testing-batch-action' in viewlet.get_batch_action_names())
+        self.assertFalse('testing-batch-action' in [action['name'] for action in viewlet.get_batch_actions()])
 
-    def test_get_batch_action_names_consider_new_action_specific_interface(self):
-        """Register a view for IBatchActionsSpecificMarker, get_batch_action_names will
+    def test_get_batch_actions_consider_new_action_specific_interface(self):
+        """Register a view for IBatchActionsSpecificMarker, get_batch_actions will
            behave differently if context implementing interface or not."""
         folder = api.content.create(
             type='Folder',
@@ -95,21 +95,22 @@ class TestViewlets(BaseTestCase):
         alsoProvides(folder, IBatchActionsMarker)
         viewlet = self._get_viewlet(folder)
         self.assertEqual(
-            viewlet.get_batch_action_names(),
-            ['transition-batch-action'])
+            viewlet.get_batch_actions(),
+            [{'name': 'transition-batch-action', 'button_with_icon': False}])
 
         # mark with IBatchActionsSpecificMarker
         alsoProvides(folder, IBatchActionsSpecificMarker)
         self.assertEqual(
-            viewlet.get_batch_action_names(),
-            ['testing-batch-action', 'transition-batch-action'])
+            viewlet.get_batch_actions(),
+            [{'name': 'testing-batch-action', 'button_with_icon': True},
+             {'name': 'transition-batch-action', 'button_with_icon': False}])
         # returned action names are traversable to get the form
-        for action_name in viewlet.get_batch_action_names():
-            form = folder.restrictedTraverse(action_name)
-            self.assertEqual(form.__name__, action_name)
+        for action in viewlet.get_batch_actions():
+            form = folder.restrictedTraverse(action['name'])
+            self.assertEqual(form.__name__, action['name'])
 
         # still correct on eea_folder that does not implements IBatchActionsSpecificMarker
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertEqual(
-            viewlet.get_batch_action_names(),
-            ['transition-batch-action'])
+            viewlet.get_batch_actions(),
+            [{'name': 'transition-batch-action', 'button_with_icon': False}])

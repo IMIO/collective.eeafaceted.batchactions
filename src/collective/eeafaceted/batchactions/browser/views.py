@@ -39,6 +39,9 @@ class BatchActionForm(EditForm):
     fields['referer'].mode = HIDDEN_MODE
     ignoreContext = True
     brains = []
+    # this will add a specific class to the generated button action
+    # so it is possible to skin it with an icon
+    button_with_icon = False
 
     def available(self):
         """Will the action be available for current context?"""

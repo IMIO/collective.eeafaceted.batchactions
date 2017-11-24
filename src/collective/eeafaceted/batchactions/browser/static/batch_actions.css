@@ -1,0 +1,8 @@
+div#batch-actions form.batch-action-form {
+  display: inline;
+}
+
+div#batch-actions input.batch-action-icon-but {
+    background-position: 5px 3px;
+    padding-left: 24px;
+}

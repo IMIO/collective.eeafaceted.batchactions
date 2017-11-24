@@ -4,6 +4,7 @@ from collective.eeafaceted.batchactions.interfaces import IBatchActionsMarker
 from plone.app.layout.viewlets import ViewletBase
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getGlobalSiteManager
+from zope.component import getMultiAdapter
 from zope.interface import Interface
 
 
@@ -29,7 +30,7 @@ class BatchActionsViewlet(ViewletBase):
                 ifaces.append(iface)
         return ifaces
 
-    def get_batch_action_names(self):
+    def get_batch_actions(self):
         """We return every views that are registered for
            IBatchActionsMarker and sub interfaces."""
         # get the marker interfaces the views are registered for
@@ -48,6 +49,11 @@ class BatchActionsViewlet(ViewletBase):
         # When getting the view, the ZCA will do the job
         registered_actions = set([action.name for action in registered_actions])
         # now check that action is available
-        registered_actions = [action for action in registered_actions if
-                              self.context.restrictedTraverse(action).available()]
-        return registered_actions
+        actions = []
+        for registered_action in registered_actions:
+            form = getMultiAdapter((self.context, self.request), name=registered_action)
+            if form.available():
+                actions.append({
+                    'name': registered_action,
+                    'button_with_icon': form.button_with_icon})
+        return actions
