@@ -64,6 +64,20 @@ class BatchActionForm(EditForm):
         self._old_buttons = self.buttons
         self.buttons = self.buttons.select('apply', 'cancel')
 
+    def _apply(self, data):
+        """This method receives in data the form content and does the apply logic.
+           It is the method to implement if default handleApply is enough."""
+        raise NotImplementedError
+
+    @button.buttonAndHandler(_(u'Apply'), name='apply')
+    def handleApply(self, action):
+        """ """
+        data, errors = self.extractData()
+        if errors:
+            self.status = self.formErrorsMessage
+        self._apply(**data)
+        self.request.response.redirect(self.request.form['form.widgets.referer'])
+
     @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
     def handleCancel(self, action):
         self.request.response.redirect(self.request.get('HTTP_REFERER'))
@@ -117,15 +131,16 @@ class TransitionBatchActionForm(BatchActionForm):
 
         super(BatchActionForm, self).update()
 
-    @button.buttonAndHandler(_(u'Apply'), name='apply', condition=lambda fi: len(fi.voc))
-    def handleApply(self, action):
-        """Handle apply button."""
-        data, errors = self.extractData()
-        if errors:
-            self.status = self.formErrorsMessage
+    def _apply(self, **data):
+        """ """
         if data['transition']:
             for brain in self.brains:
                 obj = brain.getObject()
-                api.content.transition(obj=obj, transition=data['transition'],
-                                       comment=self.request.form.get('form.widgets.comment', ''))
-        self.request.response.redirect(self.request.form['form.widgets.referer'])
+                api.content.transition(obj=obj,
+                                       transition=data['transition'],
+                                       comment=data['comment'])
+
+    @button.buttonAndHandler(_(u'Apply'), name='apply', condition=lambda fi: len(fi.voc))
+    def handleApply(self, action):
+        """ """
+        super(TransitionBatchActionForm, self).handleApply(self, action)
