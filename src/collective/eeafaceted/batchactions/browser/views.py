@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Batch actions views."""
 
+from operator import attrgetter
+
 from AccessControl import Unauthorized
 from zope import schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
@@ -11,9 +13,8 @@ from z3c.form.form import Form
 from z3c.form import button
 from z3c.form.field import Fields
 from z3c.form.interfaces import HIDDEN_MODE
-
+from zope.i18n import translate
 from Products.CMFPlone import PloneMessageFactory as PMF
-from Products.CMFPlone.utils import safe_unicode
 
 from collective.eeafaceted.batchactions import _
 
@@ -103,6 +104,8 @@ def brains_from_uids(uids):
 
 class TransitionBatchActionForm(BaseBatchActionForm):
 
+    # necessary when you redefine buttons, here it the case
+    # for handleApply because we need another condition
     buttons = BaseBatchActionForm.buttons.copy()
     label = _(u"Batch state change")
 
@@ -119,7 +122,13 @@ class TransitionBatchActionForm(BaseBatchActionForm):
                 transitions &= set([(tr['id'], tr['title']) for tr in wtool.getTransitionsFor(obj)])
         if transitions:
             for (id, tit) in transitions:
-                terms.append(SimpleTerm(id, id, PMF(safe_unicode(tit))))
+                terms.append(
+                    SimpleTerm(id,
+                               id,
+                               translate(tit,
+                                         domain='plone',
+                                         context=self.request)))
+        terms = sorted(terms, key=attrgetter('title'))
         return SimpleVocabulary(terms)
 
     def _update(self):

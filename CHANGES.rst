@@ -14,6 +14,8 @@ Changelog
   is called by `handleApply`.  This way it is easy to build an new action
   without having to think about basic default behavior.
   [gbastien]
+- In the `TransitionBatchActionForm`, sort selectable transitions alphabetically.
+  [gbastien]
 
 0.2 (2017-11-24)
 ----------------
