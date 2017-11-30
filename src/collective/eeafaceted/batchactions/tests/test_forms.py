@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from zope.component import getMultiAdapter
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from plone import api
 
@@ -22,7 +23,7 @@ class TestActions(BaseTestCase):
             container=self.portal
         )
 
-    def test_transition_action(self):
+    def test_transition_action_apply(self):
         """Working behavior, we have several documents with same transition available."""
         # set 'uids' in form
         doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
@@ -50,6 +51,20 @@ class TestActions(BaseTestCase):
         self.assertEqual(
             [api.content.get_state(self.doc1), api.content.get_state(self.doc2)],
             ['published', 'published'])
+
+    def test_transition_action_cancel(self):
+        """When cancelled, nothing is done and user is redirected to referer."""
+        form = getMultiAdapter((self.eea_folder, self.request), name='transition-batch-action')
+        self.request['HTTP_REFERER'] = self.portal.absolute_url()
+        self.request.RESPONSE.status = 200
+        self.assertNotEqual(
+            self.request.RESPONSE.getHeader('location'),
+            self.request['HTTP_REFERER'])
+        form.handleCancel(form, None)
+        self.assertEqual(self.request.RESPONSE.status, 302)
+        self.assertEqual(
+            self.request.RESPONSE.getHeader('location'),
+            self.request['HTTP_REFERER'])
 
     def test_transition_action_uids_can_be_defined_on_request_or_form(self):
         """'uids' used by the form are retrieved no matter it is defined on
