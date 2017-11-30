@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# from collective.eeafaceted.batchactions.browser.viewlets import BatchActionsViewlet
+from AccessControl import Unauthorized
 from collective.eeafaceted.batchactions.interfaces import IBatchActionsMarker
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from collective.eeafaceted.batchactions.tests.interfaces import IBatchActionsSpecificMarker
@@ -29,6 +29,11 @@ class TestViewlets(BaseTestCase):
         viewlet_manager = self._get_viewlet_manager(context)
         viewlet = viewlet_manager.get(u'collective.eeafaceted.batchactions')
         return viewlet
+
+    def test_viewlet_available(self):
+        """Available by default."""
+        viewlet = self._get_viewlet(self.eea_folder)
+        self.assertTrue(viewlet.available())
 
     def test_viewlet_only_rendered_on_IBatchActionsMarker(self):
         """ """
@@ -82,6 +87,9 @@ class TestViewlets(BaseTestCase):
         # 'testing-batch-action' is available if value 'hide_testing_action' not found in request
         self.request.set('hide_testing_action', True)
         self.assertFalse('testing-batch-action' in [action['name'] for action in viewlet.get_batch_actions()])
+        # trying to execute a not available action will raise Unauthorized
+        testing_form = getMultiAdapter((self.eea_folder, self.request), name=u'testing-batch-action')
+        self.assertRaises(Unauthorized, testing_form.handleApply, testing_form, None)
 
     def test_get_batch_actions_consider_new_action_specific_interface(self):
         """Register a view for IBatchActionsSpecificMarker, get_batch_actions will

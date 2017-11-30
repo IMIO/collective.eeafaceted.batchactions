@@ -5,8 +5,15 @@ Changelog
 0.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Renamed `BatchActionForm` to `BaseBatchActionForm` to show that it is the base
+  form to inherit from to build new batch action.  Make it inherit from
+  `Form` instead `EditForm`.
+  [gbastien]
+- Refactored the way form is updated and applied : two methods are there to be
+  overrided : `_update` that is called in the `update` process and `_apply` that
+  is called by `handleApply`.  This way it is easy to build an new action
+  without having to think about basic default behavior.
+  [gbastien]
 
 0.2 (2017-11-24)
 ----------------

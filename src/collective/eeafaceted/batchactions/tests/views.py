@@ -9,6 +9,7 @@ class TestingBatchActionForm(BatchActionForm):
 
     def available(self):
         """Available if 'hide_testing_action' not found in request."""
-        if not self.request.get('hide_testing_action'):
+        res = super(TestingBatchActionForm, self).available()
+        if res and not self.request.get('hide_testing_action'):
             return True
         return False
