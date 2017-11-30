@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.3 (unreleased)
+0.3 (2017-11-30)
 ----------------
 
 - Renamed `BatchActionForm` to `BaseBatchActionForm` to show that it is the base
