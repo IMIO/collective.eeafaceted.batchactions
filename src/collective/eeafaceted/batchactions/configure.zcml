@@ -17,6 +17,7 @@
     <include package=".browser" />
 
     <include file="columns.zcml" />
+    <include file="upgrades.zcml" />
 
     <!-- Register the installation GenericSetup extension profile -->
     <genericsetup:registerProfile

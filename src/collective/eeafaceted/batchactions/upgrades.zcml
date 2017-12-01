@@ -1,0 +1,18 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.eeafaceted.batchactions">
+
+    <include package="Products.GenericSetup" file="meta.zcml" />
+
+    <genericsetup:upgradeSteps
+        source="1"
+        destination="2"
+        profile="collective.eeafaceted.batchactions:default">
+        <genericsetup:upgradeDepends
+            title="Add the collective_eeafaceted_batchatcions_js_variables.js to portal_javascripts"
+            description=""
+            import_steps="jsregistry" />
+    </genericsetup:upgradeSteps>
+
+</configure>

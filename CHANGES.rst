@@ -5,8 +5,9 @@ Changelog
 0.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Added `collective_eeafaceted_batchactions_js_variables.js` that allows to
+  translate the `no_selected_items` message.
+  [gbastien]
 
 0.3 (2017-11-30)
 ----------------

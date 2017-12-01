@@ -1,7 +1,7 @@
-msgid ""
+ saimsgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-11-21 08:14+0000\n"
+"POT-Creation-Date: 2017-12-01 12:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,50 +14,55 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./browser/views.py:113
+#: ./browser/views.py:79
 msgid "Apply"
-msgstr ""
+msgstr "Apply"
 
-#: ./browser/views.py:36
+#: ./browser/views.py:37
 msgid "Batch action form"
-msgstr ""
+msgstr "Batch action form"
 
-#: ./browser/views.py:93
+#: ./browser/views.py:110
 msgid "Batch state change"
-msgstr ""
+msgstr "Batch state change"
 
-#: ./browser/views.py:107
+#: ./browser/views.py:145
 msgid "Comment"
-msgstr ""
+msgstr "Comment"
 
 #: ./configure.zcml:28
 msgid "Extension profile for collective.eeafaceted.batchactions."
-msgstr ""
+msgstr "Extension profile for collective.eeafaceted.batchactions."
 
-#: ./browser/views.py:103
+#: ./browser/views.py:141
 msgid "No common or available transition. Modify your selection."
-msgstr ""
+msgstr "No common or available transition. Modify your selection."
 
-#: ./browser/views.py:108
+#: ./browser/views.py:146
 msgid "Optional comment to display in history"
-msgstr ""
+msgstr "Optional comment to display in history"
 
 #: ./testing.zcml:15
 msgid "Steps to ease tests of collective.eeafaceted.batchactions"
-msgstr ""
+msgstr "Steps to ease tests of collective.eeafaceted.batchactions"
 
-#: ./browser/views.py:100
+#: ./browser/views.py:138
 msgid "Transition"
-msgstr ""
+msgstr "Transition"
 
 #: ./configure.zcml:28
 msgid "collective.eeafaceted.batchactions"
-msgstr ""
+msgstr "collective.eeafaceted.batchactions"
 
 #: ./testing.zcml:15
 msgid "collective.eeafaceted.batchactions tests"
-msgstr ""
+msgstr "collective.eeafaceted.batchactions tests"
+
+#. Default: "Please select at least one element."
+#: ./browser/jsvariables.py:15
+msgid "no_selected_items"
+msgstr "Please select at least one element."
 
 #. Default: "Change state"
 msgid "transition-batch-action-but"
-msgstr ""
+msgstr "Change state"
