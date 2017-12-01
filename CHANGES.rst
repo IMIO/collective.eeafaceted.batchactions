@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.4 (unreleased)
+0.4 (2017-12-01)
 ----------------
 
 - Added `collective_eeafaceted_batchactions_js_variables.js` that allows to
