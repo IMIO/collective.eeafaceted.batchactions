@@ -1,4 +1,4 @@
- saimsgid ""
+msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "POT-Creation-Date: 2017-12-01 12:19+0000\n"

@@ -2,11 +2,11 @@ Changelog
 =========
 
 
-0.5 (unreleased)
-----------------
+0.4.1 (unreleased)
+------------------
 
-- Nothing changed yet.
-
+- Fixed english po file.
+  [gbastien]
 
 0.4 (2017-12-01)
 ----------------
