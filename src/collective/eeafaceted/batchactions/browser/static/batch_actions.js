@@ -2,7 +2,7 @@ collective_batch_actions = {};
 
 collective_batch_actions.init_button = function () {
 
-  if ( $('.faceted-table-results')[0] == undefined ) {
+  if ( $(".faceted-table-results").length && $('.faceted-table-results')[0] == undefined ) {
     $('#batch-actions').hide();
   }
 

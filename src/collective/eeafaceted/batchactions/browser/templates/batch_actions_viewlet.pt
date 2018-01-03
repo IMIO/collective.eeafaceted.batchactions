@@ -1,7 +1,6 @@
 <div i18n:domain="collective.eeafaceted.batchactions"
      id="batch-actions"
      tal:condition="view/available">
-  <script>collective_batch_actions.init_button();</script>
   <form method="POST"
         tal:repeat="batch_action view/get_batch_actions"
         tal:attributes="action batch_action/name;
@@ -14,4 +13,5 @@
            type="submit"
            i18n:attributes="value"/>
   </form>
+  <script>collective_batch_actions.init_button();</script>
 </div>

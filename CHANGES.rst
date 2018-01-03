@@ -5,8 +5,8 @@ Changelog
 0.5 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Some changes to made it working with a simple z3c.table.
+  [sgeulette]
 
 0.4.1 (2017-12-01)
 ------------------
