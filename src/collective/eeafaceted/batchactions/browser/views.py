@@ -40,6 +40,7 @@ class BaseBatchActionForm(Form):
     fields['referer'].mode = HIDDEN_MODE
     ignoreContext = True
     brains = []
+    do_apply = True
     # this will add a specific class to the generated button action
     # so it is possible to skin it with an icon
     button_with_icon = False
@@ -50,6 +51,10 @@ class BaseBatchActionForm(Form):
 
     def _update(self):
         """Method to override if you need to do something in the update."""
+        return
+
+    def _update_widgets(self):
+        """Method to override if you need to do something after the updateWidgets method."""
         return
 
     def _apply(self, **data):
@@ -75,8 +80,9 @@ class BaseBatchActionForm(Form):
         self.buttons = self.buttons.select('apply', 'cancel')
         self._update()
         super(BaseBatchActionForm, self).update()
+        self._update_widgets()
 
-    @button.buttonAndHandler(_(u'Apply'), name='apply')
+    @button.buttonAndHandler(_(u'Apply'), name='apply', condition=lambda fi: fi.do_apply)
     def handleApply(self, action):
         """ """
         if not self.available():
@@ -104,9 +110,6 @@ def brains_from_uids(uids):
 
 class TransitionBatchActionForm(BaseBatchActionForm):
 
-    # necessary when you redefine buttons, here it the case
-    # for handleApply because we need another condition
-    buttons = BaseBatchActionForm.buttons.copy()
     label = _(u"Batch state change")
 
     def getAvailableTransitionsVoc(self):
@@ -133,6 +136,7 @@ class TransitionBatchActionForm(BaseBatchActionForm):
 
     def _update(self):
         self.voc = self.getAvailableTransitionsVoc()
+        self.do_apply = len(self.voc) > 0
         self.fields += Fields(schema.Choice(
             __name__='transition',
             title=_(u'Transition'),
@@ -154,8 +158,3 @@ class TransitionBatchActionForm(BaseBatchActionForm):
                 api.content.transition(obj=obj,
                                        transition=data['transition'],
                                        comment=data['comment'])
-
-    @button.buttonAndHandler(_(u'Apply'), name='apply', condition=lambda fi: len(fi.voc))
-    def handleApply(self, action):
-        """ """
-        super(TransitionBatchActionForm, self).handleApply(self, action)

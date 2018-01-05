@@ -5,8 +5,10 @@ Changelog
 0.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Added condition on apply button.
+  [sgeulette]
+- Added _update_widgets method
+  [sgeulette]
 
 0.5 (2018-01-05)
 ----------------
