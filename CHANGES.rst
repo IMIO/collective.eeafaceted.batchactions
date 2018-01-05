@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.5 (unreleased)
+0.5 (2018-01-05)
 ----------------
 
 - Some changes to made it working with a simple z3c.table.
