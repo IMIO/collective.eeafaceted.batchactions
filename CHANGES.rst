@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.6 (unreleased)
+0.6 (2018-01-06)
 ----------------
 
 - Added condition on apply button.
