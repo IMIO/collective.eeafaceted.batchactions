@@ -71,7 +71,7 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'name': 'transition-batch-action', 'button_with_icon': False}])
+            [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True}])
 
         # returned action names are traversable to get the form
         for action in viewlet.get_batch_actions():
@@ -104,14 +104,14 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(folder)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'name': 'transition-batch-action', 'button_with_icon': False}])
+            [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True}])
 
         # mark with IBatchActionsSpecificMarker
         alsoProvides(folder, IBatchActionsSpecificMarker)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'name': 'testing-batch-action', 'button_with_icon': True},
-             {'name': 'transition-batch-action', 'button_with_icon': False}])
+            [{'name': 'testing-batch-action', 'button_with_icon': True, 'overlay': False},
+             {'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True}])
         # returned action names are traversable to get the form
         for action in viewlet.get_batch_actions():
             form = folder.restrictedTraverse(action['name'])
@@ -121,7 +121,7 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'name': 'transition-batch-action', 'button_with_icon': False}])
+            [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True}])
 
     def test_js_variables(self):
         """Some JS variables are defined for translation purpose."""
