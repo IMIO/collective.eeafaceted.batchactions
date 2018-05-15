@@ -44,6 +44,7 @@ class BaseBatchActionForm(Form):
     # this will add a specific class to the generated button action
     # so it is possible to skin it with an icon
     button_with_icon = False
+    overlay = True
 
     def available(self):
         """Will the action be available for current context?"""

@@ -5,8 +5,8 @@ Changelog
 0.7 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Render batch action form in overlay by default, but otherwise with form 'overlay' attribute set to False.
+  [sgeulette]
 
 0.6 (2018-01-06)
 ----------------

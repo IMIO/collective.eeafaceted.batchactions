@@ -4,8 +4,9 @@
   <form method="POST"
         tal:repeat="batch_action view/get_batch_actions"
         tal:attributes="action batch_action/name;
-                        id batch_action/name;"
-        class="batch-action-form">
+                        id batch_action/name;
+                        class python: not batch_action['overlay'] and 'batch-action-form' or 'batch-action-form do-overlay'"
+        >
     <input tal:define="base_css_classes string:button batch-action-but"
            tal:attributes="value string:${batch_action/name}-but;
                            id string:${batch_action/name}-but;

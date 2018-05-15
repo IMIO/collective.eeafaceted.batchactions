@@ -26,7 +26,13 @@ collective_batch_actions.init_button = function () {
     }
     uids_input.val(uids);
     ba_form.action = document.batch_actions[form_id] + '?referer=' + referer;
-    collective_batch_actions.initializeOverlays('#'+form_id);
+    if ($(ba_form).hasClass('do-overlay')) {
+      collective_batch_actions.initializeOverlays('#'+form_id);
+    }
+    else {
+      ba_form.submit();
+    }
+
   });
 };
 

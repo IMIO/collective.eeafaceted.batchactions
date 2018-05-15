@@ -55,5 +55,6 @@ class BatchActionsViewlet(ViewletBase):
             if form.available():
                 actions.append({
                     'name': registered_action,
-                    'button_with_icon': form.button_with_icon})
+                    'button_with_icon': form.button_with_icon,
+                    'overlay': form.overlay})
         return actions
