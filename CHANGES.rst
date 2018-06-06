@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.7 (unreleased)
+0.7 (2018-06-06)
 ----------------
 
 - Render batch action form in overlay by default, but otherwise with form 'overlay' attribute set to False.
