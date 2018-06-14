@@ -5,8 +5,8 @@ Changelog
 0.8 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Moved js variables to `collective.eeafaceted.z3ctable`.
+  [gbastien]
 
 0.7 (2018-06-06)
 ----------------

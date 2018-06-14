@@ -15,12 +15,6 @@
         class=".viewlets.BatchActionsViewlet"
         permission="zope2.View" />
 
-    <browser:page
-        for="*"
-        name="collective_eeafaceted_batchactions_js_variables.js"
-        class=".jsvariables.JSVariables"
-        permission="zope.Public" />
-
     <!-- BATCH ACTIONS -->
     <browser:page
         for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
