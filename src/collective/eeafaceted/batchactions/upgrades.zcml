@@ -15,4 +15,14 @@
             import_steps="jsregistry" />
     </genericsetup:upgradeSteps>
 
+    <genericsetup:upgradeSteps
+        source="2"
+        destination="3"
+        profile="collective.eeafaceted.batchactions:default">
+        <genericsetup:upgradeDepends
+            title="Remove collective_eeafaceted_batchatcions_js_variables.js from portal_javascripts"
+            description=""
+            import_steps="jsregistry" />
+    </genericsetup:upgradeSteps>
+
 </configure>
