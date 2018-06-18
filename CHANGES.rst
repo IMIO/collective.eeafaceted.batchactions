@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.8 (unreleased)
+1.0 (unreleased)
 ----------------
 
 - Moved js variables to `collective.eeafaceted.z3ctable`.

@@ -15,7 +15,7 @@ long_description = \
 
 setup(
     name='collective.eeafaceted.batchactions',
-    version='0.8.dev0',
+    version='1.0.dev0',
     description="This package provides batch actions for eea.facetednavigation dashboard",
     long_description=long_description,
     # Get more from http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -37,7 +37,7 @@ setup(
     install_requires=[
         'Plone',
         'setuptools',
-        'collective.eeafaceted.z3ctable',
+        'collective.eeafaceted.z3ctable>=2.0',
         ],
     extras_require={
         'test': [
