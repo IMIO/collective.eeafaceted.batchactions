@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2017-12-01 12:19+0000\n"
+"POT-Creation-Date: 2018-06-20 14:29+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./browser/views.py:79
+#: ./browser/views.py:86
 msgid "Apply"
 msgstr "Appliquer"
 
@@ -22,23 +22,23 @@ msgstr "Appliquer"
 msgid "Batch action form"
 msgstr "Batch action form"
 
-#: ./browser/views.py:110
+#: ./browser/views.py:114
 msgid "Batch state change"
 msgstr "Changer l'état des éléments sélectionnés"
 
-#: ./browser/views.py:145
+#: ./browser/views.py:150
 msgid "Comment"
 msgstr "Commentaire"
 
-#: ./configure.zcml:28
+#: ./configure.zcml:29
 msgid "Extension profile for collective.eeafaceted.batchactions."
 msgstr "Extension profile for collective.eeafaceted.batchactions."
 
-#: ./browser/views.py:141
+#: ./browser/views.py:146
 msgid "No common or available transition. Modify your selection."
 msgstr "<span style='color: red;'>Aucune transition commune ou valide. Recommencez en modifiant votre sélection.</span>"
 
-#: ./browser/views.py:146
+#: ./browser/views.py:151
 msgid "Optional comment to display in history"
 msgstr "Commentaire optionnel qui sera affiché dans l'historique."
 
@@ -46,22 +46,17 @@ msgstr "Commentaire optionnel qui sera affiché dans l'historique."
 msgid "Steps to ease tests of collective.eeafaceted.batchactions"
 msgstr "Steps to ease tests of collective.eeafaceted.batchactions"
 
-#: ./browser/views.py:138
+#: ./browser/views.py:143
 msgid "Transition"
 msgstr "Transition"
 
-#: ./configure.zcml:28
+#: ./configure.zcml:29
 msgid "collective.eeafaceted.batchactions"
 msgstr "collective.eeafaceted.batchactions"
 
 #: ./testing.zcml:15
 msgid "collective.eeafaceted.batchactions tests"
 msgstr "collective.eeafaceted.batchactions tests"
-
-#. Default: "Please select at least one element."
-#: ./browser/jsvariables.py:15
-msgid "no_selected_items"
-msgstr "Veuillez sélectionner au moins un élément."
 
 #. Default: "Change state"
 msgid "transition-batch-action-but"

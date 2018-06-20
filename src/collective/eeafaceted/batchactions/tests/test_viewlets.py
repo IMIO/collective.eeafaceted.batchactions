@@ -123,10 +123,3 @@ class TestViewlets(BaseTestCase):
             viewlet.get_batch_actions(),
             [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True}])
 
-    def test_js_variables(self):
-        """Some JS variables are defined for translation purpose."""
-        js_variables = self.portal.restrictedTraverse(
-            'collective_eeafaceted_batchactions_js_variables.js')
-        self.assertEqual(
-            js_variables(),
-            'var no_selected_items = "Please select at least one element.";\n')
