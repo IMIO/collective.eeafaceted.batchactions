@@ -122,4 +122,3 @@ class TestViewlets(BaseTestCase):
         self.assertEqual(
             viewlet.get_batch_actions(),
             [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True}])
-

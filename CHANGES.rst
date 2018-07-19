@@ -5,8 +5,8 @@ Changelog
 1.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Don't apply changes if form errors
+  [sgeulette]
 
 1.0 (2018-06-20)
 ----------------

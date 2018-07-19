@@ -92,8 +92,9 @@ class BaseBatchActionForm(Form):
         data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
-        # call the method that does the job
-        self._apply(**data)
+        else:
+            # call the method that does the job
+            self._apply(**data)
         self.request.response.redirect(self.request.form['form.widgets.referer'])
 
     @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
