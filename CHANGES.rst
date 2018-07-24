@@ -5,8 +5,8 @@ Changelog
 0.8 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Apply changes and redirect if there is no error.
+  [sgeulette]
 
 0.7 (2018-06-06)
 ----------------
