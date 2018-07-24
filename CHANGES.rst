@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.8 (unreleased)
+0.8 (2018-07-24)
 ----------------
 
 - Apply changes and redirect if there is no error.
