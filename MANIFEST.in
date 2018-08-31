@@ -4,6 +4,7 @@ include *.cfg *.rst *.in
 include *.py
 include LICENSE
 include Makefile
+include *.txt
 recursive-include docs *.GPL
 recursive-include docs *.rst
 recursive-include docs *.gitkeep
