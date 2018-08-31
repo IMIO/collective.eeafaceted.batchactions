@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.1 (unreleased)
+1.1 (2018-08-31)
 ----------------
 
 - Don't apply changes if form errors
