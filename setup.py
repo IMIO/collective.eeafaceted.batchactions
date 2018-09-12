@@ -38,7 +38,7 @@ setup(
         'Plone',
         'setuptools',
         'collective.eeafaceted.z3ctable>=2.0',
-        ],
+    ],
     extras_require={
         'test': [
             'plone.app.dexterity',
