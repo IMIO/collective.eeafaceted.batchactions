@@ -3,6 +3,11 @@ language: python
 python:
   - 2.7
 
+env:
+  - PLONE_VERSION=4.3
+  - PLONE_VERSION=5.0
+  - PLONE_VERSION=5.1
+
 cache:
   pip: true
   directories:
@@ -13,6 +18,8 @@ before_install:
   - mkdir -p buildout-cache/{eggs,downloads}
 
 install:
+  - sed -ie "s#test-4.3#test-$PLONE_VERSION#" buildout.cfg
+  - sed -ie "s#travis-4.3#travis-$PLONE_VERSION#" travis.cfg
   - python bootstrap.py --version=2.5.3 -c travis.cfg
   - bin/buildout -Nc travis.cfg
 
