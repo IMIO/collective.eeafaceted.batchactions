@@ -13,6 +13,14 @@ from plone.app.testing import TEST_USER_NAME
 from plone.testing import z2
 
 import collective.eeafaceted.batchactions
+import pkg_resources
+
+try:
+    pkg_resources.get_distribution('plone.app.contenttypes')
+except pkg_resources.DistributionNotFound:
+    HAS_PA_CONTENTTYPES = False
+else:
+    HAS_PA_CONTENTTYPES = True
 
 
 class NakedPloneLayer(PloneSandboxLayer):
@@ -27,10 +35,14 @@ class NakedPloneLayer(PloneSandboxLayer):
                       name='testing.zcml')
         for p in self.products:
             z2.installProduct(app, p)
+        if HAS_PA_CONTENTTYPES:
+            import plone.app.contenttypes
+            self.loadZCML(package=plone.app.contenttypes)
 
     def tearDownZope(self, app):
         """Tear down Zope."""
         pass
+
 
 NAKED_PLONE_FIXTURE = NakedPloneLayer(
     name="NAKED_PLONE_FIXTURE"
@@ -54,6 +66,10 @@ class CollectiveEeafacetedBatchActionsLayer(NakedPloneLayer):
         login(portal, TEST_USER_NAME)
         # make sure we have a default workflow
         portal.portal_workflow.setDefaultChain('simple_publication_workflow')
+
+        # Plone 5 support
+        if HAS_PA_CONTENTTYPES:
+            self.applyProfile(portal, 'plone.app.contenttypes:default')
 
 
 FIXTURE = CollectiveEeafacetedBatchActionsLayer(
