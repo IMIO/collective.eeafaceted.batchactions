@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from collective.eeafaceted.batchactions.interfaces import IBatchActionsMarker
+from operator import itemgetter
 from plone.app.layout.viewlets import ViewletBase
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from zope.component import getGlobalSiteManager
@@ -56,5 +57,7 @@ class BatchActionsViewlet(ViewletBase):
                 actions.append({
                     'name': registered_action,
                     'button_with_icon': form.button_with_icon,
-                    'overlay': form.overlay})
+                    'overlay': form.overlay,
+                    'weight': form.weight})
+        actions.sort(key=itemgetter('weight'))
         return actions

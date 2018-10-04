@@ -45,6 +45,7 @@ class BaseBatchActionForm(Form):
     # so it is possible to skin it with an icon
     button_with_icon = False
     overlay = True
+    weight = 100
 
     def available(self):
         """Will the action be available for current context?"""
@@ -113,6 +114,7 @@ def brains_from_uids(uids):
 class TransitionBatchActionForm(BaseBatchActionForm):
 
     label = _(u"Batch state change")
+    weight = 10
 
     def getAvailableTransitionsVoc(self):
         """ Returns available transitions common for all brains """

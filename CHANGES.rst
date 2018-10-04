@@ -5,8 +5,8 @@ Changelog
 0.9 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Added weight attribute on batch action forms to order them.
+  [sgeulette]
 
 0.8 (2018-07-24)
 ----------------
