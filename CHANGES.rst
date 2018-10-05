@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.9 (unreleased)
+0.9 (2018-10-05)
 ----------------
 
 - Added weight attribute on batch action forms to order them.
