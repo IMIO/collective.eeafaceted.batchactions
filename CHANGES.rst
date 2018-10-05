@@ -7,6 +7,8 @@ Changelog
 
 - Added weight attribute on batch action forms to order them.
   [sgeulette]
+- Improved brains_from_uids
+  [sgeulette]
 
 0.8 (2018-07-24)
 ----------------

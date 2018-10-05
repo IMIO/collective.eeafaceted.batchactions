@@ -2,6 +2,7 @@
 
 from zope.component import getMultiAdapter
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
+from collective.eeafaceted.batchactions.browser.views import brains_from_uids
 from plone import api
 
 
@@ -144,3 +145,8 @@ class TestActions(BaseTestCase):
         form = self.eea_folder.restrictedTraverse('transition-batch-action')
         form.update()
         self.assertFalse(bool(apply_button.condition(form)))
+
+    def test_brains_from_uids(self):
+        self.assertEqual(len(brains_from_uids('')), 0)
+        self.assertEqual(len(brains_from_uids('{},{}'.format(self.doc1.UID(), self.doc2.UID()))), 2)
+        self.assertEqual(len(brains_from_uids([self.doc1.UID(), self.doc2.UID()])), 2)

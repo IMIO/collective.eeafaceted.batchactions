@@ -104,8 +104,11 @@ class BaseBatchActionForm(Form):
 
 
 def brains_from_uids(uids):
-    """ Returns a list of brains from a string containing uids separated by comma """
-    uids = uids.split(',')
+    """ Returns a list of brains from a string (comma separated) or a list, containing uids """
+    if isinstance(uids, basestring):  # test if we have a string or a unicode
+        uids = uids.split(',')
+    if not uids:
+        return []
     catalog = api.portal.get_tool('portal_catalog')
     brains = catalog(UID=uids)
     return brains
