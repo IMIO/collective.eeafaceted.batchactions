@@ -9,6 +9,8 @@ Changelog
   [sgeulette]
 - Improved brains_from_uids
   [sgeulette]
+- Added utils method
+  [sgeulette]
 
 1.1 (2018-08-31)
 ----------------
