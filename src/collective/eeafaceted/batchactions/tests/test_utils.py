@@ -3,7 +3,7 @@
 from collective.eeafaceted.batchactions.browser.views import brains_from_uids
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from collective.eeafaceted.batchactions.utils import filter_on_permission
-from collective.eeafaceted.batchactions.utils import is_not_permitted
+from collective.eeafaceted.batchactions.utils import is_permitted
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import setRoles
@@ -39,8 +39,8 @@ class TestUtils(BaseTestCase):
         setRoles(self.portal, TEST_USER_ID, ['Member', 'Reviewer'])
         self.assertEquals(len(filter_on_permission(brains, 'Review comments')), 2)
 
-    def test_is_not_permitted(self):
+    def test_is_permitted(self):
         doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         brains = brains_from_uids(doc_uids)
-        self.assertFalse(is_not_permitted(brains))
-        self.assertTrue(is_not_permitted(brains, 'Review comments'))
+        self.assertTrue(is_permitted(brains))
+        self.assertFalse(is_permitted(brains, 'Review comments'))
