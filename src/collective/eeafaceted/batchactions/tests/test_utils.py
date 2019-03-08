@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from collective.eeafaceted.batchactions.browser.views import brains_from_uids
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
+from collective.eeafaceted.batchactions.utils import brains_from_uids
 from collective.eeafaceted.batchactions.utils import filter_on_permission
 from collective.eeafaceted.batchactions.utils import is_permitted
 from plone import api
@@ -44,3 +44,8 @@ class TestUtils(BaseTestCase):
         brains = brains_from_uids(doc_uids)
         self.assertTrue(is_permitted(brains))
         self.assertFalse(is_permitted(brains, 'Review comments'))
+
+    def test_brains_from_uids(self):
+        self.assertEqual(len(brains_from_uids('')), 0)
+        self.assertEqual(len(brains_from_uids('{},{}'.format(self.doc1.UID(), self.doc2.UID()))), 2)
+        self.assertEqual(len(brains_from_uids([self.doc1.UID(), self.doc2.UID()])), 2)

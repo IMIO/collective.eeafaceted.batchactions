@@ -17,6 +17,7 @@ from zope.i18n import translate
 from Products.CMFPlone import PloneMessageFactory as PMF
 
 from collective.eeafaceted.batchactions import _
+from collective.eeafaceted.batchactions.utils import brains_from_uids
 
 
 class IBaseBatchActionsFormSchema(model.Schema):
@@ -101,17 +102,6 @@ class BaseBatchActionForm(Form):
     @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
     def handleCancel(self, action):
         self.request.response.redirect(self.request.get('HTTP_REFERER'))
-
-
-def brains_from_uids(uids):
-    """ Returns a list of brains from a string (comma separated) or a list, containing uids """
-    if not uids:
-        return []
-    if isinstance(uids, basestring):  # test if we have a string or a unicode
-        uids = uids.split(',')
-    catalog = api.portal.get_tool('portal_catalog')
-    brains = catalog(UID=uids)
-    return brains
 
 
 class TransitionBatchActionForm(BaseBatchActionForm):

@@ -5,8 +5,10 @@ Changelog
 1.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Moved method `browser.views.brains_from_uids` to `utils`, added helper method
+  `utils.listify_uids` that turns the data uids that is a string with each UID
+  separated by a comma into a real python list.
+  [gbastien]
 
 1.2 (2019-03-08)
 ----------------
