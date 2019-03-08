@@ -9,6 +9,8 @@ Changelog
   `utils.listify_uids` that turns the data uids that is a string with each UID
   separated by a comma into a real python list.
   [gbastien]
+- Display number of elements affected by action in the batch action form description.
+  [gbastien]
 
 1.2 (2019-03-08)
 ----------------

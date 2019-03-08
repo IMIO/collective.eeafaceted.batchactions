@@ -60,6 +60,13 @@ class BaseBatchActionForm(Form):
         """Method to override if you need to do something after the updateWidgets method."""
         return
 
+    @property
+    def description(self):
+        """ """
+        # update description depending on number of brains
+        return _('This action will affect ${number} element(s).',
+                 mapping={'number': len(self.brains)})
+
     def _apply(self, **data):
         """This method receives in data the form content and does the apply logic.
            It is the method to implement if default handleApply is enough."""

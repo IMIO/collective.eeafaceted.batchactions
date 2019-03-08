@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-20 14:29+0000\n"
+"POT-Creation-Date: 2019-03-08 16:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,19 +14,19 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./browser/views.py:86
+#: ./browser/views.py:95
 msgid "Apply"
 msgstr "Apply"
 
-#: ./browser/views.py:37
+#: ./browser/views.py:38
 msgid "Batch action form"
 msgstr "Batch action form"
 
-#: ./browser/views.py:114
+#: ./browser/views.py:116
 msgid "Batch state change"
 msgstr "Batch state change"
 
-#: ./browser/views.py:150
+#: ./browser/views.py:153
 msgid "Comment"
 msgstr "Comment"
 
@@ -34,11 +34,11 @@ msgstr "Comment"
 msgid "Extension profile for collective.eeafaceted.batchactions."
 msgstr "Extension profile for collective.eeafaceted.batchactions."
 
-#: ./browser/views.py:146
+#: ./browser/views.py:149
 msgid "No common or available transition. Modify your selection."
 msgstr "No common or available transition. Modify your selection."
 
-#: ./browser/views.py:151
+#: ./browser/views.py:154
 msgid "Optional comment to display in history"
 msgstr "Optional comment to display in history"
 
@@ -46,9 +46,17 @@ msgstr "Optional comment to display in history"
 msgid "Steps to ease tests of collective.eeafaceted.batchactions"
 msgstr "Steps to ease tests of collective.eeafaceted.batchactions"
 
-#: ./browser/views.py:143
+#: ./browser/views.py:67
+msgid "This action will affect ${number} element(s)."
+msgstr ""
+
+#: ./browser/views.py:146
 msgid "Transition"
 msgstr "Transition"
+
+#: ./utils.py:8
+msgid "You can't change this field on selected items. Modify your selection."
+msgstr ""
 
 #: ./configure.zcml:29
 msgid "collective.eeafaceted.batchactions"
