@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.3 (unreleased)
+1.3 (2019-05-16)
 ----------------
 
 - Moved method `browser.views.brains_from_uids` to `utils`, added helper method
