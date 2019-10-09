@@ -40,6 +40,7 @@ setup(
         'Plone',
         'setuptools',
         'collective.eeafaceted.z3ctable>=2.0',
+        'plone.formwidget.masterselect',
     ],
     extras_require={
         'test': [
@@ -47,6 +48,7 @@ setup(
             'plone.app.testing',
             'plone.app.relationfield',
             'plone.app.robotframework',
+            'ftw.labels',
         ],
         'develop': [
             'zest.releaser',

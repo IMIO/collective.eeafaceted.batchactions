@@ -5,8 +5,8 @@ Changelog
 1.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Added view to change labels. (button is not added)
+  [sgeulette]
 
 1.3 (2019-05-16)
 ----------------

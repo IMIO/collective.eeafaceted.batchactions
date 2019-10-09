@@ -67,8 +67,12 @@ class CollectiveEeafacetedBatchActionsLayer(NakedPloneLayer):
         # make sure we have a default workflow
         portal.portal_workflow.setDefaultChain('simple_publication_workflow')
 
+        # install ftw.labels
+        applyProfile(portal, 'ftw.labels:default')
+
         # Plone 5 support
-        if HAS_PA_CONTENTTYPES:
+        if (HAS_PA_CONTENTTYPES and portal.portal_setup.getLastVersionForProfile('plone.app.contenttypes:default')
+                != 'unknown'):  # pac is really installed
             self.applyProfile(portal, 'plone.app.contenttypes:default')
 
 

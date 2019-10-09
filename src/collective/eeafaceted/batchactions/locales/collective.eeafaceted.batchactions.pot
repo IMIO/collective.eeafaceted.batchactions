@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-03-08 16:33+0000\n"
+"POT-Creation-Date: 2019-10-09 07:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,35 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: collective.eeafaceted.batchactions\n"
 
-#: ./browser/views.py:95
+#: ./browser/views.py:216
+msgid "Add items"
+msgstr ""
+
+#: ./browser/views.py:247
+msgid "Added values"
+msgstr ""
+
+#: ./browser/views.py:100
 msgid "Apply"
 msgstr ""
 
-#: ./browser/views.py:38
+#: ./browser/views.py:214
+msgid "Batch action choice"
+msgstr ""
+
+#: ./browser/views.py:43
 msgid "Batch action form"
 msgstr ""
 
-#: ./browser/views.py:116
+#: ./browser/views.py:182
+msgid "Batch labels change"
+msgstr ""
+
+#: ./browser/views.py:121
 msgid "Batch state change"
 msgstr ""
 
-#: ./browser/views.py:153
+#: ./browser/views.py:158
 msgid "Comment"
 msgstr ""
 
@@ -37,23 +53,47 @@ msgstr ""
 msgid "Extension profile for collective.eeafaceted.batchactions."
 msgstr ""
 
-#: ./browser/views.py:149
+#: ./browser/views.py:154
 msgid "No common or available transition. Modify your selection."
 msgstr ""
 
-#: ./browser/views.py:154
+#: ./browser/views.py:159
 msgid "Optional comment to display in history"
 msgstr ""
 
-#: ./testing.zcml:15
+#: ./browser/views.py:219
+msgid "Overwrite"
+msgstr ""
+
+#: ./browser/views.py:217
+msgid "Remove items"
+msgstr ""
+
+#: ./browser/views.py:240
+msgid "Removed values"
+msgstr ""
+
+#: ./browser/views.py:218
+msgid "Replace some items by others"
+msgstr ""
+
+#: ./browser/views.py:248
+msgid "Select the values to add (CTRL+click). A personal label is represented by (*)."
+msgstr ""
+
+#: ./browser/views.py:241
+msgid "Select the values to remove (CTRL+click). A personal label is represented by (*)."
+msgstr ""
+
+#: ./testing.zcml:17
 msgid "Steps to ease tests of collective.eeafaceted.batchactions"
 msgstr ""
 
-#: ./browser/views.py:67
+#: ./browser/views.py:72
 msgid "This action will affect ${number} element(s)."
 msgstr ""
 
-#: ./browser/views.py:146
+#: ./browser/views.py:151
 msgid "Transition"
 msgstr ""
 
@@ -65,8 +105,12 @@ msgstr ""
 msgid "collective.eeafaceted.batchactions"
 msgstr ""
 
-#: ./testing.zcml:15
+#: ./testing.zcml:17
 msgid "collective.eeafaceted.batchactions tests"
+msgstr ""
+
+#. Default: "Change labels"
+msgid "labels-batch-action-but"
 msgstr ""
 
 #. Default: "Change state"

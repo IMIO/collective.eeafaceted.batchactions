@@ -20,6 +20,16 @@ def is_permitted(brains, perm='Modify portal content'):
     return ret
 
 
+def has_interface(brains, itf):
+    ret = True
+    for brain in brains:
+        obj = brain.getObject()
+        if not itf.providedBy(obj):
+            ret = False
+            break
+    return ret
+
+
 def filter_on_permission(brains, perm='Modify portal content'):
     """ Return only objects where current user has the permission """
     ret = []
@@ -47,3 +57,22 @@ def brains_from_uids(uids):
     uids = listify_uids(uids)
     brains = catalog(UID=uids)
     return brains
+
+
+def active_labels(labeling):
+    """
+        For ftw.labels only.
+        Returns 2 list of active labels on an adapted object : personal and global
+    """
+    p_act, g_act = [], []
+    for label_id in labeling.storage:
+        try:
+            label = labeling.jar.get(label_id)
+            if label['by_user']:
+                if labeling.user_id() in labeling.storage[label_id]:
+                    p_act.append(label_id)
+            else:
+                g_act.append(label_id)
+        except KeyError:
+            pass
+    return p_act, g_act

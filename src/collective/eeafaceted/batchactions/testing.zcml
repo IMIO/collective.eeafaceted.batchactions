@@ -5,6 +5,8 @@
     i18n_domain="collective.eeafaceted.batchactions">
 
   <include file="configure.zcml" />
+  <include package="ftw.labels" />
+  <include package="plone.formwidget.masterselect" />
 
   <genericsetup:registerProfile
       name="testing"
@@ -18,6 +20,12 @@
         for="collective.eeafaceted.batchactions.tests.interfaces.IBatchActionsSpecificMarker"
         name="testing-batch-action"
         class=".tests.views.TestingBatchActionForm"
+        permission="zope2.View" />
+
+    <browser:page
+        for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
+        name="labels-batch-action"
+        class=".browser.views.LabelsBatchActionForm"
         permission="zope2.View" />
 
 </configure>
