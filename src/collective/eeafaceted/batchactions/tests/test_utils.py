@@ -3,12 +3,15 @@
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from collective.eeafaceted.batchactions.utils import brains_from_uids
 from collective.eeafaceted.batchactions.utils import filter_on_permission
+from collective.eeafaceted.batchactions.utils import has_interface
 from collective.eeafaceted.batchactions.utils import is_permitted
+from ftw.labels.interfaces import ILabelSupport
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
+from zope.interface import alsoProvides
 
 
 class TestUtils(BaseTestCase):
@@ -44,6 +47,15 @@ class TestUtils(BaseTestCase):
         brains = brains_from_uids(doc_uids)
         self.assertTrue(is_permitted(brains))
         self.assertFalse(is_permitted(brains, 'Review comments'))
+
+    def test_has_interface(self):
+        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        brains = brains_from_uids(doc_uids)
+        self.assertFalse(has_interface(brains, ILabelSupport))
+        alsoProvides(self.doc1, ILabelSupport)
+        self.assertFalse(has_interface(brains, ILabelSupport))
+        alsoProvides(self.doc2, ILabelSupport)
+        self.assertTrue(has_interface(brains, ILabelSupport))
 
     def test_brains_from_uids(self):
         self.assertEqual(len(brains_from_uids('')), 0)
