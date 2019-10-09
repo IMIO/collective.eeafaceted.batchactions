@@ -48,7 +48,7 @@ setup(
             'plone.app.testing',
             'plone.app.relationfield',
             'plone.app.robotframework',
-            'ftw.labels',
+            'ftw.labels>1.3.1',
         ],
         'develop': [
             'zest.releaser',
