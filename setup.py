@@ -48,6 +48,7 @@ setup(
             'plone.app.testing',
             'plone.app.relationfield',
             'plone.app.robotframework',
+            'collective.contact.core',
             'ftw.labels>1.3.1',
         ],
         'develop': [

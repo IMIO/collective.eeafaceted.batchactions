@@ -7,6 +7,8 @@ Changelog
 
 - Added view to change labels. (button is not added)
   [sgeulette]
+- Added base view to change a collective.contact.widget field.
+  [sgeulette]
 
 1.3 (2019-05-16)
 ----------------

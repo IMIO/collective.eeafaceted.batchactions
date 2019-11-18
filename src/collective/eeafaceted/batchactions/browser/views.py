@@ -20,7 +20,10 @@ from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
 from zope import schema
+from zope.component import getUtility
 from zope.i18n import translate
+from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import modified
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
@@ -295,3 +298,83 @@ class LabelsBatchActionForm(BaseBatchActionForm):
                         if data['action_choice'] in ('add', 'replace'):
                             labeling.pers_update(values['p_a'], True)
                 obj.reindexObject(['labels'])
+
+try:
+    from collective.contact.widget.schema import ContactList
+    from z3c.relationfield.relation import RelationValue
+except ImportError:
+    pass
+
+
+class ContactBaseBatchActionForm(BaseBatchActionForm):
+    """
+        Base class to manage contact field change.
+        For now, only ContactList.
+    """
+
+    label = _(u"Batch contact field change")
+    weight = 30
+    # Following variables must be overrided in child class
+    available_permission = ''
+    attribute = ''
+    field_value_type = None
+
+    def available(self):
+        """Will the action be available for current context?"""
+        if self.available_permission:
+            return api.user.has_permission(self.available_permission)
+        return True
+
+    def _update(self):
+        assert self.attribute
+        assert self.field_value_type is not None
+        self.do_apply = is_permitted(self.brains)
+        self.fields += Fields(schema.Choice(
+            __name__='action_choice',
+            title=_(u'Batch action choice'),
+            description=(not self.do_apply and cannot_modify_field_msg or u''),
+            vocabulary=SimpleVocabulary([SimpleTerm(value=u'add', title=_(u'Add items')),
+                                         SimpleTerm(value=u'remove', title=_(u'Remove items')),
+                                         SimpleTerm(value=u'replace', title=_(u'Replace some items by others')),
+                                         SimpleTerm(value=u'overwrite', title=_(u'Overwrite'))]),
+            required=self.do_apply,
+            default=u'add'
+        ))
+        if self.do_apply:
+            self.fields += Fields(ContactList(
+                __name__='removed_values',
+                title=_(u"Removed values"),
+                description=_(u"Search and select the values to remove, if necessary."),
+                required=False,
+                addlink=False,
+                value_type=self.field_value_type,
+            ))
+            self.fields += Fields(ContactList(
+                __name__='added_values',
+                title=_(u"Added values"),
+                description=_(u"Search and select the values to add."),
+                required=False,
+                addlink=False,
+                value_type=self.field_value_type,
+            ))
+
+    def _apply(self, **data):
+        if ((data.get('removed_values', None) and data['action_choice'] in ('remove', 'replace')) or
+           (data.get('added_values', None)) and data['action_choice'] in ('add', 'replace', 'overwrite')):
+            intids = getUtility(IIntIds)
+            for brain in self.brains:
+                obj = brain.getObject()
+                if data['action_choice'] in ('overwrite'):
+                    items = set(data['added_values'])
+                else:
+                    # we get the linked objects
+                    items = set([intids.getObject(rel.to_id) for rel in (getattr(obj, self.attribute) or [])
+                                 if not rel.isBroken()])
+                    if data['action_choice'] in ('remove', 'replace'):
+                        items = items.difference(data['removed_values'])
+                    if data['action_choice'] in ('add', 'replace'):
+                        items = items.union(data['added_values'])
+                # transform to relations
+                rels = [RelationValue(intids.getId(ob)) for ob in items]
+                setattr(obj, self.attribute, rels)
+                modified(obj)
