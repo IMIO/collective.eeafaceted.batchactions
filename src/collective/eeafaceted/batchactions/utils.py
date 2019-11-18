@@ -21,6 +21,7 @@ def is_permitted(brains, perm='Modify portal content'):
 
 
 def has_interface(brains, itf):
+    """ Check all brains to verify a provided interface """
     ret = True
     for brain in brains:
         obj = brain.getObject()

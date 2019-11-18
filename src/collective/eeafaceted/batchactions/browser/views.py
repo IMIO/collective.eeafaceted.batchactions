@@ -192,7 +192,7 @@ class LabelsBatchActionForm(BaseBatchActionForm):
             adapted = ILabelJar(context)
         except:
             return SimpleVocabulary(terms), [], []
-        can_edit = is_permitted(self.brains, '')
+        self.can_change_labels = is_permitted(self.brains, perm='ftw.labels: Change Labels')
         for label in adapted.list():
             if label['by_user']:
                 p_labels.append(label['label_id'])
@@ -201,7 +201,7 @@ class LabelsBatchActionForm(BaseBatchActionForm):
                                                          u'{} (*)'.format(safe_unicode(label['title']))))
             else:
                 g_labels.append(label['label_id'])
-                if can_edit:
+                if self.can_change_labels:
                     terms.append(SimpleVocabulary.createTerm(label['label_id'], label['label_id'],
                                                              safe_unicode(label['title'])))
         return SimpleVocabulary(terms), set(p_labels), g_labels
@@ -273,7 +273,7 @@ class LabelsBatchActionForm(BaseBatchActionForm):
                 labeling = ILabeling(obj)
                 p_act, g_act = active_labels(labeling)
                 # manage global labels
-                if values['g_a'] or values['g_r']:
+                if self.can_change_labels and (values['g_a'] or values['g_r']):
                     if data['action_choice'] in ('overwrite'):
                         items = set(values['g_a'])
                     else:
