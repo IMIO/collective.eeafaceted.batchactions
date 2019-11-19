@@ -3,5 +3,6 @@
   <version>1</version>
   <dependencies>
       <dependency>profile-collective.eeafaceted.batchactions:default</dependency>
+      <dependency>profile-collective.contact.core:test_data</dependency>
   </dependencies>
 </metadata>

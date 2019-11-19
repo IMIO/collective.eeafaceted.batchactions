@@ -1,4 +1,7 @@
+from collective.contact.widget.schema import ContactChoice
+from collective.contact.widget.source import ContactSourceBinder
 from collective.eeafaceted.batchactions.browser.views import BaseBatchActionForm
+from collective.eeafaceted.batchactions.browser.views import ContactBaseBatchActionForm
 
 
 class TestingBatchActionForm(BaseBatchActionForm):
@@ -14,3 +17,10 @@ class TestingBatchActionForm(BaseBatchActionForm):
         if res and not self.request.get('hide_testing_action'):
             return True
         return False
+
+
+class ContactBatchActionForm(ContactBaseBatchActionForm):
+
+    available_permission = 'Manage portal'
+    attribute = 'related_organizations'
+    field_value_type = ContactChoice(source=ContactSourceBinder(portal_type="organization"))

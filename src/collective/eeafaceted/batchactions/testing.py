@@ -70,9 +70,9 @@ class CollectiveEeafacetedBatchActionsLayer(NakedPloneLayer):
         # install ftw.labels
         applyProfile(portal, 'ftw.labels:default')
 
-        # Plone 5 support
-        if (HAS_PA_CONTENTTYPES and portal.portal_setup.getLastVersionForProfile('plone.app.contenttypes:default')
-                != 'unknown'):  # pac is really installed
+        # pac is really installed ?
+        if (HAS_PA_CONTENTTYPES and
+                portal.portal_setup.getLastVersionForProfile('plone.app.contenttypes:default') != 'unknown'):
             self.applyProfile(portal, 'plone.app.contenttypes:default')
 
 

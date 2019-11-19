@@ -7,6 +7,7 @@
   <include file="configure.zcml" />
   <include package="ftw.labels" />
   <include package="plone.formwidget.masterselect" />
+  <!--include package="collective.contact.core" file="testing.zcml" /-->
 
   <genericsetup:registerProfile
       name="testing"
@@ -26,6 +27,12 @@
         for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
         name="labels-batch-action"
         class=".browser.views.LabelsBatchActionForm"
+        permission="zope2.View" />
+
+    <browser:page
+        for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
+        name="contact-batch-action"
+        class=".tests.views.ContactBatchActionForm"
         permission="zope2.View" />
 
 </configure>
