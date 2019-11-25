@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.4 (unreleased)
+1.4 (2019-11-25)
 ----------------
 
 - Added view to change labels. (button is not added)
