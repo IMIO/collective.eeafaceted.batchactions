@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.5 (unreleased)
+1.5 (2020-04-23)
 ----------------
 
 - Make sure elements are treated in received `uids` order. Need to rely on
