@@ -5,8 +5,8 @@ python:
 
 env:
   - PLONE_VERSION=4.3
-  - PLONE_VERSION=5.0
-  - PLONE_VERSION=5.1
+#  - PLONE_VERSION=5.0
+#  - PLONE_VERSION=5.1
 
 cache:
   pip: true
