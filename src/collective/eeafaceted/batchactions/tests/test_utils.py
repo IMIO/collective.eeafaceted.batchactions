@@ -61,3 +61,16 @@ class TestUtils(BaseTestCase):
         self.assertEqual(len(brains_from_uids('')), 0)
         self.assertEqual(len(brains_from_uids('{},{}'.format(self.doc1.UID(), self.doc2.UID()))), 2)
         self.assertEqual(len(brains_from_uids([self.doc1.UID(), self.doc2.UID()])), 2)
+
+    def test_brains_from_uids_keeps_uids_order(self):
+        self.assertEqual(brains_from_uids(''), [])
+        doc1_uid = self.doc1.UID()
+        doc2_uid = self.doc2.UID()
+        self.assertEqual([brain.UID for brain in brains_from_uids('{},{}'.format(doc1_uid, doc2_uid))],
+                         [doc1_uid, doc2_uid])
+        self.assertEqual([brain.UID for brain in brains_from_uids('{},{}'.format(doc2_uid, doc1_uid))],
+                         [doc2_uid, doc1_uid])
+        self.assertEqual([brain.UID for brain in brains_from_uids([doc1_uid, doc2_uid])],
+                         [doc1_uid, doc2_uid])
+        self.assertEqual([brain.UID for brain in brains_from_uids([doc2_uid, doc1_uid])],
+                         [doc2_uid, doc1_uid])

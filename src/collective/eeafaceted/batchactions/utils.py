@@ -3,7 +3,7 @@
 
 from AccessControl import getSecurityManager
 from collective.eeafaceted.batchactions import _
-from plone import api
+from imio.helpers.content import uuidsToCatalogBrains
 
 cannot_modify_field_msg = _(u"You can't change this field on selected items. Modify your selection.")
 
@@ -49,14 +49,13 @@ def listify_uids(uids):
     return uids
 
 
-def brains_from_uids(uids):
+def brains_from_uids(uids, ordered=True):
     """ Returns a list of brains from a string (comma separated) or a list, containing uids """
     if not uids:
         return []
 
-    catalog = api.portal.get_tool('portal_catalog')
     uids = listify_uids(uids)
-    brains = catalog(UID=uids)
+    brains = uuidsToCatalogBrains(uids, ordered=ordered)
     return brains
 
 

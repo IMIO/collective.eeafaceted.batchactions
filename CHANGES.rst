@@ -5,8 +5,9 @@ Changelog
 1.5 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Make sure elements are treated in received `uids` order. Need to rely on
+  `imio.helpers` to use `content.uuidsToCatalogBrains(ordered=True)`.
+  [gbastien]
 
 1.4 (2019-11-25)
 ----------------
