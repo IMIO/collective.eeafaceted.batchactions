@@ -15,7 +15,7 @@ from plone.supermodel import model
 from Products.CMFPlone import PloneMessageFactory as PMF
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form import button
-from z3c.form.browser.select import SelectFieldWidget
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
@@ -258,8 +258,8 @@ class LabelsBatchActionForm(BaseBatchActionForm):
                 required=False,
                 value_type=schema.Choice(vocabulary=labels_voc),
             ))
-            self.fields["removed_values"].widgetFactory = SelectFieldWidget
-            self.fields["added_values"].widgetFactory = SelectFieldWidget
+            self.fields["removed_values"].widgetFactory = CheckBoxFieldWidget
+            self.fields["added_values"].widgetFactory = CheckBoxFieldWidget
 
     def _update_widgets(self):
         if self.do_apply:

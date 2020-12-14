@@ -8,6 +8,10 @@ Changelog
 - After action applied, do not reload the entire page,
   just reload the current faceted results.
   [gbastien]
+- Use `CheckBoxFieldWidget` instead `SelectFieldWidget` to manage labels to
+  (un)select in `LabelsBatchActionForm` to avoid manipulation with
+  `CTRL+click` for selection.
+  [gbastien]
 
 1.5 (2020-04-23)
 ----------------
