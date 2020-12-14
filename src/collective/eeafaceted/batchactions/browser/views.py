@@ -112,7 +112,13 @@ class BaseBatchActionForm(Form):
         else:
             # call the method that does the job
             self._apply(**data)
-            self.request.response.redirect(self.request.form['form.widgets.referer'])
+            # redirect if not using an overlay
+            if not self.request.form.get('ajax_load', ''):
+                self.request.response.redirect(self.request.form['form.widgets.referer'])
+            else:
+                # make sure we return nothing, taken into account by ajax query
+                self.request.RESPONSE.setStatus(204)
+                return ""
 
     @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
     def handleCancel(self, action):

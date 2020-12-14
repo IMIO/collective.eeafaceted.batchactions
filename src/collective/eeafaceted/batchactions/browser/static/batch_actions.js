@@ -39,7 +39,14 @@ collective_batch_actions.init_button = function () {
 collective_batch_actions.initializeOverlays = function (form_id) {
     // Add batch actions popup
     $(form_id).prepOverlay({
+        api: true,
         subtype: 'ajax',
-        closeselector: '[name="form.buttons.cancel"]'
+        closeselector: '[name="form.buttons.cancel"]',
+        config: {
+            onBeforeLoad : function (e) {
+                submitFormHelper(this.form);
+                return true;
+            },
+        }
     });
 };

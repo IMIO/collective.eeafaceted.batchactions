@@ -5,8 +5,9 @@ Changelog
 1.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- After action applied, do not reload the entire page,
+  just reload the current faceted results.
+  [gbastien]
 
 1.5 (2020-04-23)
 ----------------
