@@ -8,6 +8,7 @@ from collective.eeafaceted.batchactions.utils import brains_from_uids
 from collective.eeafaceted.batchactions.utils import cannot_modify_field_msg
 from collective.eeafaceted.batchactions.utils import has_interface
 from collective.eeafaceted.batchactions.utils import is_permitted
+from imio.helpers.security import fplog
 from operator import attrgetter
 from plone import api
 from plone.formwidget.masterselect import MasterSelectField
@@ -110,6 +111,10 @@ class BaseBatchActionForm(Form):
         if errors:
             self.status = self.formErrorsMessage
         else:
+            # log in fingerpointing before executing job
+            extras = 'action={0} number_of_elements={1}'.format(
+                repr(self.label), len(self.brains))
+            fplog('apply_batch_action', extras=extras)
             # call the method that does the job
             self._apply(**data)
             # redirect if not using an overlay
@@ -247,14 +252,14 @@ class LabelsBatchActionForm(BaseBatchActionForm):
             self.fields += Fields(schema.List(
                 __name__='removed_values',
                 title=_(u"Removed values"),
-                description=_(u"Select the values to remove (CTRL+click). A personal label is represented by (*)."),
+                description=_(u"Select the values to remove. A personal label is represented by (*)."),
                 required=False,
                 value_type=schema.Choice(vocabulary=labels_voc),
             ))
             self.fields += Fields(schema.List(
                 __name__='added_values',
                 title=_(u"Added values"),
-                description=_(u"Select the values to add (CTRL+click). A personal label is represented by (*)."),
+                description=_(u"Select the values to add. A personal label is represented by (*)."),
                 required=False,
                 value_type=schema.Choice(vocabulary=labels_voc),
             ))

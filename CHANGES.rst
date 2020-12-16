@@ -10,7 +10,10 @@ Changelog
   [gbastien]
 - Use `CheckBoxFieldWidget` instead `SelectFieldWidget` to manage labels to
   (un)select in `LabelsBatchActionForm` to avoid manipulation with
-  `CTRL+click` for selection.
+  `CTRL+click` for selection. Adapted and rationalized translations.
+  [gbastien]
+- Add a `collective.fingerpointing` entry when applying action to know
+  which action was applied on how much elements.
   [gbastien]
 
 1.5 (2020-04-23)

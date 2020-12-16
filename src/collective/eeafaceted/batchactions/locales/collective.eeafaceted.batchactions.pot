@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2019-10-09 07:35+0000\n"
+"POT-Creation-Date: 2020-12-16 14:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,83 +17,95 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: collective.eeafaceted.batchactions\n"
 
-#: ./browser/views.py:216
+#: ./browser/views.py:230
 msgid "Add items"
 msgstr ""
 
-#: ./browser/views.py:247
+#: ./browser/views.py:261
 msgid "Added values"
 msgstr ""
 
-#: ./browser/views.py:100
+#: ./browser/views.py:104
 msgid "Apply"
 msgstr ""
 
-#: ./browser/views.py:214
+#: ./browser/views.py:228
 msgid "Batch action choice"
 msgstr ""
 
-#: ./browser/views.py:43
+#: ./browser/views.py:47
 msgid "Batch action form"
 msgstr ""
 
-#: ./browser/views.py:182
+#: ./browser/views.py:326
+msgid "Batch contact field change"
+msgstr ""
+
+#: ./browser/views.py:196
 msgid "Batch labels change"
 msgstr ""
 
-#: ./browser/views.py:121
+#: ./browser/views.py:135
 msgid "Batch state change"
 msgstr ""
 
-#: ./browser/views.py:158
+#: ./browser/views.py:172
 msgid "Comment"
 msgstr ""
 
-#: ./configure.zcml:29
+#: ./configure.zcml:32
 msgid "Extension profile for collective.eeafaceted.batchactions."
 msgstr ""
 
-#: ./browser/views.py:154
+#: ./browser/views.py:168
 msgid "No common or available transition. Modify your selection."
 msgstr ""
 
-#: ./browser/views.py:159
+#: ./browser/views.py:173
 msgid "Optional comment to display in history"
 msgstr ""
 
-#: ./browser/views.py:219
+#: ./browser/views.py:233
 msgid "Overwrite"
 msgstr ""
 
-#: ./browser/views.py:217
+#: ./browser/views.py:231
 msgid "Remove items"
 msgstr ""
 
-#: ./browser/views.py:240
+#: ./browser/views.py:254
 msgid "Removed values"
 msgstr ""
 
-#: ./browser/views.py:218
+#: ./browser/views.py:232
 msgid "Replace some items by others"
 msgstr ""
 
-#: ./browser/views.py:248
-msgid "Select the values to add (CTRL+click). A personal label is represented by (*)."
+#: ./browser/views.py:366
+msgid "Search and select the values to add."
 msgstr ""
 
-#: ./browser/views.py:241
-msgid "Select the values to remove (CTRL+click). A personal label is represented by (*)."
+#: ./browser/views.py:358
+msgid "Search and select the values to remove, if necessary."
 msgstr ""
 
-#: ./testing.zcml:17
+#: ./browser/views.py:262
+msgid "Select the values to add. A personal label is represented by (*)."
+msgstr ""
+
+#: ./browser/views.py:255
+msgid "Select the values to remove. A personal label is represented by (*)."
+msgstr ""
+
+#: ./testing.zcml:18
 msgid "Steps to ease tests of collective.eeafaceted.batchactions"
 msgstr ""
 
-#: ./browser/views.py:72
+#: ./browser/views.py:76
 msgid "This action will affect ${number} element(s)."
 msgstr ""
 
-#: ./browser/views.py:151
+#: ./browser/views.py:165
 msgid "Transition"
 msgstr ""
 
@@ -101,11 +113,11 @@ msgstr ""
 msgid "You can't change this field on selected items. Modify your selection."
 msgstr ""
 
-#: ./configure.zcml:29
+#: ./configure.zcml:32
 msgid "collective.eeafaceted.batchactions"
 msgstr ""
 
-#: ./testing.zcml:17
+#: ./testing.zcml:18
 msgid "collective.eeafaceted.batchactions tests"
 msgstr ""
 
