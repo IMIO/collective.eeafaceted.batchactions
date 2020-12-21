@@ -36,7 +36,7 @@ msgstr "Batch action form"
 
 #: ./browser/views.py:326
 msgid "Batch contact field change"
-msgstr ""
+msgstr "Changement de contact par lot"
 
 #: ./browser/views.py:196
 msgid "Batch labels change"
@@ -80,11 +80,11 @@ msgstr "Remplacer des éléments par d'autres"
 
 #: ./browser/views.py:366
 msgid "Search and select the values to add."
-msgstr ""
+msgstr "Chercher et sélectionner des contacts à ajouter."
 
 #: ./browser/views.py:358
 msgid "Search and select the values to remove, if necessary."
-msgstr ""
+msgstr "Chercher et sélectionner des contacts à retirer, si nécessaire."
 
 #: ./browser/views.py:262
 msgid "Select the values to add. A personal label is represented by (*)."
