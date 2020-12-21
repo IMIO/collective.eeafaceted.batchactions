@@ -8,6 +8,7 @@ from collective.eeafaceted.batchactions.utils import brains_from_uids
 from collective.eeafaceted.batchactions.utils import cannot_modify_field_msg
 from collective.eeafaceted.batchactions.utils import has_interface
 from collective.eeafaceted.batchactions.utils import is_permitted
+from imio.helpers.security import fplog
 from operator import attrgetter
 from plone import api
 from plone.formwidget.masterselect import MasterSelectField
@@ -15,7 +16,7 @@ from plone.supermodel import model
 from Products.CMFPlone import PloneMessageFactory as PMF
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form import button
-from z3c.form.browser.select import SelectFieldWidget
+from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.field import Fields
 from z3c.form.form import Form
 from z3c.form.interfaces import HIDDEN_MODE
@@ -110,9 +111,19 @@ class BaseBatchActionForm(Form):
         if errors:
             self.status = self.formErrorsMessage
         else:
+            # log in fingerpointing before executing job
+            extras = 'action={0} number_of_elements={1}'.format(
+                repr(self.label), len(self.brains))
+            fplog('apply_batch_action', extras=extras)
             # call the method that does the job
             self._apply(**data)
-            self.request.response.redirect(self.request.form['form.widgets.referer'])
+            # redirect if not using an overlay
+            if not self.request.form.get('ajax_load', ''):
+                self.request.response.redirect(self.request.form['form.widgets.referer'])
+            else:
+                # make sure we return nothing, taken into account by ajax query
+                self.request.RESPONSE.setStatus(204)
+                return ""
 
     @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
     def handleCancel(self, action):
@@ -241,19 +252,19 @@ class LabelsBatchActionForm(BaseBatchActionForm):
             self.fields += Fields(schema.List(
                 __name__='removed_values',
                 title=_(u"Removed values"),
-                description=_(u"Select the values to remove (CTRL+click). A personal label is represented by (*)."),
+                description=_(u"Select the values to remove. A personal label is represented by (*)."),
                 required=False,
                 value_type=schema.Choice(vocabulary=labels_voc),
             ))
             self.fields += Fields(schema.List(
                 __name__='added_values',
                 title=_(u"Added values"),
-                description=_(u"Select the values to add (CTRL+click). A personal label is represented by (*)."),
+                description=_(u"Select the values to add. A personal label is represented by (*)."),
                 required=False,
                 value_type=schema.Choice(vocabulary=labels_voc),
             ))
-            self.fields["removed_values"].widgetFactory = SelectFieldWidget
-            self.fields["added_values"].widgetFactory = SelectFieldWidget
+            self.fields["removed_values"].widgetFactory = CheckBoxFieldWidget
+            self.fields["added_values"].widgetFactory = CheckBoxFieldWidget
 
     def _update_widgets(self):
         if self.do_apply:
