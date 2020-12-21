@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.6 (unreleased)
+1.6 (2020-12-21)
 ----------------
 
 - After action applied, do not reload the entire page,
