@@ -18,6 +18,12 @@ class BatchActionsViewlet(ViewletBase):
         """Global availability of the viewlet."""
         return True
 
+    @property
+    def select_item_name(self):
+        """The name of the chekbox column, useful when displaying
+           several table on same page."""
+        return "select_item"
+
     def _get_marker_interfaces(self):
         """By default views are registered for the IBatchActionsMarker
            interface, but in case it is needed to register different views,

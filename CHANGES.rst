@@ -5,8 +5,10 @@ Changelog
 1.7 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Added possibility to define the name of the `CheckBoxColumn`
+  (`select_item` by default), necessary when displaying several tables
+  on the same page.
+  [gbastien]
 
 1.6 (2020-12-21)
 ----------------

@@ -1,5 +1,6 @@
 <div i18n:domain="collective.eeafaceted.batchactions"
      id="batch-actions"
+     tal:attributes="data-select_item_name python: view.select_item_name"
      tal:condition="view/available">
   <form method="POST"
         tal:repeat="batch_action view/get_batch_actions"
@@ -10,7 +11,7 @@
     <input tal:define="base_css_classes string:button batch-action-but"
            tal:attributes="value string:${batch_action/name}-but;
                            id string:${batch_action/name}-but;
-                           class python: not batch_action['button_with_icon'] and base_css_classes or base_css_classes + ' batch-action-icon-but'"
+                           class python: not batch_action['button_with_icon'] and base_css_classes or base_css_classes + ' batch-action-icon-but';"
            type="submit"
            i18n:attributes="value"/>
   </form>

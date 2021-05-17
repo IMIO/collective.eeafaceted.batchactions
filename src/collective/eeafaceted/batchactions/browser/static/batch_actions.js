@@ -8,7 +8,8 @@ collective_batch_actions.init_button = function () {
 
   $('.batch-action-but').click(function (e) {
     e.preventDefault();
-    var uids = selectedCheckBoxes('select_item');
+    select_item_name = $(this).parents("div#batch-actions").data().select_item_name;
+    var uids = selectedCheckBoxes(select_item_name);
     if (!uids.length) { alert(no_selected_items); return false;}
     var referer = document.location.href.replace('#','!').replace(/&/g,'@');
     var ba_form = $(this).parent()[0];
