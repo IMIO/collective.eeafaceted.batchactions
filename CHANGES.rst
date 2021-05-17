@@ -5,9 +5,15 @@ Changelog
 1.7 (unreleased)
 ----------------
 
-- Added possibility to define the name of the `CheckBoxColumn`
-  (`select_item` by default), necessary when displaying several tables
-  on the same page.
+- Adapted code to be able to display several tables on same page
+  (and so several batchactions viewlets):
+
+  - Added possibility to define the name of the `CheckBoxColumn`
+    (still `select_item` by default);
+  - Introduce idea of section for the viewlet and the batch actions so it is
+    possible to display different actions on different viewlets or different
+    views of same context.
+
   [gbastien]
 
 1.6 (2020-12-21)

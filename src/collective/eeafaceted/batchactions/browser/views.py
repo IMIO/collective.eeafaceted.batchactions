@@ -56,6 +56,8 @@ class BaseBatchActionForm(Form):
     button_with_icon = False
     overlay = True
     weight = 100
+    # useful when dispalying batch actions on several views for same context
+    section = "default"
 
     def available(self):
         """Will the action be available for current context?"""

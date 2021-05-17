@@ -24,6 +24,12 @@ class BatchActionsViewlet(ViewletBase):
            several table on same page."""
         return "select_item"
 
+    @property
+    def section(self):
+        """The name of the section, useful to manage batch actions
+           displayed on several views with same context."""
+        return "default"
+
     def _get_marker_interfaces(self):
         """By default views are registered for the IBatchActionsMarker
            interface, but in case it is needed to register different views,
@@ -57,9 +63,10 @@ class BatchActionsViewlet(ViewletBase):
         registered_actions = set([action.name for action in registered_actions])
         # now check that action is available
         actions = []
+        section = self.section
         for registered_action in registered_actions:
             form = getMultiAdapter((self.context, self.request), name=registered_action)
-            if form.available():
+            if form.available() and form.section == section:
                 actions.append({
                     'name': registered_action,
                     'button_with_icon': form.button_with_icon,
