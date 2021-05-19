@@ -17,3 +17,8 @@ msgstr ""
 #. Default: "Change state"
 msgid "transition-batch-action-but"
 msgstr ""
+
+#. Default: "Delete"
+msgid "delete-batch-action-but"
+msgstr ""
+

@@ -13,6 +13,8 @@ from operator import attrgetter
 from plone import api
 from plone.formwidget.masterselect import MasterSelectField
 from plone.supermodel import model
+from Products.CMFCore.permissions import DeleteObjects
+from Products.CMFCore.utils import _checkPermission
 from Products.CMFPlone import PloneMessageFactory as PMF
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form import button
@@ -183,6 +185,39 @@ class TransitionBatchActionForm(BaseBatchActionForm):
                 api.content.transition(obj=obj,
                                        transition=data['transition'],
                                        comment=data['comment'])
+
+
+class DeleteBatchActionForm(BaseBatchActionForm):
+
+    label = _(u"Delete elements")
+    weight = 5
+    button_with_icon = True
+
+    def get_deletable_elements(self):
+        """ """
+        deletables = [brain for brain in self.brains
+                      if _checkPermission(DeleteObjects, brain.getObject())]
+        return deletables
+
+    @property
+    def description(self):
+        """ """
+        deletables = self.get_deletable_elements()
+        if len(deletables) < len(self.brains):
+            not_deletables = len(self.brains) - len(deletables)
+            return _('This action will only affect ${deletable_number} element(s), indeed '
+                     'you do not have the permission to delete ${not_deletable_number} element(s).',
+                     mapping={'deletable_number': len(deletables),
+                              'not_deletable_number': not_deletables, })
+        else:
+            return super(DeleteBatchActionForm, self).description
+
+    def _apply(self, **data):
+        """ """
+        import ipdb; ipdb.set_trace()
+        for brain in self.brains:
+            obj = brain.getObject()
+            api.content.delete(obj)
 
 
 try:

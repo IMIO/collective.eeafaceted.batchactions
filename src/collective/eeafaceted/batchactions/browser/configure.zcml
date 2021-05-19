@@ -22,4 +22,10 @@
         class=".views.TransitionBatchActionForm"
         permission="zope2.View" />
 
+    <!--browser:page
+        for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
+        name="delete-batch-action"
+        class=".views.DeleteBatchActionForm"
+        permission="zope2.View" /-->
+
 </configure>
