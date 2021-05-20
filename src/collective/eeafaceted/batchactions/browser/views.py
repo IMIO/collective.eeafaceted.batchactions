@@ -120,14 +120,14 @@ class BaseBatchActionForm(Form):
                 repr(self.label), len(self.brains))
             fplog('apply_batch_action', extras=extras)
             # call the method that does the job
-            self._apply(**data)
+            applied = self._apply(**data)
             # redirect if not using an overlay
             if not self.request.form.get('ajax_load', ''):
                 self.request.response.redirect(self.request.form['form.widgets.referer'])
             else:
                 # make sure we return nothing, taken into account by ajax query
                 self.request.RESPONSE.setStatus(204)
-                return ""
+                return applied or ""
 
     @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
     def handleCancel(self, action):
@@ -214,7 +214,6 @@ class DeleteBatchActionForm(BaseBatchActionForm):
 
     def _apply(self, **data):
         """ """
-        import ipdb; ipdb.set_trace()
         for brain in self.brains:
             obj = brain.getObject()
             api.content.delete(obj)
