@@ -126,7 +126,8 @@ class BaseBatchActionForm(Form):
                 self.request.response.redirect(self.request.form['form.widgets.referer'])
             else:
                 # make sure we return nothing, taken into account by ajax query
-                self.request.RESPONSE.setStatus(204)
+                if not applied:
+                    self.request.RESPONSE.setStatus(204)
                 return applied or ""
 
     @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
