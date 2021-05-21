@@ -52,6 +52,8 @@ class BaseBatchActionForm(Form):
     fields['referer'].mode = HIDDEN_MODE
     ignoreContext = True
     brains = []
+    # easy way to hide the "Apply" button when required conditions
+    # are not met for the action to be applied
     do_apply = True
     # this will add a specific class to the generated button action
     # so it is possible to skin it with an icon

@@ -104,7 +104,7 @@ msgstr "Steps to ease tests of collective.eeafaceted.batchactions"
 
 #: ./browser/views.py:80
 msgid "This action will affect ${number} element(s)."
-msgstr "Cette action sera appliquée sur ${number} élément(s)."
+msgstr "Cette action concerne ${number} élément(s)."
 
 #: ./browser/views.py:207
 msgid "This action will only affect ${deletable_number} element(s), indeed you do not have the permission to delete ${not_deletable_number} element(s)."
