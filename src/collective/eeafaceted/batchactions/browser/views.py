@@ -55,6 +55,8 @@ class BaseBatchActionForm(Form):
     # easy way to hide the "Apply" button when required conditions
     # are not met for the action to be applied
     do_apply = True
+    # the title of the apply button to fit current action
+    apply_button_title = _('Apply')
     # this will add a specific class to the generated button action
     # so it is possible to skin it with an icon
     button_with_icon = False
@@ -69,6 +71,10 @@ class BaseBatchActionForm(Form):
 
     def _update(self):
         """Method to override if you need to do something in the update."""
+        return
+
+    def _final_update(self):
+        """Method to override if you need to do something when everything have been updated."""
         return
 
     def _update_widgets(self):
@@ -106,6 +112,9 @@ class BaseBatchActionForm(Form):
         self._update()
         super(BaseBatchActionForm, self).update()
         self._update_widgets()
+        if 'apply' in self.actions:
+            self.actions['apply'].title = self.apply_button_title
+        self._final_update()
 
     @button.buttonAndHandler(_(u'Apply'), name='apply', condition=lambda fi: fi.do_apply)
     def handleApply(self, action):
@@ -195,6 +204,7 @@ class DeleteBatchActionForm(BaseBatchActionForm):
     label = _(u"Delete elements")
     weight = 5
     button_with_icon = True
+    apply_button_title = _('delete-batch-action-but')
 
     def get_deletable_elements(self):
         """ """

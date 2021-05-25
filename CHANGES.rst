@@ -15,6 +15,13 @@ Changelog
     views of same context.
 
   [gbastien]
+- Added method `BaseBatchActionForm._final_update` called when every other
+  `update` methods have been called.
+  [gbastien]
+- Added `BaseBatchActionForm.apply_button_title` attribute to formalize
+  management of `apply` button title, that will be `Apply` by default but that
+  may be changed to fit the current batch action.
+  [gbastien]
 
 1.6 (2020-12-21)
 ----------------
