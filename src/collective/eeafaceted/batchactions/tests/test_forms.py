@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from zope.component import getMultiAdapter
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from plone import api
+from zope.component import getMultiAdapter
 
 
 class TestActions(BaseTestCase):
