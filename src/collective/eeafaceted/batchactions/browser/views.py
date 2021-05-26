@@ -56,7 +56,7 @@ class BaseBatchActionForm(Form):
     # are not met for the action to be applied
     do_apply = True
     # the title of the apply button to fit current action
-    apply_button_title = _('Apply')
+    apply_button_title = None
     # this will add a specific class to the generated button action
     # so it is possible to skin it with an icon
     button_with_icon = False
@@ -112,7 +112,7 @@ class BaseBatchActionForm(Form):
         self._update()
         super(BaseBatchActionForm, self).update()
         self._update_widgets()
-        if 'apply' in self.actions:
+        if self.apply_button_title is not None and 'apply' in self.actions:
             self.actions['apply'].title = self.apply_button_title
         self._final_update()
 
