@@ -66,7 +66,7 @@ class BatchActionsViewlet(ViewletBase):
         section = self.section
         for registered_action in registered_actions:
             form = getMultiAdapter((self.context, self.request), name=registered_action)
-            if form.available() and form.section == section:
+            if form.section == section and form.available():
                 actions.append({
                     'name': registered_action,
                     'button_with_icon': form.button_with_icon,
