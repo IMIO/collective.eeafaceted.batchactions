@@ -22,6 +22,8 @@ Changelog
   management of `apply` button title, that will be `Apply` by default but that
   may be changed to fit the current batch action.
   [gbastien]
+- Added `DeleteBatchActionForm` a delete elements batch action.
+  [gbastien]
 
 1.6 (2020-12-21)
 ----------------
