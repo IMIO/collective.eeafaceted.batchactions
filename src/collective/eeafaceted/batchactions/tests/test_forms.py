@@ -2,6 +2,8 @@
 
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from plone import api
+from Products.CMFCore.permissions import DeleteObjects
+from Products.CMFCore.utils import _checkPermission
 from zope.component import getMultiAdapter
 
 
@@ -144,3 +146,24 @@ class TestActions(BaseTestCase):
         form = self.eea_folder.restrictedTraverse('transition-batch-action')
         form.update()
         self.assertFalse(bool(apply_button.condition(form)))
+
+    def test_delete_action(self):
+        """Delete batch action."""
+        # make eea_folder not deletable
+        self.eea_folder.manage_permission(DeleteObjects, [])
+        self.assertFalse(_checkPermission(DeleteObjects, self.eea_folder))
+        # set 'uids' in form, 2 deletable elements, one not deletable
+        doc_uids = u"{0},{1},{2}".format(self.doc1.UID(), self.doc2.UID(), self.eea_folder.UID())
+        self.request.form['form.widgets.uids'] = doc_uids
+        form = self.eea_folder.restrictedTraverse('delete-batch-action')
+        form.update()
+        self.assertTrue("This action will only affect 2 element(s), "
+                        "indeed you do not have the permission to delete 1 element(s)."
+                        in form.render())
+        # apply button title is changed using the form.apply_button_title
+        self.assertEqual(form.actions['apply'].title, u'delete-batch-action-but')
+        # apply, 2 elements are deleted
+        form.handleApply(form, None)
+        self.assertFalse('doc1' in self.portal.objectIds())
+        self.assertFalse('doc2' in self.portal.objectIds())
+        self.assertTrue('eea_folder' in self.portal.objectIds())

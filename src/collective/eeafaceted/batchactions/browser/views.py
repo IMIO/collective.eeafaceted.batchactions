@@ -206,29 +206,32 @@ class DeleteBatchActionForm(BaseBatchActionForm):
     button_with_icon = True
     apply_button_title = _('delete-batch-action-but')
 
-    def get_deletable_elements(self):
+    def _get_deletable_elements(self):
         """ """
-        deletables = [brain for brain in self.brains
-                      if _checkPermission(DeleteObjects, brain.getObject())]
+        objs = [brain.getObject() for brain in self.brains]
+        deletables = [obj for obj in objs
+                      if _checkPermission(DeleteObjects, obj)]
         return deletables
+
+    def _update(self):
+        """ """
+        self.deletables = self._get_deletable_elements()
 
     @property
     def description(self):
         """ """
-        deletables = self.get_deletable_elements()
-        if len(deletables) < len(self.brains):
-            not_deletables = len(self.brains) - len(deletables)
+        if len(self.deletables) < len(self.brains):
+            not_deletables = len(self.brains) - len(self.deletables)
             return _('This action will only affect ${deletable_number} element(s), indeed '
                      'you do not have the permission to delete ${not_deletable_number} element(s).',
-                     mapping={'deletable_number': len(deletables),
+                     mapping={'deletable_number': len(self.deletables),
                               'not_deletable_number': not_deletables, })
         else:
             return super(DeleteBatchActionForm, self).description
 
     def _apply(self, **data):
         """ """
-        for brain in self.brains:
-            obj = brain.getObject()
+        for obj in self.deletables:
             api.content.delete(obj)
 
 

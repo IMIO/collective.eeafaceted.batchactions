@@ -14,25 +14,30 @@
       title="collective.eeafaceted.batchactions tests"
       directory="profiles/testing"
       description="Steps to ease tests of collective.eeafaceted.batchactions"
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
+      provides="Products.GenericSetup.interfaces.EXTENSION" />
 
-    <browser:page
-        for="collective.eeafaceted.batchactions.tests.interfaces.IBatchActionsSpecificMarker"
-        name="testing-batch-action"
-        class=".tests.views.TestingBatchActionForm"
-        permission="zope2.View" />
+  <browser:page
+      for="collective.eeafaceted.batchactions.tests.interfaces.IBatchActionsSpecificMarker"
+      name="testing-batch-action"
+      class=".tests.views.TestingBatchActionForm"
+      permission="zope2.View" />
 
-    <browser:page
-        for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
-        name="labels-batch-action"
-        class=".browser.views.LabelsBatchActionForm"
-        permission="zope2.View" />
+  <browser:page
+      for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
+      name="labels-batch-action"
+      class=".browser.views.LabelsBatchActionForm"
+      permission="zope2.View" />
 
-    <browser:page
-        for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
-        name="contact-batch-action"
-        class=".tests.views.ContactBatchActionForm"
-        permission="zope2.View" />
+  <browser:page
+      for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
+      name="contact-batch-action"
+      class=".tests.views.ContactBatchActionForm"
+      permission="zope2.View" />
+
+  <browser:page
+      for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
+      name="delete-batch-action"
+      class=".browser.views.DeleteBatchActionForm"
+      permission="zope2.View" />
 
 </configure>
