@@ -24,6 +24,8 @@ Changelog
   [gbastien]
 - Added `DeleteBatchActionForm` a delete elements batch action.
   [gbastien]
+- Require `plone.formwidget.masterselect<2.0.0` as it is only for `Plone5.2+/Py3`.
+  [gbastien]
 
 1.6 (2020-12-21)
 ----------------
