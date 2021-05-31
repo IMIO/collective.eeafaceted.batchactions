@@ -7,9 +7,9 @@ from ftw.labels.interfaces import ILabelJar
 from ftw.labels.interfaces import ILabelRoot
 from ftw.labels.interfaces import ILabelSupport
 from plone import api
-from zope.interface import alsoProvides
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_NAME
+from zope.interface import alsoProvides
 
 
 class TestLabels(BaseTestCase):

@@ -35,6 +35,11 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertTrue(viewlet.available())
 
+    def test_viewlet_select_item_name(self):
+        """Name of the CheckboxColumn."""
+        viewlet = self._get_viewlet(self.eea_folder)
+        self.assertEqual(viewlet.select_item_name, 'select_item')
+
     def test_viewlet_only_rendered_on_IBatchActionsMarker(self):
         """ """
         folder = api.content.create(
@@ -71,7 +76,8 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
+            [{'button_with_icon': True, 'name': 'delete-batch-action', 'weight': 5, 'overlay': True},
+             {'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
              {'name': 'labels-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 20},
              {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30}])
         # returned action names are traversable to get the form
@@ -105,7 +111,8 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(folder)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
+            [{'button_with_icon': True, 'name': 'delete-batch-action', 'weight': 5, 'overlay': True},
+             {'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
              {'name': 'labels-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 20},
              {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30}])
 
@@ -113,7 +120,8 @@ class TestViewlets(BaseTestCase):
         alsoProvides(folder, IBatchActionsSpecificMarker)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
+            [{'button_with_icon': True, 'name': 'delete-batch-action', 'weight': 5, 'overlay': True},
+             {'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
              {'name': 'labels-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 20},
              {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30},
              {'name': 'testing-batch-action', 'button_with_icon': True, 'overlay': False, 'weight': 100}])
@@ -126,6 +134,7 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
+            [{'button_with_icon': True, 'name': 'delete-batch-action', 'weight': 5, 'overlay': True},
+             {'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
              {'name': 'labels-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 20},
              {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30}])

@@ -5,8 +5,25 @@ Changelog
 1.7 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Adapted code to be able to display several tables on same page
+  (and so several batchactions viewlets):
 
+  - Added possibility to define the name of the `CheckBoxColumn`
+    (still `select_item` by default);
+  - Introduce idea of section for the viewlet and the batch actions so it is
+    possible to display different actions on different viewlets or different
+    views of same context.
+
+  [gbastien]
+- Added method `BaseBatchActionForm._final_update` called when every other
+  `update` methods have been called.
+  [gbastien]
+- Added `BaseBatchActionForm.apply_button_title` attribute to formalize
+  management of `apply` button title, that will be `Apply` by default but that
+  may be changed to fit the current batch action.
+  [gbastien]
+- Added `DeleteBatchActionForm` a delete elements batch action.
+  [gbastien]
 
 1.6 (2020-12-21)
 ----------------

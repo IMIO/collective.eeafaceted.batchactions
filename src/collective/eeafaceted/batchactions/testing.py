@@ -15,6 +15,7 @@ from plone.testing import z2
 import collective.eeafaceted.batchactions
 import pkg_resources
 
+
 try:
     pkg_resources.get_distribution('plone.app.contenttypes')
 except pkg_resources.DistributionNotFound:

@@ -8,7 +8,8 @@ collective_batch_actions.init_button = function () {
 
   $('.batch-action-but').click(function (e) {
     e.preventDefault();
-    var uids = selectedCheckBoxes('select_item');
+    select_item_name = $(this).parents("div#batch-actions").data().select_item_name;
+    var uids = selectedCheckBoxes(select_item_name);
     if (!uids.length) { alert(no_selected_items); return false;}
     var referer = document.location.href.replace('#','!').replace(/&/g,'@');
     var ba_form = $(this).parent()[0];
@@ -27,7 +28,7 @@ collective_batch_actions.init_button = function () {
     uids_input.val(uids);
     ba_form.action = document.batch_actions[form_id] + '?referer=' + referer;
     if ($(ba_form).hasClass('do-overlay')) {
-      collective_batch_actions.initializeOverlays('#'+form_id);
+      collective_batch_actions.initializeOverlays(ba_form);
     }
     else {
       ba_form.submit();
@@ -36,9 +37,9 @@ collective_batch_actions.init_button = function () {
   });
 };
 
-collective_batch_actions.initializeOverlays = function (form_id) {
+collective_batch_actions.initializeOverlays = function (ba_form) {
     // Add batch actions popup
-    $(form_id).prepOverlay({
+    $(ba_form).prepOverlay({
         api: true,
         subtype: 'ajax',
         closeselector: '[name="form.buttons.cancel"]',

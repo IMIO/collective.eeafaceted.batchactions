@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import unittest
 from collective.eeafaceted.batchactions import testing
 from collective.eeafaceted.batchactions.interfaces import IBatchActionsMarker
 from eea.facetednavigation.layout.interfaces import IFacetedLayout
 from plone import api
 from zope.interface import alsoProvides
+
+import unittest
 
 
 class BaseTestCase(unittest.TestCase):

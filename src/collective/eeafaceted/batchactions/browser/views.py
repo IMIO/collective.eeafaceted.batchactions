@@ -13,6 +13,8 @@ from operator import attrgetter
 from plone import api
 from plone.formwidget.masterselect import MasterSelectField
 from plone.supermodel import model
+from Products.CMFCore.permissions import DeleteObjects
+from Products.CMFCore.utils import _checkPermission
 from Products.CMFPlone import PloneMessageFactory as PMF
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form import button
@@ -50,12 +52,18 @@ class BaseBatchActionForm(Form):
     fields['referer'].mode = HIDDEN_MODE
     ignoreContext = True
     brains = []
+    # easy way to hide the "Apply" button when required conditions
+    # are not met for the action to be applied
     do_apply = True
+    # the title of the apply button to fit current action
+    apply_button_title = None
     # this will add a specific class to the generated button action
     # so it is possible to skin it with an icon
     button_with_icon = False
     overlay = True
     weight = 100
+    # useful when dispalying batch actions on several views for same context
+    section = "default"
 
     def available(self):
         """Will the action be available for current context?"""
@@ -63,6 +71,10 @@ class BaseBatchActionForm(Form):
 
     def _update(self):
         """Method to override if you need to do something in the update."""
+        return
+
+    def _final_update(self):
+        """Method to override if you need to do something when everything have been updated."""
         return
 
     def _update_widgets(self):
@@ -100,6 +112,9 @@ class BaseBatchActionForm(Form):
         self._update()
         super(BaseBatchActionForm, self).update()
         self._update_widgets()
+        if self.apply_button_title is not None and 'apply' in self.actions:
+            self.actions['apply'].title = self.apply_button_title
+        self._final_update()
 
     @button.buttonAndHandler(_(u'Apply'), name='apply', condition=lambda fi: fi.do_apply)
     def handleApply(self, action):
@@ -116,14 +131,15 @@ class BaseBatchActionForm(Form):
                 repr(self.label), len(self.brains))
             fplog('apply_batch_action', extras=extras)
             # call the method that does the job
-            self._apply(**data)
+            applied = self._apply(**data)
             # redirect if not using an overlay
             if not self.request.form.get('ajax_load', ''):
                 self.request.response.redirect(self.request.form['form.widgets.referer'])
             else:
                 # make sure we return nothing, taken into account by ajax query
-                self.request.RESPONSE.setStatus(204)
-                return ""
+                if not applied:
+                    self.request.RESPONSE.setStatus(204)
+                return applied or ""
 
     @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
     def handleCancel(self, action):
@@ -181,6 +197,42 @@ class TransitionBatchActionForm(BaseBatchActionForm):
                 api.content.transition(obj=obj,
                                        transition=data['transition'],
                                        comment=data['comment'])
+
+
+class DeleteBatchActionForm(BaseBatchActionForm):
+
+    label = _(u"Delete elements")
+    weight = 5
+    button_with_icon = True
+    apply_button_title = _('delete-batch-action-but')
+
+    def _get_deletable_elements(self):
+        """ """
+        objs = [brain.getObject() for brain in self.brains]
+        deletables = [obj for obj in objs
+                      if _checkPermission(DeleteObjects, obj)]
+        return deletables
+
+    def _update(self):
+        """ """
+        self.deletables = self._get_deletable_elements()
+
+    @property
+    def description(self):
+        """ """
+        if len(self.deletables) < len(self.brains):
+            not_deletables = len(self.brains) - len(self.deletables)
+            return _('This action will only affect ${deletable_number} element(s), indeed '
+                     'you do not have the permission to delete ${not_deletable_number} element(s).',
+                     mapping={'deletable_number': len(self.deletables),
+                              'not_deletable_number': not_deletables, })
+        else:
+            return super(DeleteBatchActionForm, self).description
+
+    def _apply(self, **data):
+        """ """
+        for obj in self.deletables:
+            api.content.delete(obj)
 
 
 try:
