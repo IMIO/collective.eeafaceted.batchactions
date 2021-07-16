@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.8 (unreleased)
+1.8 (2021-07-16)
 ----------------
 
 - Highlight message about number of elements that will be updated
