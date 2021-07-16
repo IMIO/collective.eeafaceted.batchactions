@@ -104,11 +104,11 @@ msgstr "Steps to ease tests of collective.eeafaceted.batchactions"
 
 #: ./browser/views.py:88
 msgid "This action will affect ${number} element(s)."
-msgstr "Cette action concerne ${number} élément(s)."
+msgstr "Cette action concerne <b>${number} élément(s)</b>."
 
 #: ./browser/views.py:221
 msgid "This action will only affect ${deletable_number} element(s), indeed you do not have the permission to delete ${not_deletable_number} element(s)."
-msgstr "Cette action ne sera appliquée que sur ${deletable_number} élément(s) sélectionné(s) car vous n'avez pas la permission de supprimer les autres ${not_deletable_number} élément(s)."
+msgstr "Cette action ne sera appliquée que sur <b>${deletable_number} élément(s) sélectionné(s)</b> car <span style='color: red;'>vous n'avez pas la permission de supprimer les autres ${not_deletable_number} élément(s).</span>"
 
 #: ./browser/views.py:181
 msgid "Transition"

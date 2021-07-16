@@ -208,13 +208,13 @@ class DeleteBatchActionForm(BaseBatchActionForm):
 
     def _get_deletable_elements(self):
         """ """
-        objs = [brain.getObject() for brain in self.brains]
-        deletables = [obj for obj in objs
+        deletables = [obj for obj in self.objs
                       if _checkPermission(DeleteObjects, obj)]
         return deletables
 
     def _update(self):
         """ """
+        self.objs = [brain.getObject() for brain in self.brains]
         self.deletables = self._get_deletable_elements()
 
     @property

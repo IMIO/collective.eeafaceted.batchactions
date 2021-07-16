@@ -5,8 +5,9 @@ Changelog
 1.8 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Highlight message about number of elements that will be updated
+  by the action on the popup.
+  [gbastien]
 
 1.7 (2021-07-16)
 ----------------
