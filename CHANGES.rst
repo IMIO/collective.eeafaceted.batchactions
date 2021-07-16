@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.7 (unreleased)
+1.7 (2021-07-16)
 ----------------
 
 - Adapted code to be able to display several tables on same page
