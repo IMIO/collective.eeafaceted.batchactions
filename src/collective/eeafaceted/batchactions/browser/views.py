@@ -385,7 +385,7 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
     def available(self):
         """Will the action be available for current context?"""
         if self.available_permission:
-            return api.user.has_permission(self.available_permission)
+            return api.user.has_permission(self.available_permission, obj=self.context)
         return True
 
     def _update(self):

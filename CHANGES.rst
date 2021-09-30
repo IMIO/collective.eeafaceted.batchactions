@@ -5,8 +5,8 @@ Changelog
 1.9 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Checked permission on context (in ContactBaseBatchActionForm).
+  [sgeulette]
 
 1.8 (2021-07-16)
 ----------------
