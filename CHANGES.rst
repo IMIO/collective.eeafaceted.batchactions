@@ -5,8 +5,6 @@ Changelog
 1.9 (unreleased)
 ----------------
 
-- Fix version conflict and get python3 support
-  [fngaha]
 - Checked permission on context (in ContactBaseBatchActionForm).
   [sgeulette]
 
