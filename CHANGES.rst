@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.9 (unreleased)
+1.9 (2021-12-06)
 ----------------
 
 - Checked permission on context (in ContactBaseBatchActionForm).
