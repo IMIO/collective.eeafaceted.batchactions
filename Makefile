@@ -5,30 +5,20 @@ all: run
 BUILDOUT_FILES = bin/buildout buildout.cfg buildout.d/*.cfg
 
 .PHONY: bootstrap buildout run test cleanall
-bin/buildout: bootstrap.py buildout.cfg
-	virtualenv-2.7 .
-	./bin/pip install -r requirements.txt
-	touch $@
 
-buildout: bin/buildout
+buildout: bootstrap
 	bin/buildout -Nt 5
 
-bootstrap: bin/buildout
+bootstrap:
+	virtualenv -p python2 .
+	./bin/pip install -r requirements.txt
 
-run: bin/instance 
+run: buildout
 	bin/instance fg
 
-bin/instance: $(BUILDOUT_FILES)
-	bin/buildout -Nvt 5
-	touch $@
-
-test: bin/test
+test:
 	rm -fr htmlcov
 	bin/test
 
-bin/test: $(BUILDOUT_FILES)
-	bin/buildout -Nvt 5
-	touch $@
-
 cleanall:
-	rm -fr bin develop-eggs htmlcov include .installed.cfg lib .mr.developer.cfg parts downloads eggs
+	rm -fr bin include lib local share htmlcov develop-eggs downloads eggs parts .installed.cfg .mr.developper.cfg .git/hooks/pre-commit

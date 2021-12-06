@@ -256,7 +256,7 @@ class LabelsBatchActionForm(BaseBatchActionForm):
         context = self.get_labeljar_context()
         try:
             adapted = ILabelJar(context)
-        except:
+        except Exception:
             return SimpleVocabulary(terms), [], []
         self.can_change_labels = is_permitted(self.brains, perm='ftw.labels: Change Labels')
         for label in adapted.list():
@@ -361,6 +361,7 @@ class LabelsBatchActionForm(BaseBatchActionForm):
                         if data['action_choice'] in ('add', 'replace'):
                             labeling.pers_update(values['p_a'], True)
                 obj.reindexObject(['labels'])
+
 
 try:
     from collective.contact.widget.schema import ContactList
