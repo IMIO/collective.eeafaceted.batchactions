@@ -5,8 +5,8 @@ Changelog
 1.10 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Corrected UnicodeDecodeError on transition title.
+  [sgeulette]
 
 1.9 (2021-12-06)
 ----------------

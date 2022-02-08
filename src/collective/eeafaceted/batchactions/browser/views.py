@@ -167,7 +167,7 @@ class TransitionBatchActionForm(BaseBatchActionForm):
                 terms.append(
                     SimpleTerm(id,
                                id,
-                               translate(tit,
+                               translate(safe_unicode(tit, 'utf8'),
                                          domain='plone',
                                          context=self.request)))
         terms = sorted(terms, key=attrgetter('title'))
