@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.10 (unreleased)
+1.10 (2022-02-10)
 -----------------
 
 - Corrected UnicodeDecodeError on transition title.
