@@ -5,8 +5,8 @@ Changelog
 1.11 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Avoided exception when referer url contains non ascii char.
+  [sgeulette]
 
 1.10 (2022-02-10)
 -----------------

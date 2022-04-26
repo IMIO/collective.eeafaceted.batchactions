@@ -8,6 +8,7 @@ from collective.eeafaceted.batchactions.utils import brains_from_uids
 from collective.eeafaceted.batchactions.utils import cannot_modify_field_msg
 from collective.eeafaceted.batchactions.utils import has_interface
 from collective.eeafaceted.batchactions.utils import is_permitted
+from imio.helpers.content import safe_encode
 from imio.helpers.security import fplog
 from operator import attrgetter
 from plone import api
@@ -134,7 +135,7 @@ class BaseBatchActionForm(Form):
             applied = self._apply(**data)
             # redirect if not using an overlay
             if not self.request.form.get('ajax_load', ''):
-                self.request.response.redirect(self.request.form['form.widgets.referer'])
+                self.request.response.redirect(safe_encode(self.request.form['form.widgets.referer']))
             else:
                 # make sure we return nothing, taken into account by ajax query
                 if not applied:
