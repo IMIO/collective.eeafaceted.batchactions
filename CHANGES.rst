@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.11 (unreleased)
+1.11 (2022-05-06)
 -----------------
 
 - Avoided exception when referer url contains non ascii char.
