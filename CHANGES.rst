@@ -6,7 +6,7 @@ Changelog
 -----------------
 
 - Added action to `Update WF role mappings`.
-  Moved `available_permission` functionnality from `ContactBaseBatchActionForm`
+  Moved `available_permission` functionality from `ContactBaseBatchActionForm`
   to `BaseBatchActionForm` so it is available for any action.
   [gbastien]
 
