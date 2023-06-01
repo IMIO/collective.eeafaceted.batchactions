@@ -22,3 +22,6 @@ msgstr ""
 msgid "delete-batch-action-but"
 msgstr ""
 
+#. Default: "Update WF role mappings"
+msgid "update-wf-role-mappings-batch-action-but"
+msgstr ""

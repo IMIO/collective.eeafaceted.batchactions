@@ -1,8 +1,15 @@
 # -*- coding: utf-8 -*-
 
+from AccessControl import Unauthorized
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from plone import api
+from plone.app.testing import login
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
 from Products.CMFCore.permissions import DeleteObjects
+from Products.CMFCore.permissions import AccessContentsInformation
+from Products.CMFCore.permissions import View
 from Products.CMFCore.utils import _checkPermission
 from zope.component import getMultiAdapter
 
@@ -174,3 +181,31 @@ class TestActions(BaseTestCase):
         self.assertFalse('doc1' in self.portal.objectIds())
         self.assertFalse('doc2' in self.portal.objectIds())
         self.assertTrue('eea_folder' in self.portal.objectIds())
+
+    def test_udate_wf_role_mappings_action(self):
+        """Update WF role mappings action."""
+        # for now test user able to see and returned by catalog query
+        self.assertTrue(_checkPermission(View, self.doc1))
+        self.assertTrue(_checkPermission(View, self.doc2))
+        catalog = self.portal.portal_catalog
+        self.assertEqual(len(catalog(UID=[self.doc1.UID(), self.doc2.UID()])), 2)
+        # do a change in Document workflow, make only "Manager" able to View
+        wf = self.portal.portal_workflow.getWorkflowsFor(self.doc1)[0]
+        wf.states.private.permission_roles[AccessContentsInformation] = ('Manager', )
+        wf.states.private.permission_roles[View] = ('Manager', )
+        # set 'uids' in form
+        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        self.request.form['form.widgets.uids'] = doc_uids
+        form = self.eea_folder.restrictedTraverse('update-wf-role-mappings-batch-action')
+        form.update()
+        self.assertTrue("This action will affect 2 element(s)." in form.render())
+        # apply, 2 elements are updated
+        form.handleApply(form, None)
+
+        # make test user no more Manager, can not access the action and the documents
+        setRoles(self.portal, TEST_USER_ID, ['Member'])
+        login(self.portal, TEST_USER_NAME)
+        self.assertRaises(Unauthorized, form.handleApply, form, None)
+        self.assertFalse(_checkPermission(View, self.doc1))
+        self.assertFalse(_checkPermission(View, self.doc2))
+        self.assertEqual(len(catalog(UID=[self.doc1.UID(), self.doc2.UID()])), 0)

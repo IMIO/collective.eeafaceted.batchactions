@@ -22,6 +22,12 @@
         class=".views.TransitionBatchActionForm"
         permission="zope2.View" />
 
+    <browser:page
+        for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
+        name="update-wf-role-mappings-batch-action"
+        class=".views.UpdateWFRoleMappingsActionForm"
+        permission="zope2.View" />
+
     <!--browser:page
         for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
         name="delete-batch-action"

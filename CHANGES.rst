@@ -5,8 +5,10 @@ Changelog
 1.12 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Added action to `Update WF role mappings`.
+  Moved `available_permission` functionnality from `ContactBaseBatchActionForm`
+  to `BaseBatchActionForm` so it is available for any action.
+  [gbastien]
 
 1.11 (2022-05-06)
 -----------------
