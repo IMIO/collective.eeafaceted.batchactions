@@ -9,13 +9,13 @@ from collective.eeafaceted.batchactions.utils import cannot_modify_field_msg
 from collective.eeafaceted.batchactions.utils import has_interface
 from collective.eeafaceted.batchactions.utils import is_permitted
 from imio.helpers.content import safe_encode
+from imio.helpers.security import check_zope_admin
 from imio.helpers.security import fplog
 from operator import attrgetter
 from plone import api
 from plone.formwidget.masterselect import MasterSelectField
 from plone.supermodel import model
 from Products.CMFCore.permissions import DeleteObjects
-from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.utils import _checkPermission
 from Products.CMFPlone import PloneMessageFactory as PMF
 from Products.CMFPlone.utils import safe_unicode
@@ -66,6 +66,8 @@ class BaseBatchActionForm(Form):
     weight = 100
     # by default, action is available or if a permission is defined
     available_permission = ''
+    # make action only available to the Zope admin
+    available_for_zope_admin = False
     # useful when dispalying batch actions on several views for same context
     section = "default"
 
@@ -74,6 +76,8 @@ class BaseBatchActionForm(Form):
         res = True
         if self.available_permission:
             res = api.user.has_permission(self.available_permission, obj=self.context)
+        elif self.available_for_zope_admin:
+            res = check_zope_admin()
         return res
 
     def _update(self):
@@ -245,7 +249,7 @@ class DeleteBatchActionForm(BaseBatchActionForm):
 class UpdateWFRoleMappingsActionForm(BaseBatchActionForm):
 
     label = _(u"Update WF role mappings")
-    available_permission = ManagePortal
+    available_for_zope_admin = True
 
     def _apply(self, **data):
         """ """
