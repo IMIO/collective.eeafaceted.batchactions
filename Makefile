@@ -7,7 +7,7 @@ BUILDOUT_FILES = bin/buildout buildout.cfg buildout.d/*.cfg
 .PHONY: bootstrap buildout run test cleanall
 
 buildout: bootstrap
-	bin/buildout -Nt 5
+	bin/buildout -t 5
 
 bootstrap:
 	virtualenv -p python2 .

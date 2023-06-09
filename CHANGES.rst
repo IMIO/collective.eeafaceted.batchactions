@@ -5,8 +5,12 @@ Changelog
 1.12 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Added action to `Update WF role mappings`.
+  Moved `available_permission` functionality from `ContactBaseBatchActionForm`
+  to `BaseBatchActionForm` so it is available for any action.
+  Added `BaseBatchActionForm.available_for_zope_admin` that makes an action
+  only available to the Zope admin.
+  [gbastien]
 
 1.11 (2022-05-06)
 -----------------

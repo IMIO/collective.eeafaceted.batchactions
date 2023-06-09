@@ -9,6 +9,7 @@ from collective.eeafaceted.batchactions.utils import cannot_modify_field_msg
 from collective.eeafaceted.batchactions.utils import has_interface
 from collective.eeafaceted.batchactions.utils import is_permitted
 from imio.helpers.content import safe_encode
+from imio.helpers.security import check_zope_admin
 from imio.helpers.security import fplog
 from operator import attrgetter
 from plone import api
@@ -63,12 +64,21 @@ class BaseBatchActionForm(Form):
     button_with_icon = False
     overlay = True
     weight = 100
+    # by default, action is available or if a permission is defined
+    available_permission = ''
+    # make action only available to the Zope admin
+    available_for_zope_admin = False
     # useful when dispalying batch actions on several views for same context
     section = "default"
 
     def available(self):
         """Will the action be available for current context?"""
-        return True
+        res = True
+        if self.available_permission:
+            res = api.user.has_permission(self.available_permission, obj=self.context)
+        elif self.available_for_zope_admin:
+            res = check_zope_admin()
+        return res
 
     def _update(self):
         """Method to override if you need to do something in the update."""
@@ -236,6 +246,22 @@ class DeleteBatchActionForm(BaseBatchActionForm):
             api.content.delete(obj)
 
 
+class UpdateWFRoleMappingsActionForm(BaseBatchActionForm):
+
+    label = _(u"Update WF role mappings")
+    available_for_zope_admin = True
+
+    def _apply(self, **data):
+        """ """
+        wtool = api.portal.get_tool(name='portal_workflow')
+        for brain in self.brains:
+            obj = brain.getObject()
+            for wf in wtool.getWorkflowsFor(obj):
+                updated = wf.updateRoleMappingsFor(obj)
+                if updated:
+                    obj.reindexObjectSecurity()
+
+
 try:
     from ftw.labels.interfaces import ILabeling
     from ftw.labels.interfaces import ILabelJar
@@ -379,16 +405,8 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
 
     label = _(u"Batch contact field change")
     weight = 30
-    # Following variables must be overrided in child class
-    available_permission = ''
     attribute = ''
     field_value_type = None
-
-    def available(self):
-        """Will the action be available for current context?"""
-        if self.available_permission:
-            return api.user.has_permission(self.available_permission, obj=self.context)
-        return True
 
     def _update(self):
         assert self.attribute
