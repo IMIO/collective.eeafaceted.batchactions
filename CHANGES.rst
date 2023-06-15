@@ -11,6 +11,9 @@ Changelog
   Added `BaseBatchActionForm.available_for_zope_admin` that makes an action
   only available to the Zope admin.
   [gbastien]
+- Make `UpdateWFRoleMappingsActionForm` use
+  `imio.helpers.workflow.update_role_mappings_for`.
+  [gbastien]
 
 1.11 (2022-05-06)
 -----------------
