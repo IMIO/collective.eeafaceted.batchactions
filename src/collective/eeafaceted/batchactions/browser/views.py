@@ -258,7 +258,7 @@ class UpdateWFRoleMappingsActionForm(BaseBatchActionForm):
         for brain in self.brains:
             obj = brain.getObject()
             for wf in wtool.getWorkflowsFor(obj):
-                update_role_mappings_for(wf, obj)
+                update_role_mappings_for(obj, wf=wf)
 
 
 try:
