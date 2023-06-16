@@ -11,6 +11,7 @@ from collective.eeafaceted.batchactions.utils import is_permitted
 from imio.helpers.content import safe_encode
 from imio.helpers.security import check_zope_admin
 from imio.helpers.security import fplog
+from imio.helpers.workflow import update_role_mappings_for
 from operator import attrgetter
 from plone import api
 from plone.formwidget.masterselect import MasterSelectField
@@ -257,9 +258,7 @@ class UpdateWFRoleMappingsActionForm(BaseBatchActionForm):
         for brain in self.brains:
             obj = brain.getObject()
             for wf in wtool.getWorkflowsFor(obj):
-                updated = wf.updateRoleMappingsFor(obj)
-                if updated:
-                    obj.reindexObjectSecurity()
+                update_role_mappings_for(obj, wf=wf)
 
 
 try:
