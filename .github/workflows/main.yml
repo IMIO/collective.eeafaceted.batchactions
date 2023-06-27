@@ -10,12 +10,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Python 2
-        uses: actions/setup-python@v2
+      - name: Set up pyenv and Python
+        uses: "gabrielfalcao/pyenv-action@v14"
         with:
-          python-version: 2.7
-      - name: Checkout
-        uses: actions/checkout@v2
+          default: 2.7.18
+          versions: 3.8.16
+          command: pyenv -v
       - name: Cache eggs
         uses: actions/cache@v2
         env:
@@ -36,12 +36,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Python 2
-        uses: actions/setup-python@v2
+      - name: Set up pyenv and Python
+        uses: "gabrielfalcao/pyenv-action@v14"
         with:
-          python-version: 2.7
-      - name: Checkout
-        uses: actions/checkout@v2
+          default: 2.7.18
+          versions: 3.8.16
+          command: pyenv -v
       - name: Cache eggs
         uses: actions/cache@v2
         env:
