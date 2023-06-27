@@ -1,9 +1,12 @@
-.. image:: https://travis-ci.org/IMIO/collective.eeafaceted.batchactions.svg?branch=master
-   :target: https://travis-ci.org/IMIO/collective.eeafaceted.batchactions
+.. image:: https://github.com/IMIO/collective.eeafaceted.batchactions/actions/workflows/main.yml/badge.svg?branch=master
+    :target: https://github.com/IMIO/collective.eeafaceted.batchactions/actions/workflows/main.yml
 
 .. image:: https://coveralls.io/repos/IMIO/collective.eeafaceted.batchactions/badge.png?branch=master
   :target: https://coveralls.io/r/IMIO/collective.eeafaceted.batchactions?branch=master
 
+.. image:: http://img.shields.io/pypi/v/collective.eeafaceted.batchactions.svg
+   :alt: PyPI badge
+   :target: https://pypi.org/project/collective.eeafaceted.batchactions
 
 ==================================
 collective.eeafaceted.batchactions
