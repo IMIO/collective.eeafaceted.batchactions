@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.12 (unreleased)
+1.12 (2023-06-27)
 -----------------
 
 - Added action to `Update WF role mappings`.
