@@ -269,38 +269,46 @@ except ImportError:
     pass
 
 
-class LabelsBatchActionForm(BaseBatchActionForm):
+class BaseARUOBatchActionForm(BaseBatchActionForm):
+    """Base class for "add/remove/update/overwrite" actions."""
 
-    label = _(u"Batch labels change")
-    weight = 20
+    @property
+    def _vocabulary(self):
+        """The name of the vocabulary or a SimpleVocabulary instance."""
+        return None
 
-    def get_labeljar_context(self):
-        return self.context
+    @property
+    def _modified_attr_name(self):
+        """The name of the attribute that will be modified on the object."""
+        return None
 
-    def get_labels_vocabulary(self):
-        terms, p_labels, g_labels = [], [], []
-        context = self.get_labeljar_context()
-        try:
-            adapted = ILabelJar(context)
-        except Exception:
-            return SimpleVocabulary(terms), [], []
-        self.can_change_labels = is_permitted(self.brains, perm='ftw.labels: Change Labels')
-        for label in adapted.list():
-            if label['by_user']:
-                p_labels.append(label['label_id'])
-                terms.append(SimpleVocabulary.createTerm('%s:' % label['label_id'],
-                                                         label['label_id'],
-                                                         u'{} (*)'.format(safe_unicode(label['title']))))
-            else:
-                g_labels.append(label['label_id'])
-                if self.can_change_labels:
-                    terms.append(SimpleVocabulary.createTerm(label['label_id'], label['label_id'],
-                                                             safe_unicode(label['title'])))
-        return SimpleVocabulary(terms), set(p_labels), g_labels
+    @property
+    def _removed_values_description(self):
+        """The description (msgid) of the "removed_values" field."""
+        return u"Select the values to remove."
+
+    @property
+    def _added_values_description(self):
+        """The description (msgid) of the "added_values" field."""
+        return u"Select the values to add."
+
+    @property
+    def _may_apply(self):
+        """The condition for the action to be applied."""
+        return is_permitted(self.brains)
+
+    @property
+    def _indexes(self):
+        """Return list of indexes to reindex if any."""
+        return []
+
+    @property
+    def _should_call_modified_event(self):
+        """Call the "modified" event on object at the end if it was modified?"""
+        return False
 
     def _update(self):
-        labels_voc, self.p_labels, self.g_labels = self.get_labels_vocabulary()
-        self.do_apply = len(labels_voc._terms) and has_interface(self.brains, ILabelSupport)
+        self.do_apply = self._may_apply
         self.fields += Fields(MasterSelectField(
             __name__='action_choice',
             title=_(u'Batch action choice'),
@@ -330,27 +338,95 @@ class LabelsBatchActionForm(BaseBatchActionForm):
             self.fields += Fields(schema.List(
                 __name__='removed_values',
                 title=_(u"Removed values"),
-                description=_(u"Select the values to remove. A personal label is represented by (*)."),
+                description=_(self._removed_values_description),
                 required=False,
-                value_type=schema.Choice(vocabulary=labels_voc),
+                value_type=schema.Choice(vocabulary=self._vocabulary),
             ))
             self.fields += Fields(schema.List(
                 __name__='added_values',
                 title=_(u"Added values"),
-                description=_(u"Select the values to add. A personal label is represented by (*)."),
+                description=_(self._added_values_description),
                 required=False,
-                value_type=schema.Choice(vocabulary=labels_voc),
+                value_type=schema.Choice(vocabulary=self._vocabulary),
             ))
             self.fields["removed_values"].widgetFactory = CheckBoxFieldWidget
             self.fields["added_values"].widgetFactory = CheckBoxFieldWidget
 
     def _update_widgets(self):
         if self.do_apply:
-            #        self.widgets['action_choice'].size = 4
             self.widgets['removed_values'].multiple = 'multiple'
             self.widgets['removed_values'].size = 5
             self.widgets['added_values'].multiple = 'multiple'
             self.widgets['added_values'].size = 5
+
+    def _apply(self, **data):
+        if ((data.get('removed_values', None) and data['action_choice'] in ('remove', 'replace')) or
+           (data.get('added_values', None)) and data['action_choice'] in ('add', 'replace', 'overwrite')):
+            for brain in self.brains:
+                obj = brain.getObject()
+                if data['action_choice'] in ('overwrite', ):
+                    items = set(data['added_values'])
+                else:
+                    items = set(obj.recipient_groups or [])
+                    if data['action_choice'] in ('remove', 'replace'):
+                        items = items.difference(data['removed_values'])
+                    if data['action_choice'] in ('add', 'replace'):
+                        items = items.union(data['added_values'])
+                # only update if values changed
+                if list(getattr(obj, self.modified_attr_name)) != list(items):
+                    setattr(obj, self.modified_attr_name, list(items))
+                    if self._should_call_modified_event:
+                        # will also reindex the entire object
+                        modified(obj)
+                    elif self._indexes:
+                        obj.reindexObject(idxs=self._indexes)
+
+
+class LabelsBatchActionForm(BaseARUOBatchActionForm):
+
+    label = _(u"Batch labels change")
+    weight = 20
+
+    @property
+    def _vocabulary(self):
+        return self.labels_voc
+
+    @property
+    def _removed_values_description(self):
+        return u"Select the values to remove. A personal label is represented by (*)."
+
+    @property
+    def _added_values_description(self):
+        return u"Select the values to add. A personal label is represented by (*)."
+
+    @property
+    def _may_apply(self):
+        self.labels_voc, self.p_labels, self.g_labels = self.get_labels_vocabulary()
+        return len(self.labels_voc._terms) and has_interface(self.brains, ILabelSupport)
+
+    def get_labeljar_context(self):
+        return self.context
+
+    def get_labels_vocabulary(self):
+        terms, p_labels, g_labels = [], [], []
+        context = self.get_labeljar_context()
+        try:
+            adapted = ILabelJar(context)
+        except Exception:
+            return SimpleVocabulary(terms), [], []
+        self.can_change_labels = is_permitted(self.brains, perm='ftw.labels: Change Labels')
+        for label in adapted.list():
+            if label['by_user']:
+                p_labels.append(label['label_id'])
+                terms.append(SimpleVocabulary.createTerm('%s:' % label['label_id'],
+                                                         label['label_id'],
+                                                         u'{} (*)'.format(safe_unicode(label['title']))))
+            else:
+                g_labels.append(label['label_id'])
+                if self.can_change_labels:
+                    terms.append(SimpleVocabulary.createTerm(label['label_id'], label['label_id'],
+                                                             safe_unicode(label['title'])))
+        return SimpleVocabulary(terms), set(p_labels), g_labels
 
     def _apply(self, **data):
         if ((data.get('removed_values', None) and data['action_choice'] in ('remove', 'replace')) or

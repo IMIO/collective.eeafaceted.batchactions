@@ -5,8 +5,12 @@ Changelog
 1.13 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Added `BaseARUOBatchActionForm`, a class factorizing the action that
+  `add/remove/update/overwrite` values on an attribute of an object
+  (originally used for the `LabelsBatchActionForm`) so it is easier to reuse
+  for other similar actions. `LabelsBatchActionForm` is now based on that
+  `BaseARUOBatchActionForm`.
+  [gbastien]
 
 1.12 (2023-06-27)
 -----------------
