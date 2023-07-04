@@ -12,6 +12,7 @@ from imio.helpers.content import safe_encode
 from imio.helpers.security import check_zope_admin
 from imio.helpers.security import fplog
 from imio.helpers.workflow import update_role_mappings_for
+from imio.pyutils.utils import sort_by_indexes
 from operator import attrgetter
 from plone import api
 from plone.formwidget.masterselect import MasterSelectField
@@ -274,8 +275,12 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
 
     @property
     def _vocabulary(self):
-        """The name of the vocabulary or a SimpleVocabulary instance."""
+        """A SimpleVocabulary instance."""
         return None
+
+    def _should_keep_vocabulary_order(self):
+        """Make order of stored values respect field vocabulary terms order?"""
+        return True
 
     @property
     def _modified_attr_name(self):
@@ -367,14 +372,19 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                 if data['action_choice'] in ('overwrite', ):
                     items = set(data['added_values'])
                 else:
-                    items = set(obj.recipient_groups or [])
+                    items = set(getattr(obj, self._modified_attr_name, []))
                     if data['action_choice'] in ('remove', 'replace'):
                         items = items.difference(data['removed_values'])
                     if data['action_choice'] in ('add', 'replace'):
                         items = items.union(data['added_values'])
                 # only update if values changed
-                if list(getattr(obj, self.modified_attr_name)) != list(items):
-                    setattr(obj, self.modified_attr_name, list(items))
+                if list(getattr(obj, self._modified_attr_name)) != list(items):
+                    if self._should_keep_vocabulary_order:
+                        vocab = self.fields['added_values'].field.value_type.vocabulary
+                        all_values = [term.value for term in vocab._terms]
+                        indexes = [all_values.index(item) for item in items]
+                        items = sort_by_indexes(list(items), indexes)
+                    setattr(obj, self._modified_attr_name, items)
                     if self._should_call_modified_event:
                         # will also reindex the entire object
                         modified(obj)
