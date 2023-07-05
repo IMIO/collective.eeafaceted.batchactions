@@ -251,10 +251,11 @@ class TestActions(BaseTestCase):
         form.update()
         # "testtype" portal_type is at the end of portal_types,
         # if we add "Document" portal_type, order is respected
-        self.request['form.widgets.added_values'] = ['Document']
         self.request['form.widgets.action_choice'] = 'add'
+        self.request['form.widgets.added_values'] = ['Document']
         form.handleApply(form, None)
         self.assertEqual(self.doc1.custom_portal_types, ['Document', 'testtype'])
         # "position" portal_type will be added between existing values
         self.request['form.widgets.added_values'] = ['position']
+        form.handleApply(form, None)
         self.assertEqual(self.doc1.custom_portal_types, ['Document', 'position', 'testtype'])
