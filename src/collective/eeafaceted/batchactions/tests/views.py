@@ -2,8 +2,8 @@
 
 from collective.contact.widget.schema import ContactChoice
 from collective.contact.widget.source import ContactSourceBinder
-from collective.eeafaceted.batchactions.browser.views import BaseBatchActionForm
 from collective.eeafaceted.batchactions.browser.views import BaseARUOBatchActionForm
+from collective.eeafaceted.batchactions.browser.views import BaseBatchActionForm
 from collective.eeafaceted.batchactions.browser.views import ContactBaseBatchActionForm
 from imio.helpers.content import get_vocab
 
