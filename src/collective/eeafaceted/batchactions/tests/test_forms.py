@@ -241,3 +241,20 @@ class TestActions(BaseTestCase):
         self.assertFalse(_checkPermission(View, self.doc1))
         self.assertFalse(_checkPermission(View, self.doc2))
         self.assertEqual(len(catalog(UID=[self.doc1.UID(), self.doc2.UID()])), 0)
+
+    def test_aruo_action(self):
+        """Update 'custom_portal_type' attribute."""
+        self.doc1.custom_portal_types = ['testtype']
+        doc_uids = self.doc1.UID()
+        self.request.form['form.widgets.uids'] = doc_uids
+        form = self.eea_folder.restrictedTraverse('testing-aruo-batch-action')
+        form.update()
+        # "testtype" portal_type is at the end of portal_types,
+        # if we add "Document" portal_type, order is respected
+        self.request['form.widgets.added_values'] = ['Document']
+        self.request['form.widgets.action_choice'] = 'add'
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['Document', 'testtype'])
+        # "position" portal_type will be added between existing values
+        self.request['form.widgets.added_values'] = ['position']
+        self.assertEqual(self.doc1.custom_portal_types, ['Document', 'position', 'testtype'])

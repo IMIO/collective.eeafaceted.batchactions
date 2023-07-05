@@ -23,6 +23,12 @@
       permission="zope2.View" />
 
   <browser:page
+      for="collective.eeafaceted.batchactions.tests.interfaces.IBatchActionsMarker"
+      name="testing-aruo-batch-action"
+      class=".tests.views.TestingARUOBatchActionForm"
+      permission="zope2.View" />
+
+  <browser:page
       for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
       name="labels-batch-action"
       class=".browser.views.LabelsBatchActionForm"

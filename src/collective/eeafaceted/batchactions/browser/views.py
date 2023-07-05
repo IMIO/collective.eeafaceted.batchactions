@@ -276,7 +276,6 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
     @property
     def _vocabulary(self):
         """A SimpleVocabulary instance."""
-        return None
 
     def _should_keep_vocabulary_order(self):
         """Make order of stored values respect field vocabulary terms order?"""
@@ -285,7 +284,6 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
     @property
     def _modified_attr_name(self):
         """The name of the attribute that will be modified on the object."""
-        return None
 
     @property
     def _removed_values_description(self):
