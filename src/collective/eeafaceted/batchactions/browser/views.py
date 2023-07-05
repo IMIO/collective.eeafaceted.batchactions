@@ -378,7 +378,7 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                     if data['action_choice'] in ('add', 'replace'):
                         items = items.union(data['added_values'])
                 # only update if values changed
-                if list(getattr(obj, self._modified_attr_name)) != list(items):
+                if sorted(list(getattr(obj, self._modified_attr_name))) != sorted(list(items)):
                     if self._should_keep_vocabulary_order:
                         vocab = self.fields['added_values'].field.value_type.vocabulary
                         all_values = [term.value for term in vocab._terms]
