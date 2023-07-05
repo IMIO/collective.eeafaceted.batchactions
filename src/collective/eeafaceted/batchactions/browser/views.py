@@ -289,13 +289,13 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
 
     @property
     def _removed_values_description(self):
-        """The description (msgid) of the "removed_values" field."""
-        return u"Select the values to remove."
+        """The translated description of the "removed_values" field."""
+        return _(u"Select the values to remove.")
 
     @property
     def _added_values_description(self):
-        """The description (msgid) of the "added_values" field."""
-        return u"Select the values to add."
+        """The translated description of the "added_values" field."""
+        return _(u"Select the values to add.")
 
     @property
     def _may_apply(self):
@@ -343,14 +343,14 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
             self.fields += Fields(schema.List(
                 __name__='removed_values',
                 title=_(u"Removed values"),
-                description=_(self._removed_values_description),
+                description=self._removed_values_description,
                 required=False,
                 value_type=schema.Choice(vocabulary=self._vocabulary),
             ))
             self.fields += Fields(schema.List(
                 __name__='added_values',
                 title=_(u"Added values"),
-                description=_(self._added_values_description),
+                description=self._added_values_description,
                 required=False,
                 value_type=schema.Choice(vocabulary=self._vocabulary),
             ))
@@ -403,11 +403,11 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
 
     @property
     def _removed_values_description(self):
-        return u"Select the values to remove. A personal label is represented by (*)."
+        return _(u"Select the values to remove. A personal label is represented by (*).")
 
     @property
     def _added_values_description(self):
-        return u"Select the values to add. A personal label is represented by (*)."
+        return _(u"Select the values to add. A personal label is represented by (*).")
 
     @property
     def _may_apply(self):

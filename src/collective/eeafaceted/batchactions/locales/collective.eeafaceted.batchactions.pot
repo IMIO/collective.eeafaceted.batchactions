@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-06-01 09:40+0000\n"
+"POT-Creation-Date: 2023-07-05 07:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,43 +17,43 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: collective.eeafaceted.batchactions\n"
 
-#: ./browser/views.py:305
+#: ./browser/views.py:321
 msgid "Add items"
 msgstr ""
 
-#: ./browser/views.py:336
+#: ./browser/views.py:352
 msgid "Added values"
 msgstr ""
 
-#: ./browser/views.py:126
+#: ./browser/views.py:132
 msgid "Apply"
 msgstr ""
 
-#: ./browser/views.py:303
+#: ./browser/views.py:319
 msgid "Batch action choice"
 msgstr ""
 
-#: ./browser/views.py:51
+#: ./browser/views.py:53
 msgid "Batch action form"
 msgstr ""
 
-#: ./browser/views.py:402
+#: ./browser/views.py:491
 msgid "Batch contact field change"
 msgstr ""
 
-#: ./browser/views.py:271
+#: ./browser/views.py:397
 msgid "Batch labels change"
 msgstr ""
 
-#: ./browser/views.py:158
+#: ./browser/views.py:164
 msgid "Batch state change"
 msgstr ""
 
-#: ./browser/views.py:195
+#: ./browser/views.py:201
 msgid "Comment"
 msgstr ""
 
-#: ./browser/views.py:211
+#: ./browser/views.py:217
 msgid "Delete elements"
 msgstr ""
 
@@ -61,43 +61,51 @@ msgstr ""
 msgid "Extension profile for collective.eeafaceted.batchactions."
 msgstr ""
 
-#: ./browser/views.py:191
+#: ./browser/views.py:197
 msgid "No common or available transition. Modify your selection."
 msgstr ""
 
-#: ./browser/views.py:196
+#: ./browser/views.py:202
 msgid "Optional comment to display in history"
 msgstr ""
 
-#: ./browser/views.py:308
+#: ./browser/views.py:324
 msgid "Overwrite"
 msgstr ""
 
-#: ./browser/views.py:306
+#: ./browser/views.py:322
 msgid "Remove items"
 msgstr ""
 
-#: ./browser/views.py:329
+#: ./browser/views.py:345
 msgid "Removed values"
 msgstr ""
 
-#: ./browser/views.py:307
+#: ./browser/views.py:323
 msgid "Replace some items by others"
 msgstr ""
 
-#: ./browser/views.py:434
+#: ./browser/views.py:523
 msgid "Search and select the values to add."
 msgstr ""
 
-#: ./browser/views.py:426
+#: ./browser/views.py:515
 msgid "Search and select the values to remove, if necessary."
 msgstr ""
 
-#: ./browser/views.py:337
+#: ./browser/views.py:298
+msgid "Select the values to add."
+msgstr ""
+
+#: ./browser/views.py:410
 msgid "Select the values to add. A personal label is represented by (*)."
 msgstr ""
 
-#: ./browser/views.py:330
+#: ./browser/views.py:293
+msgid "Select the values to remove."
+msgstr ""
+
+#: ./browser/views.py:406
 msgid "Select the values to remove. A personal label is represented by (*)."
 msgstr ""
 
@@ -105,19 +113,19 @@ msgstr ""
 msgid "Steps to ease tests of collective.eeafaceted.batchactions"
 msgstr ""
 
-#: ./browser/views.py:95
+#: ./browser/views.py:101
 msgid "This action will affect ${number} element(s)."
 msgstr ""
 
-#: ./browser/views.py:232
+#: ./browser/views.py:238
 msgid "This action will only affect ${deletable_number} element(s), indeed you do not have the permission to delete ${not_deletable_number} element(s)."
 msgstr ""
 
-#: ./browser/views.py:188
+#: ./browser/views.py:194
 msgid "Transition"
 msgstr ""
 
-#: ./browser/views.py:247
+#: ./browser/views.py:253
 msgid "Update WF role mappings"
 msgstr ""
 
@@ -133,7 +141,7 @@ msgstr ""
 msgid "collective.eeafaceted.batchactions tests"
 msgstr ""
 
-#: ./browser/views.py:214
+#: ./browser/views.py:220
 msgid "delete-batch-action-but"
 msgstr ""
 
