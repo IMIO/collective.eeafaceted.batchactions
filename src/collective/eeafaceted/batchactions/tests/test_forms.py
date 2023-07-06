@@ -247,7 +247,7 @@ class TestActions(BaseTestCase):
         """Update 'custom_portal_type' attribute."""
         addOrUpdateIndexes(
             self.portal,
-            indexInfos={'custom_portal_types': ('KeywordIndex', {}),})
+            indexInfos={'custom_portal_types': ('KeywordIndex', {}), })
         catalog = self.portal.portal_catalog
         self.doc1.custom_portal_types = ['testtype']
         self.doc1.reindexObject()
