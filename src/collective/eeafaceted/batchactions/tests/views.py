@@ -32,22 +32,10 @@ class ContactBatchActionForm(ContactBaseBatchActionForm):
 
 class TestingARUOBatchActionForm(BaseARUOBatchActionForm):
 
+    modified_attr_name = 'custom_portal_types'
+    indexes = 'custom_portal_types'
+    call_modified_event = True
+
     @property
     def _vocabulary(self):
         return get_vocab(self.context, 'plone.app.vocabularies.PortalTypes')
-
-    @property
-    def _modified_attr_name(self):
-        return 'custom_portal_types'
-
-    @property
-    def _indexes(self):
-        # call super() for coverage
-        super(TestingARUOBatchActionForm, self)._indexes
-        return ['portal_type']
-
-    @property
-    def _should_call_modified_event(self):
-        # call super() for coverage
-        super(TestingARUOBatchActionForm, self)._should_call_modified_event
-        return True

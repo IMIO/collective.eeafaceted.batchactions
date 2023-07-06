@@ -3,6 +3,7 @@
 from AccessControl import Unauthorized
 from collective.eeafaceted.batchactions.browser.views import BaseBatchActionForm
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
+from imio.helpers.catalog import addOrUpdateIndexes
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import setRoles
@@ -244,7 +245,15 @@ class TestActions(BaseTestCase):
 
     def test_aruo_action(self):
         """Update 'custom_portal_type' attribute."""
+        addOrUpdateIndexes(
+            self.portal,
+            indexInfos={'custom_portal_types': ('KeywordIndex', {}),})
+        catalog = self.portal.portal_catalog
         self.doc1.custom_portal_types = ['testtype']
+        self.doc1.reindexObject()
+        self.assertTrue(catalog(custom_portal_types='testtype'))
+        self.assertFalse(catalog(custom_portal_types='Document'))
+        self.assertFalse(catalog(custom_portal_types='position'))
         doc_uids = self.doc1.UID()
         self.request.form['form.widgets.uids'] = doc_uids
         form = self.eea_folder.restrictedTraverse('testing-aruo-batch-action')
@@ -255,7 +264,22 @@ class TestActions(BaseTestCase):
         self.request['form.widgets.added_values'] = ['Document']
         form.handleApply(form, None)
         self.assertEqual(self.doc1.custom_portal_types, ['Document', 'testtype'])
+        self.assertTrue(catalog(custom_portal_types='testtype'))
+        self.assertTrue(catalog(custom_portal_types='Document'))
+        self.assertFalse(catalog(custom_portal_types='position'))
         # "position" portal_type will be added between existing values
         self.request['form.widgets.added_values'] = ['position']
         form.handleApply(form, None)
         self.assertEqual(self.doc1.custom_portal_types, ['Document', 'position', 'testtype'])
+        self.assertTrue(catalog(custom_portal_types='testtype'))
+        self.assertTrue(catalog(custom_portal_types='Document'))
+        self.assertTrue(catalog(custom_portal_types='position'))
+        # remove "position"
+        self.request['form.widgets.action_choice'] = 'remove'
+        self.request['form.widgets.added_values'] = []
+        self.request['form.widgets.removed_values'] = ['position']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['Document', 'testtype'])
+        self.assertTrue(catalog(custom_portal_types='testtype'))
+        self.assertTrue(catalog(custom_portal_types='Document'))
+        self.assertFalse(catalog(custom_portal_types='position'))

@@ -273,17 +273,20 @@ except ImportError:
 class BaseARUOBatchActionForm(BaseBatchActionForm):
     """Base class for "add/remove/update/overwrite" actions."""
 
+    # Make order of stored values respect field vocabulary terms order?
+    keep_vocabulary_order = True
+    # the name of the attribute that will be modified on the object
+    modified_attr_name = None
+    # indexes to reindex when values changed
+    indexes = []
+    # call the "modified" event on object at the end if it was modified?
+    call_modified_event = False
+    # can the resulting set values be empty?
+    required = False
+
     @property
     def _vocabulary(self):
         """A SimpleVocabulary instance."""
-
-    def _should_keep_vocabulary_order(self):
-        """Make order of stored values respect field vocabulary terms order?"""
-        return True
-
-    @property
-    def _modified_attr_name(self):
-        """The name of the attribute that will be modified on the object."""
 
     @property
     def _removed_values_description(self):
@@ -300,15 +303,9 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
         """The condition for the action to be applied."""
         return is_permitted(self.brains)
 
-    @property
-    def _indexes(self):
-        """Return list of indexes to reindex if any."""
-        return []
-
-    @property
-    def _should_call_modified_event(self):
-        """Call the "modified" event on object at the end if it was modified?"""
-        return False
+    def _validate(self, obj, values):
+        """Validate given values for given obj."""
+        return True if not self.required or values else False
 
     def _update(self):
         self.do_apply = self._may_apply
@@ -370,24 +367,26 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                 if data['action_choice'] in ('overwrite', ):
                     items = set(data['added_values'])
                 else:
-                    items = set(getattr(obj, self._modified_attr_name, []))
+                    items = set(getattr(obj, self.modified_attr_name, []))
                     if data['action_choice'] in ('remove', 'replace'):
                         items = items.difference(data['removed_values'])
                     if data['action_choice'] in ('add', 'replace'):
                         items = items.union(data['added_values'])
                 # only update if values changed
-                if sorted(list(getattr(obj, self._modified_attr_name))) != sorted(list(items)):
-                    if self._should_keep_vocabulary_order:
+                if sorted(list(getattr(obj, self.modified_attr_name))) != sorted(list(items)):
+                    if not self._validate(obj, items):
+                        continue
+                    if self.keep_vocabulary_order:
                         vocab = self.fields['added_values'].field.value_type.vocabulary
                         all_values = [term.value for term in vocab._terms]
-                        indexes = [all_values.index(item) for item in items]
-                        items = sort_by_indexes(list(items), indexes)
-                    setattr(obj, self._modified_attr_name, items)
-                    if self._should_call_modified_event:
-                        # will also reindex the entire object
+                        term_indexes = [all_values.index(item) for item in items]
+                        items = sort_by_indexes(list(items), term_indexes)
+                    setattr(obj, self.modified_attr_name, items)
+                    if self.call_modified_event:
                         modified(obj)
-                    elif self._indexes:
-                        obj.reindexObject(idxs=self._indexes)
+                    # if modified event does not reindex, call it
+                    if self.indexes:
+                        obj.reindexObject(idxs=self.indexes)
 
 
 class LabelsBatchActionForm(BaseARUOBatchActionForm):
