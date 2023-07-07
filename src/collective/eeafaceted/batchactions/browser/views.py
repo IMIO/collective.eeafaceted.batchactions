@@ -277,6 +277,10 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
     keep_vocabulary_order = True
     # the name of the attribute that will be modified on the object
     modified_attr_name = None
+    # translated description of the "added_values" field
+    added_values_description = _(u"Select the values to add.")
+    # translated description of the "removed_values" field
+    removed_values_description = _(u"Select the values to remove.")
     # indexes to reindex when values changed
     indexes = []
     # call the "modified" event on object at the end if it was modified?
@@ -284,21 +288,10 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
     # can the resulting set values be empty?
     required = False
 
-    @property
     def _vocabulary(self):
         """A SimpleVocabulary instance."""
+        return None
 
-    @property
-    def _removed_values_description(self):
-        """The translated description of the "removed_values" field."""
-        return _(u"Select the values to remove.")
-
-    @property
-    def _added_values_description(self):
-        """The translated description of the "added_values" field."""
-        return _(u"Select the values to add.")
-
-    @property
     def _may_apply(self):
         """The condition for the action to be applied."""
         return is_permitted(self.brains)
@@ -308,7 +301,7 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
         return True if not self.required or values else False
 
     def _update(self):
-        self.do_apply = self._may_apply
+        self.do_apply = self._may_apply()
         self.fields += Fields(MasterSelectField(
             __name__='action_choice',
             title=_(u'Batch action choice'),
@@ -338,16 +331,16 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
             self.fields += Fields(schema.List(
                 __name__='removed_values',
                 title=_(u"Removed values"),
-                description=self._removed_values_description,
+                description=self.removed_values_description,
                 required=False,
-                value_type=schema.Choice(vocabulary=self._vocabulary),
+                value_type=schema.Choice(vocabulary=self._vocabulary()),
             ))
             self.fields += Fields(schema.List(
                 __name__='added_values',
                 title=_(u"Added values"),
-                description=self._added_values_description,
+                description=self.added_values_description,
                 required=False,
-                value_type=schema.Choice(vocabulary=self._vocabulary),
+                value_type=schema.Choice(vocabulary=self._vocabulary()),
             ))
             self.fields["removed_values"].widgetFactory = CheckBoxFieldWidget
             self.fields["added_values"].widgetFactory = CheckBoxFieldWidget
@@ -393,20 +386,14 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
 
     label = _(u"Batch labels change")
     weight = 20
+    removed_values_description = \
+        _(u"Select the values to remove. A personal label is represented by (*).")
+    added_values_description = \
+        _(u"Select the values to add. A personal label is represented by (*).")
 
-    @property
     def _vocabulary(self):
         return self.labels_voc
 
-    @property
-    def _removed_values_description(self):
-        return _(u"Select the values to remove. A personal label is represented by (*).")
-
-    @property
-    def _added_values_description(self):
-        return _(u"Select the values to add. A personal label is represented by (*).")
-
-    @property
     def _may_apply(self):
         self.labels_voc, self.p_labels, self.g_labels = self.get_labels_vocabulary()
         return len(self.labels_voc._terms) and has_interface(self.brains, ILabelSupport)

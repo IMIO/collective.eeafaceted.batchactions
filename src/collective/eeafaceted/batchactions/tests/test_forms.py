@@ -283,3 +283,12 @@ class TestActions(BaseTestCase):
         self.assertTrue(catalog(custom_portal_types='testtype'))
         self.assertTrue(catalog(custom_portal_types='Document'))
         self.assertFalse(catalog(custom_portal_types='position'))
+        # field is required, it is not possible to remove every values
+        # remove 'testtype'
+        self.request['form.widgets.removed_values'] = ['testtype']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['Document'])
+        # trying to remove 'Document' will do nothing
+        self.request['form.widgets.removed_values'] = ['Document']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['Document'])

@@ -35,7 +35,7 @@ class TestingARUOBatchActionForm(BaseARUOBatchActionForm):
     modified_attr_name = 'custom_portal_types'
     indexes = 'custom_portal_types'
     call_modified_event = True
+    required = True
 
-    @property
     def _vocabulary(self):
         return get_vocab(self.context, 'plone.app.vocabularies.PortalTypes')
