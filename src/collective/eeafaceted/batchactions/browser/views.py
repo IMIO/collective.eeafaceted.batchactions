@@ -357,8 +357,13 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
            (data.get('added_values', None)) and data['action_choice'] in ('add', 'replace', 'overwrite')):
             for brain in self.brains:
                 obj = brain.getObject()
+                stored_values = list(getattr(obj, self.modified_attr_name))
                 if data['action_choice'] in ('overwrite', ):
                     items = set(data['added_values'])
+                # in case of a 'replace', replaced values must be selected on obj or nothing is done
+                elif data['action_choice'] in ('replace', ) and \
+                        set(data['removed_values']).difference(stored_values):
+                    continue
                 else:
                     items = set(getattr(obj, self.modified_attr_name, []))
                     if data['action_choice'] in ('remove', 'replace'):
@@ -366,7 +371,7 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                     if data['action_choice'] in ('add', 'replace'):
                         items = items.union(data['added_values'])
                 # only update if values changed
-                if sorted(list(getattr(obj, self.modified_attr_name))) != sorted(list(items)):
+                if sorted(stored_values) != sorted(list(items)):
                     if not self._validate(obj, items):
                         continue
                     if self.keep_vocabulary_order:
@@ -434,6 +439,11 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
                 obj = brain.getObject()
                 labeling = ILabeling(obj)
                 p_act, g_act = active_labels(labeling)
+                # in case of a 'replace', replaced values must be selected on obj or nothing is done
+                if data['action_choice'] in ('replace', ) and \
+                        set(values['g_r'] + values['p_r']).difference(p_act + g_act):
+                    continue
+
                 # manage global labels
                 if self.can_change_labels and (values['g_a'] or values['g_r']):
                     if data['action_choice'] in ('overwrite'):

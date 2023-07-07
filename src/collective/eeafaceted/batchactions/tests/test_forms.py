@@ -292,3 +292,13 @@ class TestActions(BaseTestCase):
         self.request['form.widgets.removed_values'] = ['Document']
         form.handleApply(form, None)
         self.assertEqual(self.doc1.custom_portal_types, ['Document'])
+        # replace, only replaced if exists
+        self.request['form.widgets.action_choice'] = 'replace'
+        self.request['form.widgets.added_values'] = ['position']
+        self.request['form.widgets.removed_values'] = ['testtype']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['Document'])
+        # now replace a really selected value
+        self.request['form.widgets.removed_values'] = ['Document']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['position'])

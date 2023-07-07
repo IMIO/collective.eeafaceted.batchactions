@@ -84,18 +84,31 @@ class TestLabels(BaseTestCase):
         self.assertTupleEqual(active_labels(self.lab_doc1), ([], []))
 
         # test replace action
+        # in case of a 'replace', values are replaced only if it was actually selected on the element
+        # so here as nothing selected anymore, nothing changed
         form.widgets.extract = lambda *a, **kw: ({'action_choice': 'replace',
                                                   'removed_values': ['pers1:', 'glob1'],
                                                   'added_values': ['pers2:', 'pers3:', 'glob2', 'glob3']}, [])
         form.handleApply(form, None)
-        act_lab = active_labels(self.lab_doc1)
-        self.assertSetEqual(set(act_lab[0]), set(['pers2', 'pers3']))
-        self.assertSetEqual(set(act_lab[1]), set(['glob2', 'glob3']))
+        self.assertTupleEqual(active_labels(self.lab_doc1), ([], []))
+
+        # now add a value and replace it
+        # add
+        form.widgets.extract = lambda *a, **kw: ({'action_choice': 'add',
+                                                  'added_values': ['pers1:', 'glob1']}, [])
+        form.handleApply(form, None)
+        self.assertTupleEqual(active_labels(self.lab_doc1), (['pers1'], ['glob1']))
+        # replace
+        form.widgets.extract = lambda *a, **kw: ({'action_choice': 'replace',
+                                                  'removed_values': ['pers1:', 'glob1'],
+                                                  'added_values': ['pers2:', 'glob2']}, [])
+        form.handleApply(form, None)
+        self.assertTupleEqual(active_labels(self.lab_doc1), (['pers2'], ['glob2']))
 
         # test overwrite action
         form.widgets.extract = lambda *a, **kw: ({'action_choice': 'overwrite',
-                                                  'added_values': ['pers1:', 'glob1']}, [])
+                                                  'added_values': ['pers1:', 'glob3']}, [])
         form.handleApply(form, None)
         act_lab = active_labels(self.lab_doc1)
         self.assertSetEqual(set(act_lab[0]), set(['pers1']))
-        self.assertSetEqual(set(act_lab[1]), set(['glob1']))
+        self.assertSetEqual(set(act_lab[1]), set(['glob3']))
