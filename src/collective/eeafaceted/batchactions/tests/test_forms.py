@@ -243,7 +243,7 @@ class TestActions(BaseTestCase):
         self.assertFalse(_checkPermission(View, self.doc2))
         self.assertEqual(len(catalog(UID=[self.doc1.UID(), self.doc2.UID()])), 0)
 
-    def test_aruo_action(self):
+    def do_test_aruo_action(self, vocab_name=True):
         """Update 'custom_portal_type' attribute."""
         addOrUpdateIndexes(
             self.portal,
@@ -257,6 +257,8 @@ class TestActions(BaseTestCase):
         doc_uids = self.doc1.UID()
         self.request.form['form.widgets.uids'] = doc_uids
         form = self.eea_folder.restrictedTraverse('testing-aruo-batch-action')
+        if vocab_name:
+            form._vocabulary = lambda: 'plone.app.vocabularies.PortalTypes'
         form.update()
         # "testtype" portal_type is at the end of portal_types,
         # if we add "Document" portal_type, order is respected
@@ -302,3 +304,11 @@ class TestActions(BaseTestCase):
         self.request['form.widgets.removed_values'] = ['Document']
         form.handleApply(form, None)
         self.assertEqual(self.doc1.custom_portal_types, ['position'])
+
+    def test_aruo_action_with_true_vocab(self):
+        """Update 'custom_portal_type' attribute."""
+        self.do_test_aruo_action(vocab_name=False)
+
+    def test_aruo_action_with_vocab_name(self):
+        """Update 'custom_portal_type' attribute."""
+        self.do_test_aruo_action(vocab_name=True)

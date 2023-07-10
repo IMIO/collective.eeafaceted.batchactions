@@ -289,7 +289,7 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
     required = False
 
     def _vocabulary(self):
-        """A SimpleVocabulary instance."""
+        """A SimpleVocabulary instance or a vocabulary name."""
         return None
 
     def _may_apply(self):
@@ -375,8 +375,7 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                     if not self._validate(obj, items):
                         continue
                     if self.keep_vocabulary_order:
-                        vocab = self.fields['added_values'].field.value_type.vocabulary
-                        all_values = [term.value for term in vocab._terms]
+                        all_values = [term.value for term in self.widgets['added_values'].terms]
                         term_indexes = [all_values.index(item) for item in items]
                         items = sort_by_indexes(list(items), term_indexes)
                     setattr(obj, self.modified_attr_name, items)
