@@ -289,8 +289,12 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
     required = False
 
     def _vocabulary(self):
-        """A SimpleVocabulary instance or a vocabulary name."""
+        """A SimpleVocabulary instance or a vocabulary name, containing the values to add/set."""
         return None
+
+    def _remove_vocabulary(self):
+        """A SimpleVocabulary instance or a vocabulary name, containing the values to remove/replace."""
+        return self._vocabulary()
 
     def _may_apply(self):
         """The condition for the action to be applied."""
@@ -320,7 +324,7 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                 {'name': 'added_values',
                  'slaveID': '#form-widgets-added_values',
                  'action': 'hide',
-                 'hide_values': (u'remove'),
+                 'hide_values': (u'remove',),
                  'siblings': True,
                  },
             ),
@@ -333,7 +337,7 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                 title=_(u"Removed values"),
                 description=self.removed_values_description,
                 required=False,
-                value_type=schema.Choice(vocabulary=self._vocabulary()),
+                value_type=schema.Choice(vocabulary=self._remove_vocabulary()),
             ))
             self.fields += Fields(schema.List(
                 __name__='added_values',
