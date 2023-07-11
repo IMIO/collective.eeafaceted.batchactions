@@ -10,6 +10,7 @@ import os
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
+
 long_description = \
     read('README.rst') + '\n\n' + read('CHANGES.rst')
 
@@ -45,6 +46,7 @@ setup(
         'setuptools',
         'collective.eeafaceted.z3ctable>=2.0',
         'imio.helpers',
+        'imio.pyutils',
         'plone.formwidget.masterselect<2.0.0',
     ],
     extras_require={

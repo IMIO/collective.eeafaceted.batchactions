@@ -5,6 +5,7 @@ from collective.eeafaceted.batchactions.interfaces import IBatchActionsMarker
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from collective.eeafaceted.batchactions.tests.interfaces import IBatchActionsSpecificMarker
 from plone import api
+from plone.app.testing import login
 from Products.Five.browser import BrowserView
 from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
@@ -76,14 +77,20 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'button_with_icon': True, 'name': 'delete-batch-action', 'weight': 5, 'overlay': True},
-             {'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
+            [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
              {'name': 'labels-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 20},
-             {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30}])
+             {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30},
+             {'name': 'testing-aruo-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 100}])
         # returned action names are traversable to get the form
         for action in viewlet.get_batch_actions():
             form = self.eea_folder.restrictedTraverse(action['name'])
             self.assertEqual(form.__name__, action['name'])
+        # as zope admin
+        login(self.portal.aq_parent, "admin")
+        self.assertEqual(
+            sorted([dic['name'] for dic in viewlet.get_batch_actions()]),
+            ['contact-batch-action', 'delete-batch-action', 'labels-batch-action', 'testing-aruo-batch-action',
+             'transition-batch-action', 'update-wf-role-mappings-batch-action'])
 
     def test_get_batch_actions_available(self):
         """A method 'available' is evaluated on the action view to check if it is available on context."""
@@ -111,19 +118,19 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(folder)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'button_with_icon': True, 'name': 'delete-batch-action', 'weight': 5, 'overlay': True},
-             {'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
-             {'name': 'labels-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 20},
-             {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30}])
+            [{'button_with_icon': False, 'name': 'transition-batch-action', 'weight': 10, 'overlay': True},
+             {'button_with_icon': False, 'name': 'labels-batch-action', 'weight': 20, 'overlay': True},
+             {'button_with_icon': False, 'name': 'contact-batch-action', 'weight': 30, 'overlay': True},
+             {'button_with_icon': False, 'name': 'testing-aruo-batch-action', 'weight': 100, 'overlay': True}])
 
         # mark with IBatchActionsSpecificMarker
         alsoProvides(folder, IBatchActionsSpecificMarker)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'button_with_icon': True, 'name': 'delete-batch-action', 'weight': 5, 'overlay': True},
-             {'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
+            [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
              {'name': 'labels-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 20},
              {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30},
+             {'name': 'testing-aruo-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 100},
              {'name': 'testing-batch-action', 'button_with_icon': True, 'overlay': False, 'weight': 100}])
         # returned action names are traversable to get the form
         for action in viewlet.get_batch_actions():
@@ -134,7 +141,7 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(self.eea_folder)
         self.assertEqual(
             viewlet.get_batch_actions(),
-            [{'button_with_icon': True, 'name': 'delete-batch-action', 'weight': 5, 'overlay': True},
-             {'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
+            [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
              {'name': 'labels-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 20},
-             {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30}])
+             {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30},
+             {'name': 'testing-aruo-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 100}])

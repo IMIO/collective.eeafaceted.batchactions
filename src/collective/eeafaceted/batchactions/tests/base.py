@@ -30,3 +30,4 @@ class BaseTestCase(unittest.TestCase):
         eea_folder.restrictedTraverse('@@faceted_subtyper').enable()
         IFacetedLayout(eea_folder).update_layout('faceted-table-items')
         self.eea_folder = eea_folder
+        self.maxDiff = None

@@ -12,6 +12,7 @@ from imio.helpers.content import safe_encode
 from imio.helpers.security import check_zope_admin
 from imio.helpers.security import fplog
 from imio.helpers.workflow import update_role_mappings_for
+from imio.pyutils.utils import sort_by_indexes
 from operator import attrgetter
 from plone import api
 from plone.formwidget.masterselect import MasterSelectField
@@ -217,6 +218,7 @@ class DeleteBatchActionForm(BaseBatchActionForm):
     weight = 5
     button_with_icon = True
     apply_button_title = _('delete-batch-action-but')
+    available_for_zope_admin = True
 
     def _get_deletable_elements(self):
         """ """
@@ -269,10 +271,157 @@ except ImportError:
     pass
 
 
-class LabelsBatchActionForm(BaseBatchActionForm):
+class BaseARUOBatchActionForm(BaseBatchActionForm):
+    """Base class for "add/remove/update/overwrite" actions."""
+
+    # Make order of stored values respect field vocabulary terms order?
+    keep_vocabulary_order = True
+    # the name of the attribute that will be modified on the object
+    modified_attr_name = None
+    # translated description of the "added_values" field
+    added_values_description = _(u"Select the values to add.")
+    # translated description of the "removed_values" field
+    removed_values_description = _(u"Select the values to remove.")
+    # indexes to reindex when values changed
+    indexes = []
+    # call the "modified" event on object at the end if it was modified?
+    call_modified_event = False
+    # can the resulting set values be empty?
+    required = False
+
+    @property
+    def description(self):
+        """ """
+        description = translate(super(BaseARUOBatchActionForm, self).description,
+                                context=self.request)
+        if self.required:
+            description += translate(
+                'field_can_not_be_empty_warning',
+                domain="collective.eeafaceted.batchactions",
+                context=self.request)
+        description += translate(
+            'aruo_action_replace_warning',
+            domain="collective.eeafaceted.batchactions",
+            context=self.request)
+        return description
+
+    def _vocabulary(self):
+        """A SimpleVocabulary instance or a vocabulary name, containing the values to add/set."""
+        return None
+
+    def _remove_vocabulary(self):
+        """A SimpleVocabulary instance or a vocabulary name, containing the values to remove/replace."""
+        return self._vocabulary()
+
+    def _may_apply(self):
+        """The condition for the action to be applied."""
+        return is_permitted(self.brains)
+
+    def _validate(self, obj, values):
+        """Validate given values for given obj."""
+        return True if not self.required or values else False
+
+    def _update(self):
+        self.do_apply = self._may_apply()
+        self.fields += Fields(MasterSelectField(
+            __name__='action_choice',
+            title=_(u'Batch action choice'),
+            description=(not self.do_apply and cannot_modify_field_msg or u''),
+            vocabulary=SimpleVocabulary([SimpleTerm(value=u'add', title=_(u'Add items')),
+                                         SimpleTerm(value=u'remove', title=_(u'Remove items')),
+                                         SimpleTerm(value=u'replace', title=_(u'Replace some items by others')),
+                                         SimpleTerm(value=u'overwrite', title=_(u'Overwrite'))]),
+            slave_fields=(
+                {'name': 'removed_values',
+                 'slaveID': '#form-widgets-removed_values',
+                 'action': 'hide',
+                 'hide_values': (u'add', u'overwrite'),
+                 'siblings': True,
+                 },
+                {'name': 'added_values',
+                 'slaveID': '#form-widgets-added_values',
+                 'action': 'hide',
+                 'hide_values': (u'remove',),
+                 'siblings': True,
+                 },
+            ),
+            required=self.do_apply,
+            default=u'add'
+        ))
+        if self.do_apply:
+            self.fields += Fields(schema.List(
+                __name__='removed_values',
+                title=_(u"Removed values"),
+                description=self.removed_values_description,
+                required=False,
+                value_type=schema.Choice(vocabulary=self._remove_vocabulary()),
+            ))
+            self.fields += Fields(schema.List(
+                __name__='added_values',
+                title=_(u"Added values"),
+                description=self.added_values_description,
+                required=False,
+                value_type=schema.Choice(vocabulary=self._vocabulary()),
+            ))
+            self.fields["removed_values"].widgetFactory = CheckBoxFieldWidget
+            self.fields["added_values"].widgetFactory = CheckBoxFieldWidget
+
+    def _update_widgets(self):
+        if self.do_apply:
+            self.widgets['removed_values'].multiple = 'multiple'
+            self.widgets['removed_values'].size = 5
+            self.widgets['added_values'].multiple = 'multiple'
+            self.widgets['added_values'].size = 5
+
+    def _apply(self, **data):
+        if ((data.get('removed_values', None) and data['action_choice'] in ('remove', 'replace')) or
+           (data.get('added_values', None)) and data['action_choice'] in ('add', 'replace', 'overwrite')):
+            for brain in self.brains:
+                obj = brain.getObject()
+                stored_values = list(getattr(obj, self.modified_attr_name))
+                if data['action_choice'] in ('overwrite', ):
+                    items = set(data['added_values'])
+                # in case of a 'replace', replaced values must be selected on obj or nothing is done
+                elif data['action_choice'] in ('replace', ) and \
+                        set(data['removed_values']).difference(stored_values):
+                    continue
+                else:
+                    items = set(getattr(obj, self.modified_attr_name, []))
+                    if data['action_choice'] in ('remove', 'replace'):
+                        items = items.difference(data['removed_values'])
+                    if data['action_choice'] in ('add', 'replace'):
+                        items = items.union(data['added_values'])
+                # only update if values changed
+                if sorted(stored_values) != sorted(list(items)):
+                    if not self._validate(obj, items):
+                        continue
+                    if self.keep_vocabulary_order:
+                        all_values = [term.value for term in self.widgets['added_values'].terms]
+                        term_indexes = [all_values.index(item) for item in items]
+                        items = sort_by_indexes(list(items), term_indexes)
+                    setattr(obj, self.modified_attr_name, items)
+                    if self.call_modified_event:
+                        modified(obj)
+                    # if modified event does not reindex, call it
+                    if self.indexes:
+                        obj.reindexObject(idxs=self.indexes)
+
+
+class LabelsBatchActionForm(BaseARUOBatchActionForm):
 
     label = _(u"Batch labels change")
     weight = 20
+    removed_values_description = \
+        _(u"Select the values to remove. A personal label is represented by (*).")
+    added_values_description = \
+        _(u"Select the values to add. A personal label is represented by (*).")
+
+    def _vocabulary(self):
+        return self.labels_voc
+
+    def _may_apply(self):
+        self.labels_voc, self.p_labels, self.g_labels = self.get_labels_vocabulary()
+        return len(self.labels_voc._terms) and has_interface(self.brains, ILabelSupport)
 
     def get_labeljar_context(self):
         return self.context
@@ -298,60 +447,6 @@ class LabelsBatchActionForm(BaseBatchActionForm):
                                                              safe_unicode(label['title'])))
         return SimpleVocabulary(terms), set(p_labels), g_labels
 
-    def _update(self):
-        labels_voc, self.p_labels, self.g_labels = self.get_labels_vocabulary()
-        self.do_apply = len(labels_voc._terms) and has_interface(self.brains, ILabelSupport)
-        self.fields += Fields(MasterSelectField(
-            __name__='action_choice',
-            title=_(u'Batch action choice'),
-            description=(not self.do_apply and cannot_modify_field_msg or u''),
-            vocabulary=SimpleVocabulary([SimpleTerm(value=u'add', title=_(u'Add items')),
-                                         SimpleTerm(value=u'remove', title=_(u'Remove items')),
-                                         SimpleTerm(value=u'replace', title=_(u'Replace some items by others')),
-                                         SimpleTerm(value=u'overwrite', title=_(u'Overwrite'))]),
-            slave_fields=(
-                {'name': 'removed_values',
-                 'slaveID': '#form-widgets-removed_values',
-                 'action': 'hide',
-                 'hide_values': (u'add', u'overwrite'),
-                 'siblings': True,
-                 },
-                {'name': 'added_values',
-                 'slaveID': '#form-widgets-added_values',
-                 'action': 'hide',
-                 'hide_values': (u'remove'),
-                 'siblings': True,
-                 },
-            ),
-            required=self.do_apply,
-            default=u'add'
-        ))
-        if self.do_apply:
-            self.fields += Fields(schema.List(
-                __name__='removed_values',
-                title=_(u"Removed values"),
-                description=_(u"Select the values to remove. A personal label is represented by (*)."),
-                required=False,
-                value_type=schema.Choice(vocabulary=labels_voc),
-            ))
-            self.fields += Fields(schema.List(
-                __name__='added_values',
-                title=_(u"Added values"),
-                description=_(u"Select the values to add. A personal label is represented by (*)."),
-                required=False,
-                value_type=schema.Choice(vocabulary=labels_voc),
-            ))
-            self.fields["removed_values"].widgetFactory = CheckBoxFieldWidget
-            self.fields["added_values"].widgetFactory = CheckBoxFieldWidget
-
-    def _update_widgets(self):
-        if self.do_apply:
-            #        self.widgets['action_choice'].size = 4
-            self.widgets['removed_values'].multiple = 'multiple'
-            self.widgets['removed_values'].size = 5
-            self.widgets['added_values'].multiple = 'multiple'
-            self.widgets['added_values'].size = 5
-
     def _apply(self, **data):
         if ((data.get('removed_values', None) and data['action_choice'] in ('remove', 'replace')) or
            (data.get('added_values', None)) and data['action_choice'] in ('add', 'replace', 'overwrite')):
@@ -364,6 +459,11 @@ class LabelsBatchActionForm(BaseBatchActionForm):
                 obj = brain.getObject()
                 labeling = ILabeling(obj)
                 p_act, g_act = active_labels(labeling)
+                # in case of a 'replace', replaced values must be selected on obj or nothing is done
+                if data['action_choice'] in ('replace', ) and \
+                        set(values['g_r'] + values['p_r']).difference(p_act + g_act):
+                    continue
+
                 # manage global labels
                 if self.can_change_labels and (values['g_a'] or values['g_r']):
                     if data['action_choice'] in ('overwrite'):

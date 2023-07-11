@@ -3,6 +3,7 @@
 from AccessControl import Unauthorized
 from collective.eeafaceted.batchactions.browser.views import BaseBatchActionForm
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
+from imio.helpers.catalog import addOrUpdateIndexes
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import setRoles
@@ -158,6 +159,7 @@ class TestActions(BaseTestCase):
 
     def test_delete_action(self):
         """Delete batch action."""
+        login(self.portal.aq_parent, "admin")
         # make eea_folder not deletable
         self.eea_folder.manage_permission(DeleteObjects, [])
         self.assertFalse(_checkPermission(DeleteObjects, self.eea_folder))
@@ -241,3 +243,73 @@ class TestActions(BaseTestCase):
         self.assertFalse(_checkPermission(View, self.doc1))
         self.assertFalse(_checkPermission(View, self.doc2))
         self.assertEqual(len(catalog(UID=[self.doc1.UID(), self.doc2.UID()])), 0)
+
+    def do_test_aruo_action(self, vocab_name=True):
+        """Update 'custom_portal_type' attribute."""
+        addOrUpdateIndexes(
+            self.portal,
+            indexInfos={'custom_portal_types': ('KeywordIndex', {}), })
+        catalog = self.portal.portal_catalog
+        self.doc1.custom_portal_types = ['testtype']
+        self.doc1.reindexObject()
+        self.assertTrue(catalog(custom_portal_types='testtype'))
+        self.assertFalse(catalog(custom_portal_types='Document'))
+        self.assertFalse(catalog(custom_portal_types='position'))
+        doc_uids = self.doc1.UID()
+        self.request.form['form.widgets.uids'] = doc_uids
+        form = self.eea_folder.restrictedTraverse('testing-aruo-batch-action')
+        if vocab_name:
+            form._vocabulary = lambda: 'plone.app.vocabularies.PortalTypes'
+        form.update()
+        # "testtype" portal_type is at the end of portal_types,
+        # if we add "Document" portal_type, order is respected
+        self.request['form.widgets.action_choice'] = 'add'
+        self.request['form.widgets.added_values'] = ['Document']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['Document', 'testtype'])
+        self.assertTrue(catalog(custom_portal_types='testtype'))
+        self.assertTrue(catalog(custom_portal_types='Document'))
+        self.assertFalse(catalog(custom_portal_types='position'))
+        # "position" portal_type will be added between existing values
+        self.request['form.widgets.added_values'] = ['position']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['Document', 'position', 'testtype'])
+        self.assertTrue(catalog(custom_portal_types='testtype'))
+        self.assertTrue(catalog(custom_portal_types='Document'))
+        self.assertTrue(catalog(custom_portal_types='position'))
+        # remove "position"
+        self.request['form.widgets.action_choice'] = 'remove'
+        self.request['form.widgets.added_values'] = []
+        self.request['form.widgets.removed_values'] = ['position']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['Document', 'testtype'])
+        self.assertTrue(catalog(custom_portal_types='testtype'))
+        self.assertTrue(catalog(custom_portal_types='Document'))
+        self.assertFalse(catalog(custom_portal_types='position'))
+        # field is required, it is not possible to remove every values
+        # remove 'testtype'
+        self.request['form.widgets.removed_values'] = ['testtype']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['Document'])
+        # trying to remove 'Document' will do nothing
+        self.request['form.widgets.removed_values'] = ['Document']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['Document'])
+        # replace, only replaced if exists
+        self.request['form.widgets.action_choice'] = 'replace'
+        self.request['form.widgets.added_values'] = ['position']
+        self.request['form.widgets.removed_values'] = ['testtype']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['Document'])
+        # now replace a really selected value
+        self.request['form.widgets.removed_values'] = ['Document']
+        form.handleApply(form, None)
+        self.assertEqual(self.doc1.custom_portal_types, ['position'])
+
+    def test_aruo_action_with_true_vocab(self):
+        """Update 'custom_portal_type' attribute."""
+        self.do_test_aruo_action(vocab_name=False)
+
+    def test_aruo_action_with_vocab_name(self):
+        """Update 'custom_portal_type' attribute."""
+        self.do_test_aruo_action(vocab_name=True)
