@@ -159,6 +159,7 @@ class TestActions(BaseTestCase):
 
     def test_delete_action(self):
         """Delete batch action."""
+        login(self.portal.aq_parent, "admin")
         # make eea_folder not deletable
         self.eea_folder.manage_permission(DeleteObjects, [])
         self.assertFalse(_checkPermission(DeleteObjects, self.eea_folder))

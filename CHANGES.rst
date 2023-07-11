@@ -11,6 +11,8 @@ Changelog
   for other similar actions. `LabelsBatchActionForm` is now based on that
   `BaseARUOBatchActionForm`.
   [gbastien]
+- Activated `delete-batch-action` for zope admin
+  [sgeulette]
 
 1.12 (2023-06-27)
 -----------------

@@ -218,6 +218,7 @@ class DeleteBatchActionForm(BaseBatchActionForm):
     weight = 5
     button_with_icon = True
     apply_button_title = _('delete-batch-action-but')
+    available_for_zope_admin = True
 
     def _get_deletable_elements(self):
         """ """
