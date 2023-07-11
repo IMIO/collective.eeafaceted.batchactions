@@ -26,10 +26,10 @@ msgstr ""
 msgid "update-wf-role-mappings-batch-action-but"
 msgstr ""
 
-#. Default: "<p style='color: red;'>Warning, field can not be empty.</p>"
+#. Default: "<p>Warning, field can not be empty.</p>"
 msgid "field_can_not_be_empty_warning"
 msgstr ""
 
-#. Default: "<p style='color: red;'>When using \"Replace\", resulting elements will be updated only if removed values were selected on original element.</p>"
+#. Default: "<p>When using \"Replace\", resulting elements will be updated only if removed values were selected on original element.</p>"
 msgid "aruo_action_replace_warning"
 msgstr ""

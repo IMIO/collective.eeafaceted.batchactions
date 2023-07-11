@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-07-11 08:32+0000\n"
+"POT-Creation-Date: 2023-07-11 15:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: collective.eeafaceted.batchactions\n"
 
-#: ./browser/views.py:329
+#: ./browser/views.py:330
 msgid "Add items"
 msgstr ""
 
-#: ./browser/views.py:360
+#: ./browser/views.py:361
 msgid "Added values"
 msgstr ""
 
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: ./browser/views.py:327
+#: ./browser/views.py:328
 msgid "Batch action choice"
 msgstr ""
 
@@ -69,19 +69,19 @@ msgstr ""
 msgid "Optional comment to display in history"
 msgstr ""
 
-#: ./browser/views.py:332
+#: ./browser/views.py:333
 msgid "Overwrite"
 msgstr ""
 
-#: ./browser/views.py:330
+#: ./browser/views.py:331
 msgid "Remove items"
 msgstr ""
 
-#: ./browser/views.py:353
+#: ./browser/views.py:354
 msgid "Removed values"
 msgstr ""
 
-#: ./browser/views.py:331
+#: ./browser/views.py:332
 msgid "Replace some items by others"
 msgstr ""
 
@@ -93,7 +93,7 @@ msgstr ""
 msgid "Search and select the values to remove, if necessary."
 msgstr ""
 
-#: ./browser/views.py:281
+#: ./browser/views.py:282
 msgid "Select the values to add."
 msgstr ""
 
@@ -101,7 +101,7 @@ msgstr ""
 msgid "Select the values to add. A personal label is represented by (*)."
 msgstr ""
 
-#: ./browser/views.py:283
+#: ./browser/views.py:284
 msgid "Select the values to remove."
 msgstr ""
 
@@ -117,7 +117,7 @@ msgstr ""
 msgid "This action will affect ${number} element(s)."
 msgstr ""
 
-#: ./browser/views.py:238
+#: ./browser/views.py:239
 msgid "This action will only affect ${deletable_number} element(s), indeed you do not have the permission to delete ${not_deletable_number} element(s)."
 msgstr ""
 
@@ -125,7 +125,7 @@ msgstr ""
 msgid "Transition"
 msgstr ""
 
-#: ./browser/views.py:253
+#: ./browser/views.py:254
 msgid "Update WF role mappings"
 msgstr ""
 
@@ -133,7 +133,7 @@ msgstr ""
 msgid "You can't change this field on selected items. Modify your selection."
 msgstr ""
 
-#. Default: "<p style='color: red;'>When using \"Replace\", resulting elements will be updated only if removed values were selected on original element.</p>"
+#. Default: "<p>When using \"Replace\", resulting elements will be updated only if removed values were selected on original element.</p>"
 msgid "aruo_action_replace_warning"
 msgstr ""
 
@@ -149,7 +149,7 @@ msgstr ""
 msgid "delete-batch-action-but"
 msgstr ""
 
-#. Default: "<p style='color: red;'>Warning, field can not be empty.</p>"
+#. Default: "<p>Warning, field can not be empty.</p>"
 msgid "field_can_not_be_empty_warning"
 msgstr ""
 
