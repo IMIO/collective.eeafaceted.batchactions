@@ -288,6 +288,22 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
     # can the resulting set values be empty?
     required = False
 
+    @property
+    def description(self):
+        """ """
+        description = translate(super(BaseARUOBatchActionForm, self).description,
+                                context=self.request)
+        if self.required:
+            description += translate(
+                'field_can_not_be_empty_warning',
+                domain="collective.eeafaceted.batchactions",
+                context=self.request)
+        description += translate(
+            'aruo_action_replace_warning',
+            domain="collective.eeafaceted.batchactions",
+            context=self.request)
+        return description
+
     def _vocabulary(self):
         """A SimpleVocabulary instance or a vocabulary name, containing the values to add/set."""
         return None

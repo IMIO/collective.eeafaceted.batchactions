@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-07-05 07:36+0000\n"
+"POT-Creation-Date: 2023-07-11 08:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,11 +14,11 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./browser/views.py:321
+#: ./browser/views.py:329
 msgid "Add items"
 msgstr "Ajouter des éléments"
 
-#: ./browser/views.py:352
+#: ./browser/views.py:360
 msgid "Added values"
 msgstr "Éléments à ajouter / fixés"
 
@@ -26,7 +26,7 @@ msgstr "Éléments à ajouter / fixés"
 msgid "Apply"
 msgstr "Appliquer"
 
-#: ./browser/views.py:319
+#: ./browser/views.py:327
 msgid "Batch action choice"
 msgstr "Choix de l'action à effectuer"
 
@@ -34,11 +34,11 @@ msgstr "Choix de l'action à effectuer"
 msgid "Batch action form"
 msgstr "Batch action form"
 
-#: ./browser/views.py:491
+#: ./browser/views.py:504
 msgid "Batch contact field change"
 msgstr "Changement de contact par lot"
 
-#: ./browser/views.py:397
+#: ./browser/views.py:411
 msgid "Batch labels change"
 msgstr "Changer les étiquettes par lot"
 
@@ -66,43 +66,43 @@ msgstr "<span style='color: red;'>Aucune transition commune ou valide. Recommenc
 msgid "Optional comment to display in history"
 msgstr "Commentaire optionnel qui sera affiché dans l'historique."
 
-#: ./browser/views.py:324
+#: ./browser/views.py:332
 msgid "Overwrite"
 msgstr "Écraser le contenu avec les éléments choisis"
 
-#: ./browser/views.py:322
+#: ./browser/views.py:330
 msgid "Remove items"
 msgstr "Retirer des éléments"
 
-#: ./browser/views.py:345
+#: ./browser/views.py:353
 msgid "Removed values"
 msgstr "Éléments à retirer"
 
-#: ./browser/views.py:323
+#: ./browser/views.py:331
 msgid "Replace some items by others"
 msgstr "Remplacer des éléments par d'autres"
 
-#: ./browser/views.py:523
+#: ./browser/views.py:536
 msgid "Search and select the values to add."
 msgstr "Chercher et sélectionner des contacts à ajouter."
 
-#: ./browser/views.py:515
+#: ./browser/views.py:528
 msgid "Search and select the values to remove, if necessary."
 msgstr "Chercher et sélectionner des contacts à retirer, si nécessaire."
 
-#: ./browser/views.py:298
+#: ./browser/views.py:281
 msgid "Select the values to add."
 msgstr "Sélectionner les éléments à ajouter."
 
-#: ./browser/views.py:410
+#: ./browser/views.py:416
 msgid "Select the values to add. A personal label is represented by (*)."
 msgstr "Sélectionner les éléments à ajouter. Une étiquette utilisateur est indiquée par (*)."
 
-#: ./browser/views.py:293
+#: ./browser/views.py:283
 msgid "Select the values to remove."
 msgstr "Sélectionner les éléments à retirer."
 
-#: ./browser/views.py:406
+#: ./browser/views.py:414
 msgid "Select the values to remove. A personal label is represented by (*)."
 msgstr "Sélectionner les éléments à retirer. Une étiquette utilisateur est indiquée par (*)."
 
@@ -130,6 +130,10 @@ msgstr "Mettre à jour les rôles/permissions (WF)"
 msgid "You can't change this field on selected items. Modify your selection."
 msgstr "Vous ne pouvez pas modifier de manière commune ce champ sur les éléments sélectionnés. Modifiez votre sélection."
 
+#. Default: "<p style='color: red;'>When using \"Replace\", resulting elements will be updated only if removed values were selected on original element.</p>"
+msgid "aruo_action_replace_warning"
+msgstr "<p style='color: red;'>Lors de l'utilisation de l'action \"Remplacer des éléments par d'autres\", l'action ne sera appliquée que si les \"Éléments à retirer\" sont tous présents à l'origine.</p>"
+
 #: ./configure.zcml:32
 msgid "collective.eeafaceted.batchactions"
 msgstr "collective.eeafaceted.batchactions"
@@ -142,6 +146,10 @@ msgstr "collective.eeafaceted.batchactions tests"
 #: ./browser/views.py:220
 msgid "delete-batch-action-but"
 msgstr "Supprimer"
+
+#. Default: "<p style='color: red;'>Warning, field can not be empty.</p>"
+msgid "field_can_not_be_empty_warning"
+msgstr "<p style='color: red;'>Attention le champ est requis et une action qui enleverait la dernière valeur sélectionnée ne sera pas appliquée.</p>"
 
 #. Default: "Change labels"
 msgid "labels-batch-action-but"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2023-07-05 07:36+0000\n"
+"POT-Creation-Date: 2023-07-11 08:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,11 +14,11 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./browser/views.py:321
+#: ./browser/views.py:329
 msgid "Add items"
 msgstr ""
 
-#: ./browser/views.py:352
+#: ./browser/views.py:360
 msgid "Added values"
 msgstr ""
 
@@ -26,7 +26,7 @@ msgstr ""
 msgid "Apply"
 msgstr "Apply"
 
-#: ./browser/views.py:319
+#: ./browser/views.py:327
 msgid "Batch action choice"
 msgstr ""
 
@@ -34,11 +34,11 @@ msgstr ""
 msgid "Batch action form"
 msgstr "Batch action form"
 
-#: ./browser/views.py:491
+#: ./browser/views.py:504
 msgid "Batch contact field change"
 msgstr ""
 
-#: ./browser/views.py:397
+#: ./browser/views.py:411
 msgid "Batch labels change"
 msgstr ""
 
@@ -66,43 +66,43 @@ msgstr "No common or available transition. Modify your selection."
 msgid "Optional comment to display in history"
 msgstr "Optional comment to display in history"
 
-#: ./browser/views.py:324
+#: ./browser/views.py:332
 msgid "Overwrite"
 msgstr ""
 
-#: ./browser/views.py:322
+#: ./browser/views.py:330
 msgid "Remove items"
 msgstr ""
 
-#: ./browser/views.py:345
+#: ./browser/views.py:353
 msgid "Removed values"
 msgstr ""
 
-#: ./browser/views.py:323
+#: ./browser/views.py:331
 msgid "Replace some items by others"
 msgstr ""
 
-#: ./browser/views.py:523
+#: ./browser/views.py:536
 msgid "Search and select the values to add."
 msgstr ""
 
-#: ./browser/views.py:515
+#: ./browser/views.py:528
 msgid "Search and select the values to remove, if necessary."
 msgstr ""
 
-#: ./browser/views.py:298
+#: ./browser/views.py:281
 msgid "Select the values to add."
 msgstr ""
 
-#: ./browser/views.py:410
+#: ./browser/views.py:416
 msgid "Select the values to add. A personal label is represented by (*)."
 msgstr ""
 
-#: ./browser/views.py:293
+#: ./browser/views.py:283
 msgid "Select the values to remove."
 msgstr ""
 
-#: ./browser/views.py:406
+#: ./browser/views.py:414
 msgid "Select the values to remove. A personal label is represented by (*)."
 msgstr ""
 
@@ -130,6 +130,10 @@ msgstr "Update WF role mappings"
 msgid "You can't change this field on selected items. Modify your selection."
 msgstr ""
 
+#. Default: "<p style='color: red;'>When using \"Replace\", resulting elements will be updated only if removed values were selected on original element.</p>"
+msgid "aruo_action_replace_warning"
+msgstr ""
+
 #: ./configure.zcml:32
 msgid "collective.eeafaceted.batchactions"
 msgstr "collective.eeafaceted.batchactions"
@@ -142,6 +146,10 @@ msgstr "collective.eeafaceted.batchactions tests"
 #: ./browser/views.py:220
 msgid "delete-batch-action-but"
 msgstr "Delete"
+
+#. Default: "<p style='color: red;'>Warning, field can not be empty.</p>"
+msgid "field_can_not_be_empty_warning"
+msgstr ""
 
 #. Default: "Change labels"
 msgid "labels-batch-action-but"
