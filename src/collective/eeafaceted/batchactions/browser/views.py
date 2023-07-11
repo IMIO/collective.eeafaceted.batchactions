@@ -9,6 +9,7 @@ from collective.eeafaceted.batchactions.utils import cannot_modify_field_msg
 from collective.eeafaceted.batchactions.utils import has_interface
 from collective.eeafaceted.batchactions.utils import is_permitted
 from imio.helpers.content import safe_encode
+from imio.helpers.content import sort_on_vocab_order
 from imio.helpers.security import check_zope_admin
 from imio.helpers.security import fplog
 from imio.helpers.workflow import update_role_mappings_for
@@ -396,9 +397,8 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                     if not self._validate(obj, items):
                         continue
                     if self.keep_vocabulary_order:
-                        all_values = [term.value for term in self.widgets['added_values'].terms]
-                        term_indexes = [all_values.index(item) for item in items]
-                        items = sort_by_indexes(list(items), term_indexes)
+                        items = sort_on_vocab_order(
+                            values=items, vocab=self.widgets['added_values'].terms.terms)
                     setattr(obj, self.modified_attr_name, items)
                     if self.call_modified_event:
                         modified(obj)
