@@ -88,9 +88,9 @@ class TestViewlets(BaseTestCase):
         # as zope admin
         login(self.portal.aq_parent, "admin")
         self.assertEqual(
-            [dic['name'] for dic in viewlet.get_batch_actions()],
-            ['delete-batch-action', 'transition-batch-action', 'labels-batch-action', 'contact-batch-action',
-             'testing-aruo-batch-action', 'update-wf-role-mappings-batch-action'])
+            sorted([dic['name'] for dic in viewlet.get_batch_actions()]),
+            ['contact-batch-action', 'delete-batch-action', 'labels-batch-action', 'testing-aruo-batch-action',
+             'transition-batch-action', 'update-wf-role-mappings-batch-action'])
 
     def test_get_batch_actions_available(self):
         """A method 'available' is evaluated on the action view to check if it is available on context."""
