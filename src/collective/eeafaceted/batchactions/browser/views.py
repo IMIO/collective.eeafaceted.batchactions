@@ -13,7 +13,6 @@ from imio.helpers.content import sort_on_vocab_order
 from imio.helpers.security import check_zope_admin
 from imio.helpers.security import fplog
 from imio.helpers.workflow import update_role_mappings_for
-from imio.pyutils.utils import sort_by_indexes
 from operator import attrgetter
 from plone import api
 from plone.formwidget.masterselect import MasterSelectField
