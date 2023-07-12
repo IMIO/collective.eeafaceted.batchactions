@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.13 (unreleased)
+1.13 (2023-07-12)
 -----------------
 
 - Added `BaseARUOBatchActionForm`, a class factorizing the action that
