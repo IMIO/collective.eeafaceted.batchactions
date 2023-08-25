@@ -374,6 +374,7 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
             self.widgets['added_values'].size = 5
 
     def _apply(self, **data):
+        updated = []
         if ((data.get('removed_values', None) and data['action_choice'] in ('remove', 'replace')) or
            (data.get('added_values', None)) and data['action_choice'] in ('add', 'replace', 'overwrite')):
             for brain in self.brains:
@@ -399,11 +400,13 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                         items = sort_on_vocab_order(
                             values=items, vocab=self.widgets['added_values'].terms.terms)
                     setattr(obj, self.modified_attr_name, items)
+                    updated.append(obj)
                     if self.call_modified_event:
                         modified(obj)
                     # if modified event does not reindex, call it
                     if self.indexes:
                         obj.reindexObject(idxs=self.indexes)
+        return updated
 
 
 class LabelsBatchActionForm(BaseARUOBatchActionForm):

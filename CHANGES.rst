@@ -5,8 +5,9 @@ Changelog
 1.14 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- In `BaseARUOBatchActionForm._apply`, return the elements that were actually
+  updated so it may be used when overriding the base view.
+  [gbastien]
 
 1.13 (2023-07-12)
 -----------------
