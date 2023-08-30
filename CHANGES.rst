@@ -8,6 +8,8 @@ Changelog
 - In `BaseARUOBatchActionForm._apply`, return the elements that were actually
   updated so it may be used when overriding the base view.
   [gbastien]
+- Avoided exception when a field value is None and we want to get a list or set
+  [sgeulette]
 
 1.13 (2023-07-12)
 -----------------

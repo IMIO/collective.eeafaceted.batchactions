@@ -379,7 +379,7 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
            (data.get('added_values', None)) and data['action_choice'] in ('add', 'replace', 'overwrite')):
             for brain in self.brains:
                 obj = brain.getObject()
-                stored_values = list(getattr(obj, self.modified_attr_name))
+                stored_values = list(getattr(obj, self.modified_attr_name) or [])
                 if data['action_choice'] in ('overwrite', ):
                     items = set(data['added_values'])
                 # in case of a 'replace', replaced values must be selected on obj or nothing is done
@@ -387,7 +387,7 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                         set(data['removed_values']).difference(stored_values):
                     continue
                 else:
-                    items = set(getattr(obj, self.modified_attr_name, []))
+                    items = set(getattr(obj, self.modified_attr_name) or [])
                     if data['action_choice'] in ('remove', 'replace'):
                         items = items.difference(data['removed_values'])
                     if data['action_choice'] in ('add', 'replace'):
