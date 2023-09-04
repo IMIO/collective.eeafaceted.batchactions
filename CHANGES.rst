@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.14 (unreleased)
+1.14 (2023-09-04)
 -----------------
 
 - In `BaseARUOBatchActionForm._apply`, return the elements that were actually
