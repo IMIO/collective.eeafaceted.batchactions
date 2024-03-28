@@ -5,8 +5,8 @@ Changelog
 1.15 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Import `safe_encode` from `imio.pyutils` instead `imio.helpers`.
+  [gbastien]
 
 1.14 (2023-09-04)
 -----------------

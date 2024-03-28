@@ -8,11 +8,11 @@ from collective.eeafaceted.batchactions.utils import brains_from_uids
 from collective.eeafaceted.batchactions.utils import cannot_modify_field_msg
 from collective.eeafaceted.batchactions.utils import has_interface
 from collective.eeafaceted.batchactions.utils import is_permitted
-from imio.helpers.content import safe_encode
 from imio.helpers.content import sort_on_vocab_order
 from imio.helpers.security import check_zope_admin
 from imio.helpers.security import fplog
 from imio.helpers.workflow import update_role_mappings_for
+from imio.pyutils.utils import safe_encode
 from operator import attrgetter
 from plone import api
 from plone.formwidget.masterselect import MasterSelectField
