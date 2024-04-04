@@ -232,6 +232,7 @@ class TestActions(BaseTestCase):
 
         # do it as Zope admin
         login(self.portal.aq_parent, 'admin')
+        form.update()
         self.assertTrue("This action will affect 2 element(s)." in form.render())
         # apply, 2 elements are updated
         form.handleApply(form, None)
