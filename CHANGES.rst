@@ -7,6 +7,9 @@ Changelog
 
 - Import `safe_encode` from `imio.pyutils` instead `imio.helpers`.
   [gbastien]
+- Check available in `update` instead in `handleApply` so form is not
+  displayed at all if user have not access.
+  [gbastien]
 
 1.14 (2023-09-04)
 -----------------
