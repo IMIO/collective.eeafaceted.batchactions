@@ -228,11 +228,11 @@ class TestActions(BaseTestCase):
         doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         self.request.form['form.widgets.uids'] = doc_uids
         form = self.eea_folder.restrictedTraverse('update-wf-role-mappings-batch-action')
-        form.update()
-        self.assertRaises(Unauthorized, form.handleApply, form, None)
+        self.assertRaises(Unauthorized, form)
 
         # do it as Zope admin
         login(self.portal.aq_parent, 'admin')
+        form.update()
         self.assertTrue("This action will affect 2 element(s)." in form.render())
         # apply, 2 elements are updated
         form.handleApply(form, None)

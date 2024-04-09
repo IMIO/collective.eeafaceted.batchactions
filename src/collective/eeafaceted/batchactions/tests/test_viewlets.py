@@ -103,7 +103,7 @@ class TestViewlets(BaseTestCase):
         self.assertFalse('testing-batch-action' in [action['name'] for action in viewlet.get_batch_actions()])
         # trying to execute a not available action will raise Unauthorized
         testing_form = getMultiAdapter((self.eea_folder, self.request), name=u'testing-batch-action')
-        self.assertRaises(Unauthorized, testing_form.handleApply, testing_form, None)
+        self.assertRaises(Unauthorized, testing_form)
 
     def test_get_batch_actions_consider_new_action_specific_interface(self):
         """Register a view for IBatchActionsSpecificMarker, get_batch_actions will

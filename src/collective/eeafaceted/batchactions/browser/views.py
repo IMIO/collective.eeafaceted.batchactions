@@ -107,6 +107,9 @@ class BaseBatchActionForm(Form):
         raise NotImplementedError
 
     def update(self):
+        if not self.available():
+            raise Unauthorized
+
         form = self.request.form
         if 'form.widgets.uids' in form:
             uids = form['form.widgets.uids']
@@ -132,9 +135,6 @@ class BaseBatchActionForm(Form):
     @button.buttonAndHandler(_(u'Apply'), name='apply', condition=lambda fi: fi.do_apply)
     def handleApply(self, action):
         """ """
-        if not self.available():
-            raise Unauthorized
-
         data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
