@@ -11,8 +11,10 @@
     <!-- Zope2 initialization -->
     <five:registerPackage package="." initialize=".initialize" />
 
-    <!-- Include configuration for dependencies listed in setup.py -->
-    <includeDependencies package="." />
+    <!-- Include dependencies listed in setup.py -->
+    <include package="collective.eeafaceted.z3ctable" />
+    <include package="imio.helpers" />
+    <include package="plone.formwidget.masterselect" />
 
     <include zcml:condition="installed collective.contact.core" package="collective.contact.core" />
 
