@@ -47,7 +47,7 @@ setup(
         'collective.eeafaceted.z3ctable>=2.0',
         'imio.helpers',
         'imio.pyutils',
-        'plone.formwidget.masterselect<2.0.0',
+        'plone.formwidget.masterselect',
     ],
     extras_require={
         'test': [
