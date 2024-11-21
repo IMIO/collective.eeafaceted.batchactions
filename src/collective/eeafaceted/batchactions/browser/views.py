@@ -509,6 +509,18 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
     attribute = ''
     field_value_type = None
 
+    def available(self):
+        """Will the action be available for current context?
+        We have to handle an autocomplete search made as anonymous because update method is called on search."""
+        res = True
+        if self.request["ACTUAL_URL"].endswith('@@autocomplete-search'):
+            return True
+        elif self.available_permission:
+            res = api.user.has_permission(self.available_permission, obj=self.context)
+        elif self.available_for_zope_admin:
+            res = check_zope_admin()
+        return res
+
     def _update(self):
         assert self.attribute
         assert self.field_value_type is not None
