@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-1.16 (unreleased)
------------------
+1.16.0 (2024-12-19)
+-------------------
 
 - Overrided `ContactBaseBatchActionForm.available` method to handle anonymous search correctly.
   [sgeulette]
