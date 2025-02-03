@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.16.1 (unreleased)
+1.16.1 (2025-02-03)
 -------------------
 
 - Check again `self.do_apply` in `BaseBatchActionForm.handleApply` to avoid
