@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.16 (unreleased)
+1.16 (2025-02-03)
 -----------------
 
 - Overrided `ContactBaseBatchActionForm.available` method to handle anonymous
