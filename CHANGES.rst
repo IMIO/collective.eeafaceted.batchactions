@@ -11,8 +11,12 @@ Changelog
 1.16.0 (2024-12-19)
 -------------------
 
-- Overrided `ContactBaseBatchActionForm.available` method to handle anonymous search correctly.
+- Overrided `ContactBaseBatchActionForm.available` method to handle anonymous
+  search correctly.
   [sgeulette]
+- Check again `self.do_apply` in `BaseBatchActionForm.handleApply` to avoid
+  nasty behaviors.
+  [gbastien]
 
 1.15 (2024-04-10)
 -----------------

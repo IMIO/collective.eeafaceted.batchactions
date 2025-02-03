@@ -135,6 +135,9 @@ class BaseBatchActionForm(Form):
     @button.buttonAndHandler(_(u'Apply'), name='apply', condition=lambda fi: fi.do_apply)
     def handleApply(self, action):
         """ """
+        if not self.do_apply:
+            raise Unauthorized
+
         data, errors = self.extractData()
         if errors:
             self.status = self.formErrorsMessage
