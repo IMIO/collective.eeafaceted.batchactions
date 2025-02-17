@@ -5,8 +5,11 @@ Changelog
 1.16.2 (unreleased)
 -------------------
 
-- Nothing changed yet.
-
+- Overrided `Form.__call__` to not render if request reponse status
+  is 204 (No content) as it is already the case when response status is 302 or
+  the portal message is not displayed after faceted refresh because
+  it was already displayed on the closing form.
+  [gbastien]
 
 1.16.1 (2025-02-03)
 -------------------

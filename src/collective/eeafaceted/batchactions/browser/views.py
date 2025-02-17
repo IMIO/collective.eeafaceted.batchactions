@@ -132,6 +132,17 @@ class BaseBatchActionForm(Form):
             self.actions['apply'].title = self.apply_button_title
         self._final_update()
 
+    def __call__(self):
+        self.update()
+        # Don't render anything if we are doing a redirect
+        # Overrided default z3c.form's behavior to not render if status is "204"
+        # in addition to status 3xx already managed by z3c.form
+        # or we do not have the portal_message that is supposed
+        # to be displayed when refreshing the faceted after action is applied
+        if self.request.response.getStatus() in (204, 300, 301, 302, 303, 304, 305, 307,):
+            return u''
+        return self.render()
+
     @button.buttonAndHandler(_(u'Apply'), name='apply', condition=lambda fi: fi.do_apply)
     def handleApply(self, action):
         """ """
