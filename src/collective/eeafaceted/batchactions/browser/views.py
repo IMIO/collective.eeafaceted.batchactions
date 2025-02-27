@@ -15,6 +15,7 @@ from imio.helpers.workflow import update_role_mappings_for
 from imio.pyutils.utils import safe_encode
 from operator import attrgetter
 from plone import api
+from plone.dexterity.interfaces import IDexterityContent
 from plone.formwidget.masterselect import MasterSelectField
 from plone.supermodel import model
 from Products.CMFCore.permissions import DeleteObjects
@@ -30,6 +31,7 @@ from zope import schema
 from zope.component import getUtility
 from zope.i18n import translate
 from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import Attributes
 from zope.lifecycleevent import modified
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -416,7 +418,10 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                     setattr(obj, self.modified_attr_name, items)
                     updated.append(obj)
                     if self.call_modified_event:
-                        modified(obj)
+                        if IDexterityContent.providedBy(obj):
+                            modified(obj, Attributes(IDexterityContent, self.modified_attr_name))
+                        else:
+                            modified(obj)
                     # if modified event does not reindex, call it
                     if self.indexes:
                         obj.reindexObject(idxs=self.indexes)
@@ -587,4 +592,7 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
                 # transform to relations
                 rels = [RelationValue(intids.getId(ob)) for ob in items]
                 setattr(obj, self.attribute, rels)
-                modified(obj)
+                if IDexterityContent.providedBy(obj):
+                    modified(obj, Attributes(IDexterityContent, self.attribute))
+                else:
+                    modified(obj)
