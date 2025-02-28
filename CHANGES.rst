@@ -10,6 +10,10 @@ Changelog
   the portal message is not displayed after faceted refresh because
   it was already displayed on the closing form.
   [gbastien]
+- Added Attributes in modified call to specify which attribute has been modified.
+  [cadam, sgeulette]
+- Corrected typo
+  [sgeulette]
 
 1.16.1 (2025-02-03)
 -------------------

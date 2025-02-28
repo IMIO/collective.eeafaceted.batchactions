@@ -579,7 +579,7 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
             intids = getUtility(IIntIds)
             for brain in self.brains:
                 obj = brain.getObject()
-                if data['action_choice'] in ('overwrite'):
+                if data['action_choice'] in ('overwrite', ):
                     items = set(data['added_values'])
                 else:
                     # we get the linked objects
