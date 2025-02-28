@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.16.2 (unreleased)
+1.16.2 (2025-02-28)
 -------------------
 
 - Overrided `Form.__call__` to not render if request reponse status
