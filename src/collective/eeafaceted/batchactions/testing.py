@@ -11,6 +11,7 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.testing import z2
+from zope.globalrequest import setLocal
 
 import collective.eeafaceted.batchactions
 import pkg_resources
@@ -59,6 +60,7 @@ class CollectiveEeafacetedBatchActionsLayer(NakedPloneLayer):
 
     def setUpPloneSite(self, portal):
         """Set up Plone."""
+        setLocal("request", portal.REQUEST)
         # Install into Plone site using portal_setup
         applyProfile(portal, 'collective.eeafaceted.batchactions:testing')
 
@@ -72,8 +74,8 @@ class CollectiveEeafacetedBatchActionsLayer(NakedPloneLayer):
         applyProfile(portal, 'ftw.labels:default')
 
         # pac is really installed ?
-        if (HAS_PA_CONTENTTYPES and
-                portal.portal_setup.getLastVersionForProfile('plone.app.contenttypes:default') != 'unknown'):
+        if (HAS_PA_CONTENTTYPES
+                and portal.portal_setup.getLastVersionForProfile('plone.app.contenttypes:default') != 'unknown'):
             self.applyProfile(portal, 'plone.app.contenttypes:default')
 
 
