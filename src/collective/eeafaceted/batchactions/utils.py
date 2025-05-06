@@ -4,18 +4,24 @@
 from AccessControl import getSecurityManager
 from collective.eeafaceted.batchactions import _
 from imio.helpers.content import uuidsToCatalogBrains
+from plone.api.validation import mutually_exclusive_parameters
 
 
 cannot_modify_field_msg = _(u"You can't change this field on selected items. Modify your selection.")
 
 
-def is_permitted(brains, perm='Modify portal content'):
-    """ Check all brains to verify a permission, by default 'Modify portal content' """
+def is_permitted(brains, perm='Modify portal content', perms=None):
+    """
+    Check all brains to verify permissions, by default 'Modify portal content'
+    `perms` overrides `perm` if defined
+    """
+    if perms is None:
+        perms = (perm,)
     ret = True
     sm = getSecurityManager()
     for brain in brains:
         obj = brain.getObject()
-        if not sm.checkPermission(perm, obj):
+        if not all([sm.checkPermission(p, obj) for p in perms]):
             ret = False
             break
     return ret

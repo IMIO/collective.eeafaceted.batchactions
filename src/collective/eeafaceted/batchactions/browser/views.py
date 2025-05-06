@@ -527,6 +527,7 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
     weight = 30
     attribute = ''
     field_value_type = None
+    perms = ('Modify portal content',)
 
     def available(self):
         """Will the action be available for current context?
@@ -543,7 +544,7 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
     def _update(self):
         assert self.attribute
         assert self.field_value_type is not None
-        self.do_apply = is_permitted(self.brains)
+        self.do_apply = is_permitted(self.brains, perms=self.perms)
         self.fields += Fields(schema.Choice(
             __name__='action_choice',
             title=_(u'Batch action choice'),
