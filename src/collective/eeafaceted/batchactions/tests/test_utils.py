@@ -48,6 +48,12 @@ class TestUtils(BaseTestCase):
         self.assertTrue(is_permitted(brains))
         self.assertFalse(is_permitted(brains, 'Review comments'))
 
+        self.assertTrue(is_permitted(brains, perms=('Modify portal content',)))
+        self.assertFalse(is_permitted(brains, perms=('Review comments',)))
+
+        self.assertTrue(is_permitted(brains, perms=('Modify portal content', 'Delete objects', 'Request review')))
+        self.assertFalse(is_permitted(brains, perms=('Modify portal content', 'Delete objects', 'Request review', 'Review portal content')))
+
     def test_has_interface(self):
         doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         brains = brains_from_uids(doc_uids)
