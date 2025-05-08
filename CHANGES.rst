@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.16.3 (unreleased)
+1.16.3 (2025-05-08)
 -------------------
 
 - Updated is_permitted function to check multiple permissions.
