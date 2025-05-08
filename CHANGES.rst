@@ -8,7 +8,6 @@ Changelog
 - Updated is_permitted function to check multiple permissions.
   [chris-adam]
 
-
 1.16.2 (2025-02-28)
 -------------------
 

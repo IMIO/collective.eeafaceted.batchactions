@@ -15,4 +15,5 @@ exclude .installed.cfg
 exclude .mr.developer.cfg
 exclude *.yml
 exclude .coveragerc
+exclude pyvenv.cfg
 global-exclude *.pyc
