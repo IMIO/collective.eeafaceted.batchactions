@@ -4,7 +4,6 @@
 from AccessControl import getSecurityManager
 from collective.eeafaceted.batchactions import _
 from imio.helpers.content import uuidsToCatalogBrains
-from plone.api.validation import mutually_exclusive_parameters
 
 
 cannot_modify_field_msg = _(u"You can't change this field on selected items. Modify your selection.")
