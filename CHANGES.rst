@@ -5,8 +5,12 @@ Changelog
 1.16.4 (unreleased)
 -------------------
 
-- Nothing changed yet.
-
+- Renamed `TransitionBatchActionForm.getAvailableTransitionsVoc` to
+  `TransitionBatchActionForm.get_available_transitions_voc`.
+  [gbastien]
+- Moved `LabelsBatchActionForm` can change labels computation to
+  `LabelsBatchActionForm._can_change_labels` so it is easy to override.
+  [gbastien]
 
 1.16.3 (2025-05-08)
 -------------------

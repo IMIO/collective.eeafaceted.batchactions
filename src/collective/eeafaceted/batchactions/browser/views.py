@@ -180,7 +180,7 @@ class TransitionBatchActionForm(BaseBatchActionForm):
     label = _(u"Batch state change")
     weight = 10
 
-    def getAvailableTransitionsVoc(self):
+    def get_available_transitions_voc(self):
         """ Returns available transitions common for all brains """
         wtool = api.portal.get_tool(name='portal_workflow')
         terms = []
@@ -203,7 +203,7 @@ class TransitionBatchActionForm(BaseBatchActionForm):
         return SimpleVocabulary(terms)
 
     def _update(self):
-        self.voc = self.getAvailableTransitionsVoc()
+        self.voc = self.get_available_transitions_voc()
         self.do_apply = len(self.voc) > 0
         self.fields += Fields(schema.Choice(
             __name__='transition',
@@ -444,6 +444,9 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
         self.labels_voc, self.p_labels, self.g_labels = self.get_labels_vocabulary()
         return len(self.labels_voc._terms) and has_interface(self.brains, ILabelSupport)
 
+    def _can_change_labels(self):
+        return is_permitted(self.brains, perm='ftw.labels: Change Labels')
+
     def get_labeljar_context(self):
         return self.context
 
@@ -454,7 +457,7 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
             adapted = ILabelJar(context)
         except Exception:
             return SimpleVocabulary(terms), [], []
-        self.can_change_labels = is_permitted(self.brains, perm='ftw.labels: Change Labels')
+        self.can_change_labels = self._can_change_labels()
         for label in adapted.list():
             if label['by_user']:
                 p_labels.append(label['label_id'])
