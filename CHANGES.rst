@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.16.4 (unreleased)
+1.16.4 (2025-06-25)
 -------------------
 
 - Renamed `TransitionBatchActionForm.getAvailableTransitionsVoc` to

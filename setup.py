@@ -16,7 +16,7 @@ long_description = \
 
 setup(
     name='collective.eeafaceted.batchactions',
-    version='1.16.4.dev0',
+    version='1.16.4',
     description="This package provides batch actions for eea.facetednavigation dashboard",
     long_description=long_description,
     # Get more from http://pypi.python.org/pypi?%3Aaction=list_classifiers
