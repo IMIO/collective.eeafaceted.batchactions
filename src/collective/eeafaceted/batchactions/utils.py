@@ -5,6 +5,8 @@ from AccessControl import getSecurityManager
 from collective.eeafaceted.batchactions import _
 from imio.helpers.content import uuidsToCatalogBrains
 
+import six
+
 
 cannot_modify_field_msg = _(u"You can't change this field on selected items. Modify your selection.")
 
@@ -50,7 +52,7 @@ def filter_on_permission(brains, perm='Modify portal content'):
 
 def listify_uids(uids):
     """ uids is received as a string separated by commas, turn it into a real list """
-    if isinstance(uids, basestring):
+    if (six.PY2 and isinstance(uids, basestring)) or (six.PY3 and isinstance(uids, str)):  # noqa: F821
         uids = uids.split(',')
     return uids
 
