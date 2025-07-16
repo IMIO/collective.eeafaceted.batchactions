@@ -1,28 +1,36 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    i18n_domain="collective.eeafaceted.batchactions">
+    i18n_domain="collective.eeafaceted.batchactions"
+    >
 
-    <include package="Products.GenericSetup" file="meta.zcml" />
+  <include
+      package="Products.GenericSetup"
+      file="meta.zcml"
+      />
 
-    <genericsetup:upgradeSteps
-        source="1"
-        destination="2"
-        profile="collective.eeafaceted.batchactions:default">
-        <genericsetup:upgradeDepends
-            title="Add the collective_eeafaceted_batchatcions_js_variables.js to portal_javascripts"
-            description=""
-            import_steps="jsregistry" />
-    </genericsetup:upgradeSteps>
+  <genericsetup:upgradeSteps
+      profile="collective.eeafaceted.batchactions:default"
+      source="1"
+      destination="2"
+      >
+    <genericsetup:upgradeDepends
+        title="Add the collective_eeafaceted_batchatcions_js_variables.js to portal_javascripts"
+        description=""
+        import_steps="jsregistry"
+        />
+  </genericsetup:upgradeSteps>
 
-    <genericsetup:upgradeSteps
-        source="2"
-        destination="3"
-        profile="collective.eeafaceted.batchactions:default">
-        <genericsetup:upgradeDepends
-            title="Remove collective_eeafaceted_batchatcions_js_variables.js from portal_javascripts"
-            description=""
-            import_steps="jsregistry" />
-    </genericsetup:upgradeSteps>
+  <genericsetup:upgradeSteps
+      profile="collective.eeafaceted.batchactions:default"
+      source="2"
+      destination="3"
+      >
+    <genericsetup:upgradeDepends
+        title="Remove collective_eeafaceted_batchatcions_js_variables.js from portal_javascripts"
+        description=""
+        import_steps="jsregistry"
+        />
+  </genericsetup:upgradeSteps>
 
 </configure>

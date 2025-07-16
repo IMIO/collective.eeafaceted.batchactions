@@ -24,11 +24,13 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Plone :: 4.3",
-        "Framework :: Plone :: 5.0",
-        "Framework :: Plone :: 5.1",
+        "Framework :: Plone :: 6.0",
+        "Framework :: Plone :: 6.1",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.13",
     ],
     keywords='faceted navigation batch actions table',
     author='IMIO',
@@ -48,6 +50,7 @@ setup(
         'imio.helpers',
         'imio.pyutils',
         'plone.formwidget.masterselect',
+        'six',
     ],
     extras_require={
         'test': [
@@ -55,7 +58,7 @@ setup(
             'plone.app.testing',
             'plone.app.relationfield',
             'plone.app.robotframework',
-            'collective.contact.core>1.43.0',
+            'collective.contact.core',
             'ftw.labels>1.3.1',
         ],
         'develop': [
