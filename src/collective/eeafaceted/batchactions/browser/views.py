@@ -450,25 +450,31 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
     def get_labeljar_context(self):
         return self.context
 
+    def _filter_labels_vocabulary(self, jar):
+        return jar.list()
+
     def get_labels_vocabulary(self):
         terms, p_labels, g_labels = [], [], []
         context = self.get_labeljar_context()
         try:
-            adapted = ILabelJar(context)
+            jar = ILabelJar(context)
         except Exception:
             return SimpleVocabulary(terms), [], []
         self.can_change_labels = self._can_change_labels()
-        for label in adapted.list():
+        for label in self._filter_labels_vocabulary(jar):
             if label['by_user']:
                 p_labels.append(label['label_id'])
-                terms.append(SimpleVocabulary.createTerm('%s:' % label['label_id'],
-                                                         label['label_id'],
-                                                         u'{} (*)'.format(safe_unicode(label['title']))))
+                terms.append(SimpleVocabulary.createTerm(
+                    '%s:' % label['label_id'],
+                    label['label_id'],
+                    u'{} (*)'.format(safe_unicode(label['title']))))
             else:
                 g_labels.append(label['label_id'])
                 if self.can_change_labels:
-                    terms.append(SimpleVocabulary.createTerm(label['label_id'], label['label_id'],
-                                                             safe_unicode(label['title'])))
+                    terms.append(SimpleVocabulary.createTerm(
+                        label['label_id'],
+                        label['label_id'],
+                        safe_unicode(label['title'])))
         return SimpleVocabulary(terms), set(p_labels), g_labels
 
     def _apply(self, **data):
