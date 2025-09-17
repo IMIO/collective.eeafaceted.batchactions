@@ -71,6 +71,7 @@ jobs:
           pip3 install -U "coveralls>=3.0.0" coverage==5.3.1 --no-cache-dir
       - name: Publish to Coveralls
         env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          coveralls --service=github
+          coveralls --service=github-actions
