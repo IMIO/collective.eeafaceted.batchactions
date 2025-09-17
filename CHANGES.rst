@@ -5,8 +5,9 @@ Changelog
 1.16.5 (unreleased)
 -------------------
 
-- Nothing changed yet.
-
+- Added `PMLabelsBatchActionForm._filter_labels_vocabulary` to be able to filter
+  selectable labels vocabulary.
+  [gbastien]
 
 1.16.4 (2025-06-25)
 -------------------
