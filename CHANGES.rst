@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.16.5 (unreleased)
+1.16.5 (2025-09-26)
 -------------------
 
 - Added `PMLabelsBatchActionForm._filter_labels_vocabulary` to be able to filter
