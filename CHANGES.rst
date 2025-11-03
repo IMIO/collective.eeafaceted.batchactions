@@ -5,8 +5,10 @@ Changelog
 1.16.6 (unreleased)
 -------------------
 
-- Nothing changed yet.
-
+- Added possibliity to use custom overlay configuration by setting
+  `BaseBatchActionForm.overlay` attribute to `None`, in this case nothing is
+  done and the overlay JS initialization must be done by an external package.
+  [gbastien]
 
 1.16.5 (2025-09-26)
 -------------------

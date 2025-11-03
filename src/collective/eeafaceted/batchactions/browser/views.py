@@ -66,6 +66,9 @@ class BaseBatchActionForm(Form):
     # this will add a specific class to the generated button action
     # so it is possible to skin it with an icon
     button_with_icon = False
+    # True, init default overlay, False, no overlay, link to form
+    # None, no default overlay, no link to form, need to be managed
+    # manually by external package
     overlay = True
     weight = 100
     # by default, action is available or if a permission is defined

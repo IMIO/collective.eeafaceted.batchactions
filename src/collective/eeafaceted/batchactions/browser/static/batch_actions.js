@@ -31,7 +31,9 @@ collective_batch_actions.init_button = function () {
       collective_batch_actions.initializeOverlays(ba_form);
     }
     else {
-      ba_form.submit();
+        if (!$(ba_form).hasClass('custom-overlay')) {
+          ba_form.submit();
+        }
     }
 
   });
@@ -45,7 +47,7 @@ collective_batch_actions.initializeOverlays = function (ba_form) {
         closeselector: '[name="form.buttons.cancel"]',
         config: {
             onBeforeLoad : function (e) {
-                submitFormHelper(this.form);
+                submitFormHelper();
                 return true;
             },
         }
