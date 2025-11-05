@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.16.6 (unreleased)
+1.16.6 (2025-11-05)
 -------------------
 
 - Added possibliity to use custom overlay configuration by setting
