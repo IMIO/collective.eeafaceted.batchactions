@@ -8,6 +8,8 @@ from collective.eeafaceted.batchactions.utils import brains_from_uids
 from collective.eeafaceted.batchactions.utils import cannot_modify_field_msg
 from collective.eeafaceted.batchactions.utils import has_interface
 from collective.eeafaceted.batchactions.utils import is_permitted
+from imio.actionspanel.interfaces import IContentDeletable
+from imio.actionspanel.utils import unrestrictedRemoveGivenObject
 from imio.helpers.content import sort_on_vocab_order
 from imio.helpers.security import check_zope_admin
 from imio.helpers.security import fplog
@@ -18,8 +20,6 @@ from plone import api
 from plone.dexterity.interfaces import IDexterityContent
 from plone.formwidget.masterselect import MasterSelectField
 from plone.supermodel import model
-from Products.CMFCore.permissions import DeleteObjects
-from Products.CMFCore.utils import _checkPermission
 from Products.CMFPlone import PloneMessageFactory as PMF
 from Products.CMFPlone.utils import safe_unicode
 from z3c.form import button
@@ -242,7 +242,7 @@ class DeleteBatchActionForm(BaseBatchActionForm):
     def _get_deletable_elements(self):
         """ """
         deletables = [obj for obj in self.objs
-                      if _checkPermission(DeleteObjects, obj)]
+                      if IContentDeletable(obj).mayDelete()]
         return deletables
 
     def _update(self):
@@ -265,7 +265,7 @@ class DeleteBatchActionForm(BaseBatchActionForm):
     def _apply(self, **data):
         """ """
         for obj in self.deletables:
-            api.content.delete(obj)
+            unrestrictedRemoveGivenObject(obj)
 
 
 class UpdateWFRoleMappingsActionForm(BaseBatchActionForm):
