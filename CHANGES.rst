@@ -2,16 +2,21 @@ Changelog
 =========
 
 
-1.16.7 (unreleased)
+1.17.0 (unreleased)
 -------------------
 
-- Nothing changed yet.
-
+- Adapted `DeleteBatchActionForm` to rely on `imio.actionspanel`
+  `IContentDeletable` adapter in `DeleteBatchActionForm._get_deletable_elements`
+  and use `unrestrictedRemoveGivenObject` to remove the deletable object:
+  the default implementation of `IContentDeletable.mayDelete` is the same as
+  replaced code, that is checking for the `Delete objects` permission.
+  Added `imio.actionspanel` as a dependency.
+  [gbastien]
 
 1.16.6 (2025-11-05)
 -------------------
 
-- Added possibliity to use custom overlay configuration by setting
+- Added possibility to use custom overlay configuration by setting
   `BaseBatchActionForm.overlay` attribute to `None`, in this case nothing is
   done and the overlay JS initialization must be done by an external package.
   [gbastien]
