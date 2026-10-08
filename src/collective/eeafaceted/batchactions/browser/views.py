@@ -39,13 +39,10 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 class IBaseBatchActionsFormSchema(model.Schema):
 
-    uids = schema.TextLine(
-        title=u"uids",
-        description=u''
-    )
+    uids = schema.TextLine(title=u"uids", description=u"")
 
     referer = schema.TextLine(
-        title=u'referer',
+        title=u"referer",
         required=False,
     )
 
@@ -54,8 +51,8 @@ class BaseBatchActionForm(Form):
 
     label = _(u"Batch action form")
     fields = Fields(IBaseBatchActionsFormSchema)
-    fields['uids'].mode = HIDDEN_MODE
-    fields['referer'].mode = HIDDEN_MODE
+    fields["uids"].mode = HIDDEN_MODE
+    fields["referer"].mode = HIDDEN_MODE
     ignoreContext = True
     brains = []
     # easy way to hide the "Apply" button when required conditions
@@ -72,7 +69,7 @@ class BaseBatchActionForm(Form):
     overlay = True
     weight = 100
     # by default, action is available or if a permission is defined
-    available_permission = ''
+    available_permission = ""
     # make action only available to the Zope admin
     available_for_zope_admin = False
     # useful when dispalying batch actions on several views for same context
@@ -103,12 +100,14 @@ class BaseBatchActionForm(Form):
     def description(self):
         """ """
         # update description depending on number of brains
-        return _('This action will affect ${number} element(s).',
-                 mapping={'number': len(self.brains)})
+        return _(
+            "This action will affect ${number} element(s).",
+            mapping={"number": len(self.brains)},
+        )
 
     def _apply(self, **data):
         """This method receives in data the form content and does the apply logic.
-           It is the method to implement if default handleApply is enough."""
+        It is the method to implement if default handleApply is enough."""
         raise NotImplementedError
 
     def update(self):
@@ -116,25 +115,27 @@ class BaseBatchActionForm(Form):
             raise Unauthorized
 
         form = self.request.form
-        if 'form.widgets.uids' in form:
-            uids = form['form.widgets.uids']
+        if "form.widgets.uids" in form:
+            uids = form["form.widgets.uids"]
         else:
-            uids = self.request.get('uids', '')
-            form['form.widgets.uids'] = uids
+            uids = self.request.get("uids", "")
+            form["form.widgets.uids"] = uids
 
-        if 'form.widgets.referer' not in form:
-            form['form.widgets.referer'] = self.request.get('referer', '').replace('@', '&').replace('!', '#')
+        if "form.widgets.referer" not in form:
+            form["form.widgets.referer"] = (
+                self.request.get("referer", "").replace("@", "&").replace("!", "#")
+            )
 
         self.brains = self.brains or brains_from_uids(uids)
 
         # sort buttons
         self._old_buttons = self.buttons
-        self.buttons = self.buttons.select('apply', 'cancel')
+        self.buttons = self.buttons.select("apply", "cancel")
         self._update()
         super(BaseBatchActionForm, self).update()
         self._update_widgets()
-        if self.apply_button_title is not None and 'apply' in self.actions:
-            self.actions['apply'].title = self.apply_button_title
+        if self.apply_button_title is not None and "apply" in self.actions:
+            self.actions["apply"].title = self.apply_button_title
         self._final_update()
 
     def __call__(self):
@@ -144,11 +145,22 @@ class BaseBatchActionForm(Form):
         # in addition to status 3xx already managed by z3c.form
         # or we do not have the portal_message that is supposed
         # to be displayed when refreshing the faceted after action is applied
-        if self.request.response.getStatus() in (204, 300, 301, 302, 303, 304, 305, 307,):
-            return u''
+        if self.request.response.getStatus() in (
+            204,
+            300,
+            301,
+            302,
+            303,
+            304,
+            305,
+            307,
+        ):
+            return u""
         return self.render()
 
-    @button.buttonAndHandler(_(u'Apply'), name='apply', condition=lambda fi: fi.do_apply)
+    @button.buttonAndHandler(
+        _(u"Apply"), name="apply", condition=lambda fi: fi.do_apply
+    )
     def handleApply(self, action):
         """ """
         if not self.do_apply:
@@ -159,23 +171,26 @@ class BaseBatchActionForm(Form):
             self.status = self.formErrorsMessage
         else:
             # log in fingerpointing before executing job
-            extras = 'action={0} number_of_elements={1}'.format(
-                repr(self.label), len(self.brains))
-            fplog('apply_batch_action', extras=extras)
+            extras = "action={0} number_of_elements={1}".format(
+                repr(self.label), len(self.brains)
+            )
+            fplog("apply_batch_action", extras=extras)
             # call the method that does the job
             applied = self._apply(**data)
             # redirect if not using an overlay
-            if not self.request.form.get('ajax_load', ''):
-                self.request.response.redirect(safe_encode(self.request.form['form.widgets.referer']))
+            if not self.request.form.get("ajax_load", ""):
+                self.request.response.redirect(
+                    safe_encode(self.request.form["form.widgets.referer"])
+                )
             else:
                 # make sure we return nothing, taken into account by ajax query
                 if not applied:
                     self.request.RESPONSE.setStatus(204)
                 return applied or ""
 
-    @button.buttonAndHandler(PMF(u'Cancel'), name='cancel')
+    @button.buttonAndHandler(PMF(u"Cancel"), name="cancel")
     def handleCancel(self, action):
-        self.request.response.redirect(self.request.get('HTTP_REFERER'))
+        self.request.response.redirect(self.request.get("HTTP_REFERER"))
 
 
 class TransitionBatchActionForm(BaseBatchActionForm):
@@ -184,51 +199,69 @@ class TransitionBatchActionForm(BaseBatchActionForm):
     weight = 10
 
     def get_available_transitions_voc(self):
-        """ Returns available transitions common for all brains """
-        wtool = api.portal.get_tool(name='portal_workflow')
+        """Returns available transitions common for all brains"""
+        wtool = api.portal.get_tool(name="portal_workflow")
         terms = []
         transitions = None
         for brain in self.brains:
             obj = brain.getObject()
             if transitions is None:
-                transitions = set([(tr['id'], tr['title']) for tr in wtool.getTransitionsFor(obj)])
+                transitions = set(
+                    [(tr["id"], tr["title"]) for tr in wtool.getTransitionsFor(obj)]
+                )
             else:
-                transitions &= set([(tr['id'], tr['title']) for tr in wtool.getTransitionsFor(obj)])
+                transitions &= set(
+                    [(tr["id"], tr["title"]) for tr in wtool.getTransitionsFor(obj)]
+                )
         if transitions:
             for (id, tit) in transitions:
                 terms.append(
-                    SimpleTerm(id,
-                               id,
-                               translate(safe_unicode(tit, 'utf8'),
-                                         domain='plone',
-                                         context=self.request)))
-        terms = sorted(terms, key=attrgetter('title'))
+                    SimpleTerm(
+                        id,
+                        id,
+                        translate(
+                            safe_unicode(tit, "utf8"),
+                            domain="plone",
+                            context=self.request,
+                        ),
+                    )
+                )
+        terms = sorted(terms, key=attrgetter("title"))
         return SimpleVocabulary(terms)
 
     def _update(self):
         self.voc = self.get_available_transitions_voc()
         self.do_apply = len(self.voc) > 0
-        self.fields += Fields(schema.Choice(
-            __name__='transition',
-            title=_(u'Transition'),
-            vocabulary=self.voc,
-            description=(len(self.voc) == 0 and
-                         _(u'No common or available transition. Modify your selection.') or u''),
-            required=len(self.voc) > 0))
-        self.fields += Fields(schema.Text(
-            __name__='comment',
-            title=_(u'Comment'),
-            description=_(u'Optional comment to display in history'),
-            required=False))
+        self.fields += Fields(
+            schema.Choice(
+                __name__="transition",
+                title=_(u"Transition"),
+                vocabulary=self.voc,
+                description=(
+                    len(self.voc) == 0
+                    and _(u"No common or available transition. Modify your selection.")
+                    or u""
+                ),
+                required=len(self.voc) > 0,
+            )
+        )
+        self.fields += Fields(
+            schema.Text(
+                __name__="comment",
+                title=_(u"Comment"),
+                description=_(u"Optional comment to display in history"),
+                required=False,
+            )
+        )
 
     def _apply(self, **data):
         """ """
-        if data['transition']:
+        if data["transition"]:
             for brain in self.brains:
                 obj = brain.getObject()
-                api.content.transition(obj=obj,
-                                       transition=data['transition'],
-                                       comment=data['comment'])
+                api.content.transition(
+                    obj=obj, transition=data["transition"], comment=data["comment"]
+                )
 
 
 class DeleteBatchActionForm(BaseBatchActionForm):
@@ -236,13 +269,12 @@ class DeleteBatchActionForm(BaseBatchActionForm):
     label = _(u"Delete elements")
     weight = 5
     button_with_icon = True
-    apply_button_title = _('delete-batch-action-but')
+    apply_button_title = _("delete-batch-action-but")
     available_for_zope_admin = True
 
     def _get_deletable_elements(self):
         """ """
-        deletables = [obj for obj in self.objs
-                      if IContentDeletable(obj).mayDelete()]
+        deletables = [obj for obj in self.objs if IContentDeletable(obj).mayDelete()]
         return deletables
 
     def _update(self):
@@ -255,10 +287,14 @@ class DeleteBatchActionForm(BaseBatchActionForm):
         """ """
         if len(self.deletables) < len(self.brains):
             not_deletables = len(self.brains) - len(self.deletables)
-            return _('This action will only affect ${deletable_number} element(s), indeed '
-                     'you do not have the permission to delete ${not_deletable_number} element(s).',
-                     mapping={'deletable_number': len(self.deletables),
-                              'not_deletable_number': not_deletables, })
+            return _(
+                "This action will only affect ${deletable_number} element(s), indeed "
+                "you do not have the permission to delete ${not_deletable_number} element(s).",
+                mapping={
+                    "deletable_number": len(self.deletables),
+                    "not_deletable_number": not_deletables,
+                },
+            )
         else:
             return super(DeleteBatchActionForm, self).description
 
@@ -275,7 +311,7 @@ class UpdateWFRoleMappingsActionForm(BaseBatchActionForm):
 
     def _apply(self, **data):
         """ """
-        wtool = api.portal.get_tool(name='portal_workflow')
+        wtool = api.portal.get_tool(name="portal_workflow")
         for brain in self.brains:
             obj = brain.getObject()
             for wf in wtool.getWorkflowsFor(obj):
@@ -311,17 +347,20 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
     @property
     def description(self):
         """ """
-        description = translate(super(BaseARUOBatchActionForm, self).description,
-                                context=self.request)
+        description = translate(
+            super(BaseARUOBatchActionForm, self).description, context=self.request
+        )
         if self.required:
             description += translate(
-                'field_can_not_be_empty_warning',
+                "field_can_not_be_empty_warning",
                 domain="collective.eeafaceted.batchactions",
-                context=self.request)
+                context=self.request,
+            )
         description += translate(
-            'aruo_action_replace_warning',
+            "aruo_action_replace_warning",
             domain="collective.eeafaceted.batchactions",
-            context=self.request)
+            context=self.request,
+        )
         return description
 
     def _vocabulary(self):
@@ -342,87 +381,112 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
 
     def _update(self):
         self.do_apply = self._may_apply()
-        self.fields += Fields(MasterSelectField(
-            __name__='action_choice',
-            title=_(u'Batch action choice'),
-            description=(not self.do_apply and cannot_modify_field_msg or u''),
-            vocabulary=SimpleVocabulary([SimpleTerm(value=u'add', title=_(u'Add items')),
-                                         SimpleTerm(value=u'remove', title=_(u'Remove items')),
-                                         SimpleTerm(value=u'replace', title=_(u'Replace some items by others')),
-                                         SimpleTerm(value=u'overwrite', title=_(u'Overwrite'))]),
-            slave_fields=(
-                {'name': 'removed_values',
-                 'slaveID': '#form-widgets-removed_values',
-                 'action': 'hide',
-                 'hide_values': (u'add', u'overwrite'),
-                 'siblings': True,
-                 },
-                {'name': 'added_values',
-                 'slaveID': '#form-widgets-added_values',
-                 'action': 'hide',
-                 'hide_values': (u'remove',),
-                 'siblings': True,
-                 },
-            ),
-            required=self.do_apply,
-            default=u'add'
-        ))
+        self.fields += Fields(
+            MasterSelectField(
+                __name__="action_choice",
+                title=_(u"Batch action choice"),
+                description=(not self.do_apply and cannot_modify_field_msg or u""),
+                vocabulary=SimpleVocabulary(
+                    [
+                        SimpleTerm(value=u"add", title=_(u"Add items")),
+                        SimpleTerm(value=u"remove", title=_(u"Remove items")),
+                        SimpleTerm(
+                            value=u"replace", title=_(u"Replace some items by others")
+                        ),
+                        SimpleTerm(value=u"overwrite", title=_(u"Overwrite")),
+                    ]
+                ),
+                slave_fields=(
+                    {
+                        "name": "removed_values",
+                        "slaveID": "#form-widgets-removed_values",
+                        "action": "hide",
+                        "hide_values": (u"add", u"overwrite"),
+                        "siblings": True,
+                    },
+                    {
+                        "name": "added_values",
+                        "slaveID": "#form-widgets-added_values",
+                        "action": "hide",
+                        "hide_values": (u"remove",),
+                        "siblings": True,
+                    },
+                ),
+                required=self.do_apply,
+                default=u"add",
+            )
+        )
         if self.do_apply:
-            self.fields += Fields(schema.List(
-                __name__='removed_values',
-                title=_(u"Removed values"),
-                description=self.removed_values_description,
-                required=False,
-                value_type=schema.Choice(vocabulary=self._remove_vocabulary()),
-            ))
-            self.fields += Fields(schema.List(
-                __name__='added_values',
-                title=_(u"Added values"),
-                description=self.added_values_description,
-                required=False,
-                value_type=schema.Choice(vocabulary=self._vocabulary()),
-            ))
+            self.fields += Fields(
+                schema.List(
+                    __name__="removed_values",
+                    title=_(u"Removed values"),
+                    description=self.removed_values_description,
+                    required=False,
+                    value_type=schema.Choice(vocabulary=self._remove_vocabulary()),
+                )
+            )
+            self.fields += Fields(
+                schema.List(
+                    __name__="added_values",
+                    title=_(u"Added values"),
+                    description=self.added_values_description,
+                    required=False,
+                    value_type=schema.Choice(vocabulary=self._vocabulary()),
+                )
+            )
             self.fields["removed_values"].widgetFactory = CheckBoxFieldWidget
             self.fields["added_values"].widgetFactory = CheckBoxFieldWidget
 
     def _update_widgets(self):
         if self.do_apply:
-            self.widgets['removed_values'].multiple = 'multiple'
-            self.widgets['removed_values'].size = 5
-            self.widgets['added_values'].multiple = 'multiple'
-            self.widgets['added_values'].size = 5
+            self.widgets["removed_values"].multiple = "multiple"
+            self.widgets["removed_values"].size = 5
+            self.widgets["added_values"].multiple = "multiple"
+            self.widgets["added_values"].size = 5
 
     def _apply(self, **data):
         updated = []
-        if ((data.get('removed_values', None) and data['action_choice'] in ('remove', 'replace')) or
-           (data.get('added_values', None)) and data['action_choice'] in ('add', 'replace', 'overwrite')):
+        if (
+            (
+                data.get("removed_values", None)
+                and data["action_choice"] in ("remove", "replace")
+            )
+            or (data.get("added_values", None))
+            and data["action_choice"] in ("add", "replace", "overwrite")
+        ):
             for brain in self.brains:
                 obj = brain.getObject()
                 stored_values = list(getattr(obj, self.modified_attr_name) or [])
-                if data['action_choice'] in ('overwrite', ):
-                    items = set(data['added_values'])
+                if data["action_choice"] in ("overwrite",):
+                    items = set(data["added_values"])
                 # in case of a 'replace', replaced values must be selected on obj or nothing is done
-                elif data['action_choice'] in ('replace', ) and \
-                        set(data['removed_values']).difference(stored_values):
+                elif data["action_choice"] in ("replace",) and set(
+                    data["removed_values"]
+                ).difference(stored_values):
                     continue
                 else:
                     items = set(getattr(obj, self.modified_attr_name) or [])
-                    if data['action_choice'] in ('remove', 'replace'):
-                        items = items.difference(data['removed_values'])
-                    if data['action_choice'] in ('add', 'replace'):
-                        items = items.union(data['added_values'])
+                    if data["action_choice"] in ("remove", "replace"):
+                        items = items.difference(data["removed_values"])
+                    if data["action_choice"] in ("add", "replace"):
+                        items = items.union(data["added_values"])
                 # only update if values changed
                 if sorted(stored_values) != sorted(list(items)):
                     if not self._validate(obj, items):
                         continue
                     if self.keep_vocabulary_order:
                         items = sort_on_vocab_order(
-                            values=items, vocab=self.widgets['added_values'].terms.terms)
+                            values=items, vocab=self.widgets["added_values"].terms.terms
+                        )
                     setattr(obj, self.modified_attr_name, items)
                     updated.append(obj)
                     if self.call_modified_event:
                         if IDexterityContent.providedBy(obj):
-                            modified(obj, Attributes(IDexterityContent, self.modified_attr_name))
+                            modified(
+                                obj,
+                                Attributes(IDexterityContent, self.modified_attr_name),
+                            )
                         else:
                             modified(obj)
                     # if modified event does not reindex, call it
@@ -435,10 +499,12 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
 
     label = _(u"Batch labels change")
     weight = 20
-    removed_values_description = \
-        _(u"Select the values to remove. A personal label is represented by (*).")
-    added_values_description = \
-        _(u"Select the values to add. A personal label is represented by (*).")
+    removed_values_description = _(
+        u"Select the values to remove. A personal label is represented by (*)."
+    )
+    added_values_description = _(
+        u"Select the values to add. A personal label is represented by (*)."
+    )
 
     def _vocabulary(self):
         return self.labels_voc
@@ -448,7 +514,7 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
         return len(self.labels_voc._terms) and has_interface(self.brains, ILabelSupport)
 
     def _can_change_labels(self):
-        return is_permitted(self.brains, perm='ftw.labels: Change Labels')
+        return is_permitted(self.brains, perm="ftw.labels: Change Labels")
 
     def get_labeljar_context(self):
         return self.context
@@ -465,61 +531,79 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
             return SimpleVocabulary(terms), [], []
         self.can_change_labels = self._can_change_labels()
         for label in self._filter_labels_vocabulary(jar):
-            if label['by_user']:
-                p_labels.append(label['label_id'])
-                terms.append(SimpleVocabulary.createTerm(
-                    '%s:' % label['label_id'],
-                    label['label_id'],
-                    u'{} (*)'.format(safe_unicode(label['title']))))
+            if label["by_user"]:
+                p_labels.append(label["label_id"])
+                terms.append(
+                    SimpleVocabulary.createTerm(
+                        "%s:" % label["label_id"],
+                        label["label_id"],
+                        u"{} (*)".format(safe_unicode(label["title"])),
+                    )
+                )
             else:
-                g_labels.append(label['label_id'])
+                g_labels.append(label["label_id"])
                 if self.can_change_labels:
-                    terms.append(SimpleVocabulary.createTerm(
-                        label['label_id'],
-                        label['label_id'],
-                        safe_unicode(label['title'])))
+                    terms.append(
+                        SimpleVocabulary.createTerm(
+                            label["label_id"],
+                            label["label_id"],
+                            safe_unicode(label["title"]),
+                        )
+                    )
         return SimpleVocabulary(terms), set(p_labels), g_labels
 
     def _apply(self, **data):
-        if ((data.get('removed_values', None) and data['action_choice'] in ('remove', 'replace')) or
-           (data.get('added_values', None)) and data['action_choice'] in ('add', 'replace', 'overwrite')):
-            values = {'p_a': [], 'p_r': [], 'g_a': [], 'g_r': []}
-            for act, lst in (('a', data.get('added_values', [])), ('r', data.get('removed_values', []))):
+        if (
+            (
+                data.get("removed_values", None)
+                and data["action_choice"] in ("remove", "replace")
+            )
+            or (data.get("added_values", None))
+            and data["action_choice"] in ("add", "replace", "overwrite")
+        ):
+            values = {"p_a": [], "p_r": [], "g_a": [], "g_r": []}
+            for act, lst in (
+                ("a", data.get("added_values", [])),
+                ("r", data.get("removed_values", [])),
+            ):
                 for val in lst:
-                    typ = (':' in val) and 'p' or 'g'
-                    values['{}_{}'.format(typ, act)].append(val.split(':')[0])
+                    typ = (":" in val) and "p" or "g"
+                    values["{}_{}".format(typ, act)].append(val.split(":")[0])
             for brain in self.brains:
                 obj = brain.getObject()
                 labeling = ILabeling(obj)
                 p_act, g_act = active_labels(labeling)
                 # in case of a 'replace', replaced values must be selected on obj or nothing is done
-                if data['action_choice'] in ('replace', ) and \
-                        set(values['g_r'] + values['p_r']).difference(p_act + g_act):
+                if data["action_choice"] in ("replace",) and set(
+                    values["g_r"] + values["p_r"]
+                ).difference(p_act + g_act):
                     continue
 
                 # manage global labels
-                if self.can_change_labels and (values['g_a'] or values['g_r']):
-                    if data['action_choice'] in ('overwrite'):
-                        items = set(values['g_a'])
+                if self.can_change_labels and (values["g_a"] or values["g_r"]):
+                    if data["action_choice"] in ("overwrite"):
+                        items = set(values["g_a"])
                     else:
                         items = set(g_act)  # currently active labels
-                        if data['action_choice'] in ('remove', 'replace'):
-                            items = items.difference(values['g_r'])
-                        if data['action_choice'] in ('add', 'replace'):
-                            items = items.union(values['g_a'])
+                        if data["action_choice"] in ("remove", "replace"):
+                            items = items.difference(values["g_r"])
+                        if data["action_choice"] in ("add", "replace"):
+                            items = items.union(values["g_a"])
                     labeling.update(items)
                 # manage personal labels
-                if values['p_a'] or values['p_r']:
-                    if data['action_choice'] in ('overwrite'):
-                        items = set(values['p_a'])
+                if values["p_a"] or values["p_r"]:
+                    if data["action_choice"] in ("overwrite"):
+                        items = set(values["p_a"])
                         labeling.pers_update(self.p_labels.difference(items), False)
                         labeling.pers_update(items, True)
                     else:
-                        if data['action_choice'] in ('remove', 'replace'):
-                            labeling.pers_update(set(p_act).intersection(values['p_r']), False)
-                        if data['action_choice'] in ('add', 'replace'):
-                            labeling.pers_update(values['p_a'], True)
-                obj.reindexObject(['labels'])
+                        if data["action_choice"] in ("remove", "replace"):
+                            labeling.pers_update(
+                                set(p_act).intersection(values["p_r"]), False
+                            )
+                        if data["action_choice"] in ("add", "replace"):
+                            labeling.pers_update(values["p_a"], True)
+                obj.reindexObject(["labels"])
 
 
 try:
@@ -531,21 +615,21 @@ except ImportError:
 
 class ContactBaseBatchActionForm(BaseBatchActionForm):
     """
-        Base class to manage contact field change.
-        For now, only ContactList.
+    Base class to manage contact field change.
+    For now, only ContactList.
     """
 
     label = _(u"Batch contact field change")
     weight = 30
-    attribute = ''
+    attribute = ""
     field_value_type = None
-    perms = ('Modify portal content',)
+    perms = ("Modify portal content",)
 
     def available(self):
         """Will the action be available for current context?
         We have to handle an autocomplete search made as anonymous because update method is called on search."""
         res = True
-        if self.request["ACTUAL_URL"].endswith('@@autocomplete-search'):
+        if self.request["ACTUAL_URL"].endswith("@@autocomplete-search"):
             return True
         elif self.available_permission:
             res = api.user.has_permission(self.available_permission, obj=self.context)
@@ -557,51 +641,76 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
         assert self.attribute
         assert self.field_value_type is not None
         self.do_apply = is_permitted(self.brains, perms=self.perms)
-        self.fields += Fields(schema.Choice(
-            __name__='action_choice',
-            title=_(u'Batch action choice'),
-            description=(not self.do_apply and cannot_modify_field_msg or u''),
-            vocabulary=SimpleVocabulary([SimpleTerm(value=u'add', title=_(u'Add items')),
-                                         SimpleTerm(value=u'remove', title=_(u'Remove items')),
-                                         SimpleTerm(value=u'replace', title=_(u'Replace some items by others')),
-                                         SimpleTerm(value=u'overwrite', title=_(u'Overwrite'))]),
-            required=self.do_apply,
-            default=u'add'
-        ))
+        self.fields += Fields(
+            schema.Choice(
+                __name__="action_choice",
+                title=_(u"Batch action choice"),
+                description=(not self.do_apply and cannot_modify_field_msg or u""),
+                vocabulary=SimpleVocabulary(
+                    [
+                        SimpleTerm(value=u"add", title=_(u"Add items")),
+                        SimpleTerm(value=u"remove", title=_(u"Remove items")),
+                        SimpleTerm(
+                            value=u"replace", title=_(u"Replace some items by others")
+                        ),
+                        SimpleTerm(value=u"overwrite", title=_(u"Overwrite")),
+                    ]
+                ),
+                required=self.do_apply,
+                default=u"add",
+            )
+        )
         if self.do_apply:
-            self.fields += Fields(ContactList(
-                __name__='removed_values',
-                title=_(u"Removed values"),
-                description=_(u"Search and select the values to remove, if necessary."),
-                required=False,
-                addlink=False,
-                value_type=self.field_value_type,
-            ))
-            self.fields += Fields(ContactList(
-                __name__='added_values',
-                title=_(u"Added values"),
-                description=_(u"Search and select the values to add."),
-                required=False,
-                addlink=False,
-                value_type=self.field_value_type,
-            ))
+            self.fields += Fields(
+                ContactList(
+                    __name__="removed_values",
+                    title=_(u"Removed values"),
+                    description=_(
+                        u"Search and select the values to remove, if necessary."
+                    ),
+                    required=False,
+                    addlink=False,
+                    value_type=self.field_value_type,
+                )
+            )
+            self.fields += Fields(
+                ContactList(
+                    __name__="added_values",
+                    title=_(u"Added values"),
+                    description=_(u"Search and select the values to add."),
+                    required=False,
+                    addlink=False,
+                    value_type=self.field_value_type,
+                )
+            )
 
     def _apply(self, **data):
-        if ((data.get('removed_values', None) and data['action_choice'] in ('remove', 'replace')) or
-           (data.get('added_values', None)) and data['action_choice'] in ('add', 'replace', 'overwrite')):
+        if (
+            (
+                data.get("removed_values", None)
+                and data["action_choice"] in ("remove", "replace")
+            )
+            or (data.get("added_values", None))
+            and data["action_choice"] in ("add", "replace", "overwrite")
+        ):
             intids = getUtility(IIntIds)
             for brain in self.brains:
                 obj = brain.getObject()
-                if data['action_choice'] in ('overwrite', ):
-                    items = set(data['added_values'])
+                if data["action_choice"] in ("overwrite",):
+                    items = set(data["added_values"])
                 else:
                     # we get the linked objects
-                    items = set([intids.getObject(rel.to_id) for rel in (getattr(obj, self.attribute) or [])
-                                 if not rel.isBroken()])
-                    if data['action_choice'] in ('remove', 'replace'):
-                        items = items.difference(data['removed_values'])
-                    if data['action_choice'] in ('add', 'replace'):
-                        items = items.union(data['added_values'])
+                    items = set(
+                        [
+                            intids.getObject(rel.to_id)
+                            for rel in (getattr(obj, self.attribute) or [])
+                            if not rel.isBroken()
+                        ]
+                    )
+                    if data["action_choice"] in ("remove", "replace"):
+                        items = items.difference(data["removed_values"])
+                    if data["action_choice"] in ("add", "replace"):
+                        items = items.union(data["added_values"])
                 # transform to relations
                 rels = [RelationValue(intids.getId(ob)) for ob in items]
                 setattr(obj, self.attribute, rels)

@@ -7,6 +7,8 @@ from collective.eeafaceted.batchactions.browser.views import ContactBaseBatchAct
 
 class ContactBatchActionForm(ContactBaseBatchActionForm):
 
-    available_permission = 'Manage portal'
-    attribute = 'related_organizations'
-    field_value_type = ContactChoice(source=ContactSourceBinder(portal_type="organization"))
+    available_permission = "Manage portal"
+    attribute = "related_organizations"
+    field_value_type = ContactChoice(
+        source=ContactSourceBinder(portal_type="organization")
+    )

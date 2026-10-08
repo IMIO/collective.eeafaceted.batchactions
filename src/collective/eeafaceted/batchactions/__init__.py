@@ -4,7 +4,7 @@
 from zope.i18nmessageid import MessageFactory
 
 
-_ = MessageFactory('collective.eeafaceted.batchactions')
+_ = MessageFactory("collective.eeafaceted.batchactions")
 
 
 def initialize(context):
