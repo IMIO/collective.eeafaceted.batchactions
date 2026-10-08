@@ -2,6 +2,11 @@ collective_batch_actions = {};
 
 collective_batch_actions.init_button = function () {
 
+  if (typeof jQuery === "undefined") {
+    // viewlet in the page itself: the plone bundle makes jQuery global asynchronously
+    window.addEventListener("load", collective_batch_actions.init_button);
+    return;
+  }
   if ( $(".faceted-table-results").length && $('.faceted-table-results')[0] == undefined ) {
     $('#batch-actions').hide();
   }
@@ -40,16 +45,41 @@ collective_batch_actions.init_button = function () {
 };
 
 collective_batch_actions.initializeOverlays = function (ba_form) {
-    // Add batch actions popup
-    $(ba_form).prepOverlay({
-        api: true,
-        subtype: 'ajax',
-        closeselector: '[name="form.buttons.cancel"]',
-        config: {
-            onBeforeLoad : function (e) {
-                submitFormHelper();
-                return true;
-            },
-        }
+    // the form posted with the selected uids, shown in a Plone modal (pat-plone-modal)
+    if (!$.fn.patPloneModal) {
+        ba_form.submit();
+        return;
+    }
+    $.post(ba_form.action, $(ba_form).serialize() + '&ajax_load=1', function (html) {
+        var trigger = $('<a href="#" />').hide().appendTo('body');
+        trigger.on('hidden.plone-modal.patterns', function () { trigger.remove(); });
+        trigger.patPloneModal({
+            html: html,
+            automaticallyAddButtonActions: false,
+            onRender: collective_batch_actions.ajaxApply
+        });
+        trigger.click();
+    });
+};
+
+collective_batch_actions.ajaxApply = function (modal) {
+    // Apply posted over ajax (ajax_load: the form answers 204), then the modal is closed and the faceted
+    // table refreshed (or the returned file downloaded) by imio.helpers; its submitFormHelper only binds
+    // input buttons, Plone 6 forms have button elements
+    var form = $('.modal-body form', modal.$modal);
+    $('#form-buttons-apply', form).on('click', function () {
+        var data = form.serializeArray();
+        data.push({name: this.name, value: this.value}, {name: 'ajax_load', value: true});
+        $.ajax({
+            type: 'POST',
+            url: form.attr('action'),
+            data: data,
+            dataType: 'binary',
+            responseType: 'arraybuffer',
+            cache: false
+        }).done(function (data, textStatus, request) {
+            modal.hide();
+            submitFormHelperOnsuccessDefault(data, textStatus, request);
+        });
     });
 };

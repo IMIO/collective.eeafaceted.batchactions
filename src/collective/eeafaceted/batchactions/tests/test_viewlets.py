@@ -7,7 +7,6 @@ from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from collective.eeafaceted.batchactions.tests.interfaces import (
     IBatchActionsSpecificMarker,
 )
-from operator import itemgetter
 from plone import api
 from plone.app.testing import login
 from Products.Five.browser import BrowserView
@@ -26,11 +25,8 @@ class OtherSectionViewlet(BatchActionsViewlet):
 
 class TestViewlets(BaseTestCase):
     def _assert_actions(self, actions, expected):
-        """Actions are sorted on weight, but those of equal weight come from a set:
-        compare them sorted on name."""
-        weights = [action["weight"] for action in actions]
-        self.assertEqual(weights, sorted(weights))
-        self.assertEqual(sorted(actions, key=itemgetter("weight", "name")), expected)
+        """Actions are sorted on weight, then on name (they come from a set)."""
+        self.assertEqual(actions, expected)
 
     def _get_viewlet_manager(self, context):
         """ """
@@ -238,6 +234,8 @@ class TestViewlets(BaseTestCase):
         """One form per action, its class depends on overlay (True: do-overlay, None: custom-overlay,
         False: none), its button gets batch-action-icon-but when button_with_icon."""
         alsoProvides(self.eea_folder, IBatchActionsSpecificMarker)
+        # absolute: Plone 6 pages have no base tag
+        url = self.eea_folder.absolute_url()
 
         def render(viewlet):
             viewlet.update()
@@ -260,7 +258,7 @@ class TestViewlets(BaseTestCase):
             [
                 (
                     "testing-aruo-batch-action",
-                    "testing-aruo-batch-action",
+                    url + "/testing-aruo-batch-action",
                     "batch-action-form do-overlay",
                     "testing-aruo-batch-action-but",
                     "button batch-action-but",
@@ -268,7 +266,7 @@ class TestViewlets(BaseTestCase):
                 ),
                 (
                     "testing-batch-action",
-                    "testing-batch-action",
+                    url + "/testing-batch-action",
                     "batch-action-form",
                     "testing-batch-action-but",
                     "button batch-action-but batch-action-icon-but",
@@ -276,7 +274,7 @@ class TestViewlets(BaseTestCase):
                 ),
                 (
                     "transition-batch-action",
-                    "transition-batch-action",
+                    url + "/transition-batch-action",
                     "batch-action-form do-overlay",
                     "transition-batch-action-but",
                     "button batch-action-but",
@@ -294,7 +292,7 @@ class TestViewlets(BaseTestCase):
             [
                 (
                     "testing-other-section-batch-action",
-                    "testing-other-section-batch-action",
+                    url + "/testing-other-section-batch-action",
                     "batch-action-form custom-overlay",
                     "testing-other-section-batch-action-but",
                     "button batch-action-but",

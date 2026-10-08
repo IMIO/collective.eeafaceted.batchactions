@@ -4,6 +4,7 @@ from collective.eeafaceted.batchactions.browser.views import TransitionBatchActi
 from collective.eeafaceted.batchactions.interfaces import IBatchActionsMarker
 from eea.facetednavigation.layout.interfaces import IFacetedLayout
 from plone import api
+from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
 from plone.app.robotframework.remote import RemoteLibrary
 from plone.app.robotframework.remote import RemoteLibraryLayer
 from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
@@ -17,32 +18,19 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
-from plone.testing import z2
+from plone.testing import zope
+from plone.testing.zope import WSGI_SERVER_FIXTURE
 from zope.dottedname.resolve import resolve
 from zope.globalrequest import setLocal
 from zope.interface import alsoProvides
 
 import collective.eeafaceted.batchactions
-import pkg_resources
-
-
-try:
-    from plone.testing.zope import WSGI_SERVER_FIXTURE as SERVER_FIXTURE
-except ImportError:  # Plone 4
-    from plone.testing.z2 import ZSERVER_FIXTURE as SERVER_FIXTURE
-
-
-try:
-    pkg_resources.get_distribution("plone.app.contenttypes")
-except pkg_resources.DistributionNotFound:
-    HAS_PA_CONTENTTYPES = False
-else:
-    HAS_PA_CONTENTTYPES = True
+import transaction
 
 
 class NakedPloneLayer(PloneSandboxLayer):
 
-    defaultBases = (PLONE_FIXTURE,)
+    defaultBases = (PLONE_APP_CONTENTTYPES_FIXTURE,)
     products = ("collective.eeafaceted.batchactions", "eea.facetednavigation")
 
     def setUpZope(self, app, configurationContext):
@@ -50,11 +38,7 @@ class NakedPloneLayer(PloneSandboxLayer):
         # Load ZCML
         self.loadZCML(package=collective.eeafaceted.batchactions, name="testing.zcml")
         for p in self.products:
-            z2.installProduct(app, p)
-        if HAS_PA_CONTENTTYPES:
-            import plone.app.contenttypes
-
-            self.loadZCML(package=plone.app.contenttypes)
+            zope.installProduct(app, p)
 
     def tearDownZope(self, app):
         """Tear down Zope."""
@@ -80,16 +64,8 @@ class CollectiveEeafacetedBatchActionsLayer(NakedPloneLayer):
         login(portal, TEST_USER_NAME)
         # make sure we have a default workflow
         portal.portal_workflow.setDefaultChain("simple_publication_workflow")
-
-        # pac is really installed ?
-        if (
-            HAS_PA_CONTENTTYPES
-            and portal.portal_setup.getLastVersionForProfile(
-                "plone.app.contenttypes:default"
-            )
-            != "unknown"
-        ):
-            self.applyProfile(portal, "plone.app.contenttypes:default")
+        # plone.testing 10 swallows an error of the layer commit: commit here so it is raised
+        transaction.commit()
 
 
 FIXTURE = CollectiveEeafacetedBatchActionsLayer(name="FIXTURE")
@@ -102,7 +78,7 @@ FUNCTIONAL = FunctionalTesting(bases=(FIXTURE,), name="FUNCTIONAL")
 
 
 class LabelsLayer(PloneSandboxLayer):
-    """Optional ftw.labels integration (LabelsBatchActionForm)."""
+    """Optional collective.labels integration (LabelsBatchActionForm)."""
 
     defaultBases = (FIXTURE,)
 
@@ -112,7 +88,8 @@ class LabelsLayer(PloneSandboxLayer):
         )
 
     def setUpPloneSite(self, portal):
-        applyProfile(portal, "ftw.labels:default")
+        applyProfile(portal, "collective.labels:default")
+        transaction.commit()
 
 
 LABELS_FIXTURE = LabelsLayer(name="LABELS_FIXTURE")
@@ -133,6 +110,8 @@ class ContactLayer(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         setLocal("request", portal.REQUEST)
         applyProfile(portal, "collective.contact.core:test_data")
+        # contact.core HeldPosition.Title() needs the site at commit (reindex queue)
+        transaction.commit()
 
 
 CONTACT_FIXTURE = ContactLayer(name="CONTACT_FIXTURE")
@@ -175,5 +154,5 @@ REMOTE_LIBRARY_FIXTURE = RemoteLibraryLayer(
 
 
 ACCEPTANCE = FunctionalTesting(
-    bases=(FIXTURE, REMOTE_LIBRARY_FIXTURE, SERVER_FIXTURE), name="ACCEPTANCE"
+    bases=(FIXTURE, REMOTE_LIBRARY_FIXTURE, WSGI_SERVER_FIXTURE), name="ACCEPTANCE"
 )

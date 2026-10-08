@@ -2,7 +2,8 @@
 Documentation  Plone 6 Classic UI keywords. Same keyword names and arguments as ui_plone4.robot.
 ...            Robot Framework 3.0 syntax: shared with the Plone 4.3 (Python 2) environment.
 ...            Selectors checked on Plone 6.1 (collective.contact.contactlist).
-...            Apply the modal: NOT CHECKED YET on Plone 6 (collective.eeafaceted.batchactions).
+...            Checked on Plone 6.2 (collective.eeafaceted.batchactions): Log in with the login form,
+...            The modal is open, Modal element, Apply the modal, Cancel the modal, The modal is closed.
 Resource  plone/app/robotframework/selenium.robot
 Resource  plone/app/robotframework/keywords.robot
 Library  Remote  ${PLONE_URL}/RobotRemote

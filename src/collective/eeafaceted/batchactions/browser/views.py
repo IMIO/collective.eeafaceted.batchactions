@@ -17,11 +17,11 @@ from imio.helpers.workflow import update_role_mappings_for
 from imio.pyutils.utils import safe_encode
 from operator import attrgetter
 from plone import api
+from plone.base import PloneMessageFactory as PMF
+from plone.base.utils import safe_text
 from plone.dexterity.interfaces import IDexterityContent
 from plone.formwidget.masterselect import MasterSelectField
 from plone.supermodel import model
-from Products.CMFPlone import PloneMessageFactory as PMF
-from Products.CMFPlone.utils import safe_unicode
 from z3c.form import button
 from z3c.form.browser.checkbox import CheckBoxFieldWidget
 from z3c.form.field import Fields
@@ -220,7 +220,7 @@ class TransitionBatchActionForm(BaseBatchActionForm):
                         id,
                         id,
                         translate(
-                            safe_unicode(tit, "utf8"),
+                            safe_text(tit, "utf8"),
                             domain="plone",
                             context=self.request,
                         ),
@@ -319,9 +319,9 @@ class UpdateWFRoleMappingsActionForm(BaseBatchActionForm):
 
 
 try:
-    from ftw.labels.interfaces import ILabeling
-    from ftw.labels.interfaces import ILabelJar
-    from ftw.labels.interfaces import ILabelSupport
+    from collective.labels.interfaces import ILabeling
+    from collective.labels.interfaces import ILabelJar
+    from collective.labels.interfaces import ILabelSupport
 except ImportError:
     pass
 
@@ -514,7 +514,7 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
         return len(self.labels_voc._terms) and has_interface(self.brains, ILabelSupport)
 
     def _can_change_labels(self):
-        return is_permitted(self.brains, perm="ftw.labels: Change Labels")
+        return is_permitted(self.brains, perm="collective.labels: Change Labels")
 
     def get_labeljar_context(self):
         return self.context
@@ -537,7 +537,7 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
                     SimpleVocabulary.createTerm(
                         "%s:" % label["label_id"],
                         label["label_id"],
-                        u"{} (*)".format(safe_unicode(label["title"])),
+                        u"{} (*)".format(safe_text(label["title"])),
                     )
                 )
             else:
@@ -547,7 +547,7 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
                         SimpleVocabulary.createTerm(
                             label["label_id"],
                             label["label_id"],
-                            safe_unicode(label["title"]),
+                            safe_text(label["title"]),
                         )
                     )
         return SimpleVocabulary(terms), set(p_labels), g_labels

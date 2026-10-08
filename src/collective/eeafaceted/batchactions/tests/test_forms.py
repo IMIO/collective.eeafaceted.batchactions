@@ -198,7 +198,7 @@ class TestActions(BaseTestCase):
 
     def test_action_form_available(self):
         """Check available_permission and available_for_zope_admin."""
-        api.user.create(email="test@test.org", username="new_user", password="secret")
+        api.user.create(email="test@test.org", username="new_user", password="secret123")
         form = BaseBatchActionForm(self.portal, self.request)
         login(self.portal, "new_user")
         # available_permission
@@ -515,13 +515,17 @@ class TestActions(BaseTestCase):
         )
         form = self.eea_folder.restrictedTraverse("testing-aruo-batch-action")
         form.update()
-        # Plone 4 known issue: the en msgstr of both warnings are empty, the msgids are shown
+        required = u"<p>Warning, field can not be empty.</p>"
+        replace = (
+            u'<p>When using "Replace", resulting elements will be updated only if removed values '
+            u"were selected on original element.</p>"
+        )
         self.assertEqual(
             form.description,
-            u"This action will affect 2 element(s).field_can_not_be_empty_warningaruo_action_replace_warning",
+            u"This action will affect 2 element(s)." + required + replace,
         )
         form.required = False
         self.assertEqual(
             form.description,
-            u"This action will affect 2 element(s).aruo_action_replace_warning",
+            u"This action will affect 2 element(s)." + replace,
         )

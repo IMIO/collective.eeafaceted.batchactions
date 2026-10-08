@@ -77,5 +77,5 @@ class BatchActionsViewlet(ViewletBase):
                         "weight": form.weight,
                     }
                 )
-        actions.sort(key=itemgetter("weight"))
+        actions.sort(key=itemgetter("weight", "name"))
         return actions

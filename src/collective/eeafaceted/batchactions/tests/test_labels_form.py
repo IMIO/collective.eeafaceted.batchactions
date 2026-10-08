@@ -4,10 +4,10 @@ from collective.eeafaceted.batchactions.testing import LABELS_FUNCTIONAL
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from collective.eeafaceted.batchactions.utils import active_labels
 from collective.eeafaceted.batchactions.utils import cannot_modify_field_msg
-from ftw.labels.interfaces import ILabeling
-from ftw.labels.interfaces import ILabelJar
-from ftw.labels.interfaces import ILabelRoot
-from ftw.labels.interfaces import ILabelSupport
+from collective.labels.interfaces import ILabeling
+from collective.labels.interfaces import ILabelJar
+from collective.labels.interfaces import ILabelRoot
+from collective.labels.interfaces import ILabelSupport
 from plone import api
 from plone.app.testing import login
 from plone.app.testing import TEST_USER_NAME
@@ -146,7 +146,7 @@ class TestLabels(BaseTestCase):
         self.assertSetEqual(set(act_lab[1]), set(["glob3"]))
 
     def test_LabelsBatchActionForm_get_labels_vocabulary(self):
-        """Global labels are only proposed (and changed) with "ftw.labels: Change Labels" on every element,
+        """Global labels are only proposed (and changed) with "collective.labels: Change Labels" on every element,
         personal labels are marked with (*)."""
         self.request.form["form.widgets.uids"] = u"{0},{1}".format(
             self.doc1.UID(), self.doc2.UID()

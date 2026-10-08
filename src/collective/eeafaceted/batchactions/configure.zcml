@@ -17,6 +17,7 @@
 
   <!-- Include dependencies listed in setup.py -->
   <include package="collective.eeafaceted.z3ctable" />
+  <include package="imio.actionspanel" />
   <include package="imio.helpers" />
   <include package="plone.formwidget.masterselect" />
 
@@ -29,7 +30,6 @@
   <include package=".browser" />
 
   <include file="columns.zcml" />
-  <include file="upgrades.zcml" />
   <include file="profiles.zcml" />
 
 </configure>

@@ -4,8 +4,8 @@
     i18n_domain="collective.eeafaceted.batchactions"
     >
 
-  <!-- LABELS_FIXTURE (testing.py): optional ftw.labels integration -->
-  <include package="ftw.labels" />
+  <!-- LABELS_FIXTURE (testing.py): optional collective.labels integration -->
+  <include package="collective.labels" />
 
   <browser:page
       name="labels-batch-action"

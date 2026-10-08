@@ -31,18 +31,18 @@ class TestUtils(BaseTestCase):
         doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         brains = brains_from_uids(doc_uids)
         self.assertEqual(len(filter_on_permission(brains)), 2)
-        self.assertEqual(len(filter_on_permission(brains, "Review comments")), 0)
+        self.assertEqual(len(filter_on_permission(brains, "Review portal content")), 0)
         setRoles(self.portal, TEST_USER_ID, ["Member", "Reviewer"])
-        self.assertEqual(len(filter_on_permission(brains, "Review comments")), 2)
+        self.assertEqual(len(filter_on_permission(brains, "Review portal content")), 2)
 
     def test_is_permitted(self):
         doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         brains = brains_from_uids(doc_uids)
         self.assertTrue(is_permitted(brains))
-        self.assertFalse(is_permitted(brains, "Review comments"))
+        self.assertFalse(is_permitted(brains, "Review portal content"))
 
         self.assertTrue(is_permitted(brains, perms=("Modify portal content",)))
-        self.assertFalse(is_permitted(brains, perms=("Review comments",)))
+        self.assertFalse(is_permitted(brains, perms=("Review portal content",)))
 
         self.assertTrue(
             is_permitted(

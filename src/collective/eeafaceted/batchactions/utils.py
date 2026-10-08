@@ -5,8 +5,6 @@ from AccessControl import getSecurityManager
 from collective.eeafaceted.batchactions import _
 from imio.helpers.content import uuidsToCatalogBrains
 
-import six
-
 
 cannot_modify_field_msg = _(
     u"You can't change this field on selected items. Modify your selection."
@@ -54,7 +52,7 @@ def filter_on_permission(brains, perm="Modify portal content"):
 
 def listify_uids(uids):
     """uids is received as a string separated by commas, turn it into a real list"""
-    if isinstance(uids, six.string_types):
+    if isinstance(uids, str):
         uids = uids.split(",")
     return uids
 
@@ -71,7 +69,7 @@ def brains_from_uids(uids, ordered=True):
 
 def active_labels(labeling):
     """
-    For ftw.labels only.
+    For collective.labels only.
     Returns 2 list of active labels on an adapted object : personal and global
     """
     p_act, g_act = [], []

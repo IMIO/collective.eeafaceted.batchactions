@@ -1,9 +1,6 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:five="http://namespaces.zope.org/five"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:i18n="http://namespaces.zope.org/i18n"
-    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="collective.eeafaceted.batchactions"
     >
 
@@ -12,17 +9,7 @@
       title="collective.eeafaceted.batchactions"
       description="Extension profile for collective.eeafaceted.batchactions."
       provides="Products.GenericSetup.interfaces.EXTENSION"
-      directory="profiles/plone4"
-      zcml:condition="not-have plone-5"
-      />
-
-  <genericsetup:registerProfile
-      name="default"
-      title="collective.eeafaceted.batchactions"
-      description="Extension profile for collective.eeafaceted.batchactions."
-      provides="Products.GenericSetup.interfaces.EXTENSION"
-      directory="profiles/plone6"
-      zcml:condition="have plone-6"
+      directory="profiles/default"
       />
 
   <genericsetup:registerProfile
@@ -31,7 +18,11 @@
       description="collective.eeafaceted.batchactions"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       directory="profiles/uninstall"
-      zcml:condition="have plone-6"
+      />
+
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="collective.eeafaceted.batchactions"
       />
 
 </configure>
