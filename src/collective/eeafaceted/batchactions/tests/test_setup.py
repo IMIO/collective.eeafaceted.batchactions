@@ -75,13 +75,13 @@ class TestSetup(unittest.TestCase):
         """The fr translations are registered (locales)."""
         self.assertEqual(
             translate(
-                u"transition-batch-action-but",
+                "transition-batch-action-but",
                 domain="collective.eeafaceted.batchactions",
                 target_language="fr",
             ),
-            u"Changer l'\xe9tat",
+            "Changer l'\xe9tat",
         )
         self.assertEqual(
-            translate(_(u"Batch state change"), target_language="fr"),
-            u"Changer l'\xe9tat par lot",
+            translate(_("Batch state change"), target_language="fr"),
+            "Changer l'\xe9tat par lot",
         )

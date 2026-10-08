@@ -34,7 +34,7 @@ class TestContactForm(BaseTestCase):
             RelationValue(self.intids.getId(org3)),
         ]
         # set 'uids' in form
-        typ_uids = u"{0},{1}".format(self.typ1.UID(), self.typ2.UID())
+        typ_uids = "{0},{1}".format(self.typ1.UID(), self.typ2.UID())
         self.request.form["form.widgets.uids"] = typ_uids
 
     def to_objs(self, rels):
@@ -117,7 +117,7 @@ class TestContactForm(BaseTestCase):
         form = self.eea_folder.restrictedTraverse("contact-batch-action")
         form.update()
         self.assertTrue(form.do_apply)
-        self.assertEqual(form.widgets["action_choice"].field.description, u"")
+        self.assertEqual(form.widgets["action_choice"].field.description, "")
         self.assertEqual(
             sorted(form.widgets.keys()),
             ["action_choice", "added_values", "referer", "removed_values", "uids"],

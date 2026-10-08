@@ -39,17 +39,17 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 class IBaseBatchActionsFormSchema(model.Schema):
 
-    uids = schema.TextLine(title=u"uids", description=u"")
+    uids = schema.TextLine(title="uids", description="")
 
     referer = schema.TextLine(
-        title=u"referer",
+        title="referer",
         required=False,
     )
 
 
 class BaseBatchActionForm(Form):
 
-    label = _(u"Batch action form")
+    label = _("Batch action form")
     fields = Fields(IBaseBatchActionsFormSchema)
     fields["uids"].mode = HIDDEN_MODE
     fields["referer"].mode = HIDDEN_MODE
@@ -155,12 +155,10 @@ class BaseBatchActionForm(Form):
             305,
             307,
         ):
-            return u""
+            return ""
         return self.render()
 
-    @button.buttonAndHandler(
-        _(u"Apply"), name="apply", condition=lambda fi: fi.do_apply
-    )
+    @button.buttonAndHandler(_("Apply"), name="apply", condition=lambda fi: fi.do_apply)
     def handleApply(self, action):
         """ """
         if not self.do_apply:
@@ -188,14 +186,14 @@ class BaseBatchActionForm(Form):
                     self.request.RESPONSE.setStatus(204)
                 return applied or ""
 
-    @button.buttonAndHandler(PMF(u"Cancel"), name="cancel")
+    @button.buttonAndHandler(PMF("Cancel"), name="cancel")
     def handleCancel(self, action):
         self.request.response.redirect(self.request.get("HTTP_REFERER"))
 
 
 class TransitionBatchActionForm(BaseBatchActionForm):
 
-    label = _(u"Batch state change")
+    label = _("Batch state change")
     weight = 10
 
     def get_available_transitions_voc(self):
@@ -214,7 +212,7 @@ class TransitionBatchActionForm(BaseBatchActionForm):
                     [(tr["id"], tr["title"]) for tr in wtool.getTransitionsFor(obj)]
                 )
         if transitions:
-            for (id, tit) in transitions:
+            for id, tit in transitions:
                 terms.append(
                     SimpleTerm(
                         id,
@@ -235,12 +233,12 @@ class TransitionBatchActionForm(BaseBatchActionForm):
         self.fields += Fields(
             schema.Choice(
                 __name__="transition",
-                title=_(u"Transition"),
+                title=_("Transition"),
                 vocabulary=self.voc,
                 description=(
                     len(self.voc) == 0
-                    and _(u"No common or available transition. Modify your selection.")
-                    or u""
+                    and _("No common or available transition. Modify your selection.")
+                    or ""
                 ),
                 required=len(self.voc) > 0,
             )
@@ -248,8 +246,8 @@ class TransitionBatchActionForm(BaseBatchActionForm):
         self.fields += Fields(
             schema.Text(
                 __name__="comment",
-                title=_(u"Comment"),
-                description=_(u"Optional comment to display in history"),
+                title=_("Comment"),
+                description=_("Optional comment to display in history"),
                 required=False,
             )
         )
@@ -266,7 +264,7 @@ class TransitionBatchActionForm(BaseBatchActionForm):
 
 class DeleteBatchActionForm(BaseBatchActionForm):
 
-    label = _(u"Delete elements")
+    label = _("Delete elements")
     weight = 5
     button_with_icon = True
     apply_button_title = _("delete-batch-action-but")
@@ -306,7 +304,7 @@ class DeleteBatchActionForm(BaseBatchActionForm):
 
 class UpdateWFRoleMappingsActionForm(BaseBatchActionForm):
 
-    label = _(u"Update WF role mappings")
+    label = _("Update WF role mappings")
     available_for_zope_admin = True
 
     def _apply(self, **data):
@@ -334,9 +332,9 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
     # the name of the attribute that will be modified on the object
     modified_attr_name = None
     # translated description of the "added_values" field
-    added_values_description = _(u"Select the values to add.")
+    added_values_description = _("Select the values to add.")
     # translated description of the "removed_values" field
-    removed_values_description = _(u"Select the values to remove.")
+    removed_values_description = _("Select the values to remove.")
     # indexes to reindex when values changed
     indexes = []
     # call the "modified" event on object at the end if it was modified?
@@ -384,16 +382,16 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
         self.fields += Fields(
             MasterSelectField(
                 __name__="action_choice",
-                title=_(u"Batch action choice"),
-                description=(not self.do_apply and cannot_modify_field_msg or u""),
+                title=_("Batch action choice"),
+                description=(not self.do_apply and cannot_modify_field_msg or ""),
                 vocabulary=SimpleVocabulary(
                     [
-                        SimpleTerm(value=u"add", title=_(u"Add items")),
-                        SimpleTerm(value=u"remove", title=_(u"Remove items")),
+                        SimpleTerm(value="add", title=_("Add items")),
+                        SimpleTerm(value="remove", title=_("Remove items")),
                         SimpleTerm(
-                            value=u"replace", title=_(u"Replace some items by others")
+                            value="replace", title=_("Replace some items by others")
                         ),
-                        SimpleTerm(value=u"overwrite", title=_(u"Overwrite")),
+                        SimpleTerm(value="overwrite", title=_("Overwrite")),
                     ]
                 ),
                 slave_fields=(
@@ -401,26 +399,26 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
                         "name": "removed_values",
                         "slaveID": "#form-widgets-removed_values",
                         "action": "hide",
-                        "hide_values": (u"add", u"overwrite"),
+                        "hide_values": ("add", "overwrite"),
                         "siblings": True,
                     },
                     {
                         "name": "added_values",
                         "slaveID": "#form-widgets-added_values",
                         "action": "hide",
-                        "hide_values": (u"remove",),
+                        "hide_values": ("remove",),
                         "siblings": True,
                     },
                 ),
                 required=self.do_apply,
-                default=u"add",
+                default="add",
             )
         )
         if self.do_apply:
             self.fields += Fields(
                 schema.List(
                     __name__="removed_values",
-                    title=_(u"Removed values"),
+                    title=_("Removed values"),
                     description=self.removed_values_description,
                     required=False,
                     value_type=schema.Choice(vocabulary=self._remove_vocabulary()),
@@ -429,7 +427,7 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
             self.fields += Fields(
                 schema.List(
                     __name__="added_values",
-                    title=_(u"Added values"),
+                    title=_("Added values"),
                     description=self.added_values_description,
                     required=False,
                     value_type=schema.Choice(vocabulary=self._vocabulary()),
@@ -497,13 +495,13 @@ class BaseARUOBatchActionForm(BaseBatchActionForm):
 
 class LabelsBatchActionForm(BaseARUOBatchActionForm):
 
-    label = _(u"Batch labels change")
+    label = _("Batch labels change")
     weight = 20
     removed_values_description = _(
-        u"Select the values to remove. A personal label is represented by (*)."
+        "Select the values to remove. A personal label is represented by (*)."
     )
     added_values_description = _(
-        u"Select the values to add. A personal label is represented by (*)."
+        "Select the values to add. A personal label is represented by (*)."
     )
 
     def _vocabulary(self):
@@ -537,7 +535,7 @@ class LabelsBatchActionForm(BaseARUOBatchActionForm):
                     SimpleVocabulary.createTerm(
                         "%s:" % label["label_id"],
                         label["label_id"],
-                        u"{} (*)".format(safe_text(label["title"])),
+                        "{} (*)".format(safe_text(label["title"])),
                     )
                 )
             else:
@@ -619,7 +617,7 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
     For now, only ContactList.
     """
 
-    label = _(u"Batch contact field change")
+    label = _("Batch contact field change")
     weight = 30
     attribute = ""
     field_value_type = None
@@ -627,7 +625,8 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
 
     def available(self):
         """Will the action be available for current context?
-        We have to handle an autocomplete search made as anonymous because update method is called on search."""
+        We have to handle an autocomplete search made as anonymous because update method is called on search.
+        """
         res = True
         if self.request["ACTUAL_URL"].endswith("@@autocomplete-search"):
             return True
@@ -644,29 +643,29 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
         self.fields += Fields(
             schema.Choice(
                 __name__="action_choice",
-                title=_(u"Batch action choice"),
-                description=(not self.do_apply and cannot_modify_field_msg or u""),
+                title=_("Batch action choice"),
+                description=(not self.do_apply and cannot_modify_field_msg or ""),
                 vocabulary=SimpleVocabulary(
                     [
-                        SimpleTerm(value=u"add", title=_(u"Add items")),
-                        SimpleTerm(value=u"remove", title=_(u"Remove items")),
+                        SimpleTerm(value="add", title=_("Add items")),
+                        SimpleTerm(value="remove", title=_("Remove items")),
                         SimpleTerm(
-                            value=u"replace", title=_(u"Replace some items by others")
+                            value="replace", title=_("Replace some items by others")
                         ),
-                        SimpleTerm(value=u"overwrite", title=_(u"Overwrite")),
+                        SimpleTerm(value="overwrite", title=_("Overwrite")),
                     ]
                 ),
                 required=self.do_apply,
-                default=u"add",
+                default="add",
             )
         )
         if self.do_apply:
             self.fields += Fields(
                 ContactList(
                     __name__="removed_values",
-                    title=_(u"Removed values"),
+                    title=_("Removed values"),
                     description=_(
-                        u"Search and select the values to remove, if necessary."
+                        "Search and select the values to remove, if necessary."
                     ),
                     required=False,
                     addlink=False,
@@ -676,8 +675,8 @@ class ContactBaseBatchActionForm(BaseBatchActionForm):
             self.fields += Fields(
                 ContactList(
                     __name__="added_values",
-                    title=_(u"Added values"),
-                    description=_(u"Search and select the values to add."),
+                    title=_("Added values"),
+                    description=_("Search and select the values to add."),
                     required=False,
                     addlink=False,
                     value_type=self.field_value_type,

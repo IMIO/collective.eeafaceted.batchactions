@@ -41,7 +41,7 @@ class TestLabels(BaseTestCase):
 
     def test_LabelsBatchActionForm_apply(self):
         # set 'uids' in form
-        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        doc_uids = "{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         self.request.form["form.widgets.uids"] = doc_uids
         form = self.eea_folder.restrictedTraverse("labels-batch-action")
         form.update()
@@ -148,7 +148,7 @@ class TestLabels(BaseTestCase):
     def test_LabelsBatchActionForm_get_labels_vocabulary(self):
         """Global labels are only proposed (and changed) with "collective.labels: Change Labels" on every element,
         personal labels are marked with (*)."""
-        self.request.form["form.widgets.uids"] = u"{0},{1}".format(
+        self.request.form["form.widgets.uids"] = "{0},{1}".format(
             self.doc1.UID(), self.doc2.UID()
         )
         form = self.eea_folder.restrictedTraverse("labels-batch-action")
@@ -160,12 +160,12 @@ class TestLabels(BaseTestCase):
                 for term in form.widgets["added_values"].terms.terms
             ),
             [
-                ("glob1", "glob1", u"Glob1"),
-                ("glob2", "glob2", u"Glob2"),
-                ("glob3", "glob3", u"Glob3"),
-                ("pers1:", "pers1", u"Pers1 (*)"),
-                ("pers2:", "pers2", u"Pers2 (*)"),
-                ("pers3:", "pers3", u"Pers3 (*)"),
+                ("glob1", "glob1", "Glob1"),
+                ("glob2", "glob2", "Glob2"),
+                ("glob3", "glob3", "Glob3"),
+                ("pers1:", "pers1", "Pers1 (*)"),
+                ("pers2:", "pers2", "Pers2 (*)"),
+                ("pers3:", "pers3", "Pers3 (*)"),
             ],
         )
         self.assertEqual(form.p_labels, set(["pers1", "pers2", "pers3"]))
@@ -200,7 +200,7 @@ class TestLabels(BaseTestCase):
     def test_LabelsBatchActionForm_may_apply(self):
         """Can not be applied when an element does not support labels or no label is defined."""
         doc3 = api.content.create(self.portal, "Document", "doc3")
-        self.request.form["form.widgets.uids"] = u"{0},{1}".format(
+        self.request.form["form.widgets.uids"] = "{0},{1}".format(
             self.doc1.UID(), doc3.UID()
         )
         form = self.eea_folder.restrictedTraverse("labels-batch-action")
@@ -212,7 +212,7 @@ class TestLabels(BaseTestCase):
         self.assertNotIn("added_values", form.widgets)
         self.assertNotIn("apply", form.actions)
         # labelable elements
-        self.request.form["form.widgets.uids"] = u"{0},{1}".format(
+        self.request.form["form.widgets.uids"] = "{0},{1}".format(
             self.doc1.UID(), self.doc2.UID()
         )
         form = self.eea_folder.restrictedTraverse("labels-batch-action")

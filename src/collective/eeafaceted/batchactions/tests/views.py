@@ -8,7 +8,7 @@ from imio.helpers.content import get_vocab
 class TestingBatchActionForm(BaseBatchActionForm):
 
     buttons = BaseBatchActionForm.buttons.copy()
-    label = u"Testing form"
+    label = "Testing form"
     button_with_icon = True
     overlay = False
 

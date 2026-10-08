@@ -28,7 +28,7 @@ class TestUtils(BaseTestCase):
         setRoles(self.portal, TEST_USER_ID, ["Member"])
 
     def test_filter_on_permission(self):
-        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        doc_uids = "{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         brains = brains_from_uids(doc_uids)
         self.assertEqual(len(filter_on_permission(brains)), 2)
         self.assertEqual(len(filter_on_permission(brains, "Review portal content")), 0)
@@ -36,7 +36,7 @@ class TestUtils(BaseTestCase):
         self.assertEqual(len(filter_on_permission(brains, "Review portal content")), 2)
 
     def test_is_permitted(self):
-        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        doc_uids = "{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         brains = brains_from_uids(doc_uids)
         self.assertTrue(is_permitted(brains))
         self.assertFalse(is_permitted(brains, "Review portal content"))
@@ -63,7 +63,7 @@ class TestUtils(BaseTestCase):
         )
 
     def test_has_interface(self):
-        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        doc_uids = "{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         brains = brains_from_uids(doc_uids)
         self.assertFalse(has_interface(brains, IBatchActionsMarker))
         alsoProvides(self.doc1, IBatchActionsMarker)

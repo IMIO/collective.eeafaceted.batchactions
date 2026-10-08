@@ -41,7 +41,7 @@ class TestViewlets(BaseTestCase):
     def _get_viewlet(self, context):
         """ """
         viewlet_manager = self._get_viewlet_manager(context)
-        viewlet = viewlet_manager.get(u"collective.eeafaceted.batchactions")
+        viewlet = viewlet_manager.get("collective.eeafaceted.batchactions")
         return viewlet
 
     def test_viewlet_available(self):
@@ -63,7 +63,7 @@ class TestViewlets(BaseTestCase):
         self.assertIsNone(viewlet)
         alsoProvides(folder, IBatchActionsMarker)
         viewlet = self._get_viewlet(folder)
-        self.assertEqual(viewlet.__name__, u"collective.eeafaceted.batchactions")
+        self.assertEqual(viewlet.__name__, "collective.eeafaceted.batchactions")
 
     def test_get_marker_interfaces(self):
         """_get_marker_interfaces will return the marker interfaces views
@@ -72,7 +72,7 @@ class TestViewlets(BaseTestCase):
         viewlet = self._get_viewlet(self.eea_folder)
         # the u'collective.eeafaceted.batchactions' viewlet exists in the viewlet manager
         # as IBatchActionsMarker is implemented by self.eea_folder
-        self.assertEqual(viewlet.__name__, u"collective.eeafaceted.batchactions")
+        self.assertEqual(viewlet.__name__, "collective.eeafaceted.batchactions")
         self.assertEqual(viewlet._get_marker_interfaces(), [IBatchActionsMarker])
 
         # if an interface suclassing IBatchActionsMarker is found, it is also returned
@@ -84,7 +84,8 @@ class TestViewlets(BaseTestCase):
 
     def test_get_batch_actions(self):
         """This will return every found action names.
-        We test here classical functionnality with actions registered for IBatchActionsMarker."""
+        We test here classical functionnality with actions registered for IBatchActionsMarker.
+        """
         viewlet = self._get_viewlet(self.eea_folder)
         # testing-other-section-batch-action is registered for IBatchActionsMarker too,
         # but only listed by a viewlet of its section
@@ -150,7 +151,7 @@ class TestViewlets(BaseTestCase):
         )
         # trying to execute a not available action will raise Unauthorized
         testing_form = getMultiAdapter(
-            (self.eea_folder, self.request), name=u"testing-batch-action"
+            (self.eea_folder, self.request), name="testing-batch-action"
         )
         self.assertRaises(Unauthorized, testing_form)
 

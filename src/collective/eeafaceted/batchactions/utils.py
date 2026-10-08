@@ -7,7 +7,7 @@ from imio.helpers.content import uuidsToCatalogBrains
 
 
 cannot_modify_field_msg = _(
-    u"You can't change this field on selected items. Modify your selection."
+    "You can't change this field on selected items. Modify your selection."
 )
 
 

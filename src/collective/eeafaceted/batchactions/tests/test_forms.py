@@ -39,19 +39,19 @@ class TestActions(BaseTestCase):
     def test_transition_action_apply(self):
         """Working behavior, we have several documents with same transition available."""
         # set 'uids' in form
-        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        doc_uids = "{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         self.request.form["form.widgets.uids"] = doc_uids
         form = self.eea_folder.restrictedTraverse("transition-batch-action")
         # common transitions are shown, here it is the case as docs are in same state
         form.update()
         self.assertEqual(self._tokens(form), ["submit", "publish"])
         form.request["form.widgets.transition"] = "publish"
-        form.request["form.widgets.comment"] = u"Published in batch"
+        form.request["form.widgets.comment"] = "Published in batch"
         extracted_data, errors = form.extractData()
         self.assertEqual(
             extracted_data,
             {
-                "comment": u"Published in batch",
+                "comment": "Published in batch",
                 "transition": "publish",
                 "referer": None,
                 "uids": doc_uids,
@@ -75,7 +75,7 @@ class TestActions(BaseTestCase):
             last_event = wf_tool.getHistoryOf("simple_publication_workflow", doc)[-1]
             self.assertEqual(
                 (last_event["action"], last_event["comments"]),
-                ("publish", u"Published in batch"),
+                ("publish", "Published in batch"),
             )
 
     def test_transition_action_cancel(self):
@@ -98,7 +98,7 @@ class TestActions(BaseTestCase):
         """'uids' used by the form are retrieved no matter it is defined on
         self.request or self.request.form."""
         # set 'uids' in self.request.form
-        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        doc_uids = "{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         self.request.form["form.widgets.uids"] = doc_uids
         form = self.eea_folder.restrictedTraverse("transition-batch-action")
         # common transitions are shown, here it is the case as docs are in same state
@@ -108,7 +108,7 @@ class TestActions(BaseTestCase):
         del self.request.form["form.widgets.uids"]
 
         # set 'uids' in self.request
-        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        doc_uids = "{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         self.request["uids"] = doc_uids
         form = self.eea_folder.restrictedTraverse("transition-batch-action")
         # common transitions are shown, here it is the case as docs are in same state
@@ -119,7 +119,7 @@ class TestActions(BaseTestCase):
     def test_transition_action_only_list_common_transitions(self):
         """Only work if there are common transitions for selected elements."""
         # set 'uids' in form
-        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        doc_uids = "{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         self.request.form["form.widgets.uids"] = doc_uids
         form = self.eea_folder.restrictedTraverse("transition-batch-action")
         # common transitions are shown, here it is the case as docs are in same state
@@ -134,13 +134,13 @@ class TestActions(BaseTestCase):
 
         # only one selected element
         # doc1
-        doc_uids = u"{0}".format(self.doc1.UID())
+        doc_uids = "{0}".format(self.doc1.UID())
         self.request.form["form.widgets.uids"] = doc_uids
         form = self.eea_folder.restrictedTraverse("transition-batch-action")
         form.update()
         self.assertEqual(self._tokens(form), ["retract", "reject"])
         # doc2
-        doc_uids = u"{0}".format(self.doc2.UID())
+        doc_uids = "{0}".format(self.doc2.UID())
         self.request.form["form.widgets.uids"] = doc_uids
         form = self.eea_folder.restrictedTraverse("transition-batch-action")
         form.update()
@@ -148,7 +148,7 @@ class TestActions(BaseTestCase):
 
     def test_transition_action_button_visibility(self):
         """Button 'Apply' is only shown if there are common transitions."""
-        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        doc_uids = "{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         self.request.form["form.widgets.uids"] = doc_uids
         form = self.eea_folder.restrictedTraverse("transition-batch-action")
         # button is shown as there are common transitions
@@ -170,13 +170,13 @@ class TestActions(BaseTestCase):
         self.eea_folder.manage_permission(DeleteObjects, [])
         self.assertFalse(_checkPermission(DeleteObjects, self.eea_folder))
         # set 'uids' in form, 2 deletable elements, one not deletable
-        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        doc_uids = "{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         self.request.form["form.widgets.uids"] = doc_uids
         form = self.eea_folder.restrictedTraverse("delete-batch-action")
         form.update()
         self.assertTrue("This action will affect 2 element(s)." in form.render())
         # when some not deletable a specific description is displayed
-        doc_uids = u"{0},{1},{2}".format(
+        doc_uids = "{0},{1},{2}".format(
             self.doc1.UID(), self.doc2.UID(), self.eea_folder.UID()
         )
         self.request.form["form.widgets.uids"] = doc_uids
@@ -189,7 +189,7 @@ class TestActions(BaseTestCase):
         )
 
         # apply button title is changed using the form.apply_button_title
-        self.assertEqual(form.actions["apply"].title, u"delete-batch-action-but")
+        self.assertEqual(form.actions["apply"].title, "delete-batch-action-but")
         # apply, 2 elements are deleted
         form.handleApply(form, None)
         self.assertFalse("doc1" in self.portal.objectIds())
@@ -198,7 +198,9 @@ class TestActions(BaseTestCase):
 
     def test_action_form_available(self):
         """Check available_permission and available_for_zope_admin."""
-        api.user.create(email="test@test.org", username="new_user", password="secret123")
+        api.user.create(
+            email="test@test.org", username="new_user", password="secret123"
+        )
         form = BaseBatchActionForm(self.portal, self.request)
         login(self.portal, "new_user")
         # available_permission
@@ -235,7 +237,7 @@ class TestActions(BaseTestCase):
 
         # action only available to Zope admin
         # set 'uids' in form
-        doc_uids = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        doc_uids = "{0},{1}".format(self.doc1.UID(), self.doc2.UID())
         self.request.form["form.widgets.uids"] = doc_uids
         form = self.eea_folder.restrictedTraverse(
             "update-wf-role-mappings-batch-action"
@@ -362,39 +364,39 @@ class TestActions(BaseTestCase):
         # batch_actions.js POSTs uids and referer (a GET request is ignored by the widgets)
         self.request.environ["REQUEST_METHOD"] = "POST"
         self.request.form["uids"] = self.doc1.UID()
-        self.request.form[
-            "referer"
-        ] = "http://nohost/plone/eea_folder?b_start=20@sort_on=sortable_title!c3=20"
+        self.request.form["referer"] = (
+            "http://nohost/plone/eea_folder?b_start=20@sort_on=sortable_title!c3=20"
+        )
         form = getMultiAdapter(
             (self.eea_folder, self.request), name="transition-batch-action"
         )
         form.update()
         self.assertEqual(
             self.request.form["form.widgets.referer"],
-            u"http://nohost/plone/eea_folder?b_start=20&sort_on=sortable_title#c3=20",
+            "http://nohost/plone/eea_folder?b_start=20&sort_on=sortable_title#c3=20",
         )
         self.assertEqual(self.request.form["form.widgets.uids"], self.doc1.UID())
         # hidden in the rendered form, posted with the apply button
         self.assertEqual(
             form.widgets["referer"].value,
-            u"http://nohost/plone/eea_folder?b_start=20&sort_on=sortable_title#c3=20",
+            "http://nohost/plone/eea_folder?b_start=20&sort_on=sortable_title#c3=20",
         )
         self.assertEqual(form.widgets["uids"].value, self.doc1.UID())
         self.assertEqual(list(form.actions.keys()), ["apply", "cancel"])
         # submitted form: the referer widget value is kept as is
         # (as processInputs did with the first form, the form values are mirrored in request.other)
-        self.request.form[
-            "form.widgets.referer"
-        ] = u"http://nohost/plone/eea_folder?a=1@b=2"
+        self.request.form["form.widgets.referer"] = (
+            "http://nohost/plone/eea_folder?a=1@b=2"
+        )
         self.request.set(
-            "form.widgets.referer", u"http://nohost/plone/eea_folder?a=1@b=2"
+            "form.widgets.referer", "http://nohost/plone/eea_folder?a=1@b=2"
         )
         form = getMultiAdapter(
             (self.eea_folder, self.request), name="transition-batch-action"
         )
         form.update()
         self.assertEqual(
-            form.widgets["referer"].value, u"http://nohost/plone/eea_folder?a=1@b=2"
+            form.widgets["referer"].value, "http://nohost/plone/eea_folder?a=1@b=2"
         )
 
     def test_handleApply(self):
@@ -403,9 +405,9 @@ class TestActions(BaseTestCase):
         # BaseTestCase.setUp left the 302 of the faceted enable()
         self.request.response.setStatus(200)
         self.request.form["form.widgets.uids"] = self.doc1.UID()
-        self.request.form[
-            "referer"
-        ] = "http://nohost/plone/eea_folder?b_start=20@sort_on=sortable_title!c3=20"
+        self.request.form["referer"] = (
+            "http://nohost/plone/eea_folder?b_start=20@sort_on=sortable_title!c3=20"
+        )
         self.request.form["form.widgets.transition"] = "publish"
         form = getMultiAdapter(
             (self.eea_folder, self.request), name="transition-batch-action"
@@ -463,7 +465,7 @@ class TestActions(BaseTestCase):
         form = getMultiAdapter(
             (self.eea_folder, self.request), name="transition-batch-action"
         )
-        self.assertEqual(form(), u"")
+        self.assertEqual(form(), "")
         self.assertEqual(self.request.response.getStatus(), 302)
         self.assertEqual(api.content.get_state(self.doc1), "published")
         # in the overlay
@@ -473,7 +475,7 @@ class TestActions(BaseTestCase):
         form = getMultiAdapter(
             (self.eea_folder, self.request), name="transition-batch-action"
         )
-        self.assertEqual(form(), u"")
+        self.assertEqual(form(), "")
         self.assertEqual(self.request.response.getStatus(), 204)
         self.assertEqual(api.content.get_state(self.doc1), "private")
 
@@ -488,7 +490,7 @@ class TestActions(BaseTestCase):
         form = self.eea_folder.restrictedTraverse("testing-aruo-batch-action")
         form.update()
         self.assertTrue(form.do_apply)
-        self.assertEqual(form.widgets["action_choice"].field.description, u"")
+        self.assertEqual(form.widgets["action_choice"].field.description, "")
         self.assertEqual(
             sorted(form.widgets.keys()),
             ["action_choice", "added_values", "referer", "removed_values", "uids"],
@@ -510,22 +512,22 @@ class TestActions(BaseTestCase):
 
     def test_aruo_action_description(self):
         """Number of elements, then the "required" and "replace" warnings."""
-        self.request.form["form.widgets.uids"] = u"{0},{1}".format(
+        self.request.form["form.widgets.uids"] = "{0},{1}".format(
             self.doc1.UID(), self.doc2.UID()
         )
         form = self.eea_folder.restrictedTraverse("testing-aruo-batch-action")
         form.update()
-        required = u"<p>Warning, field can not be empty.</p>"
+        required = "<p>Warning, field can not be empty.</p>"
         replace = (
-            u'<p>When using "Replace", resulting elements will be updated only if removed values '
-            u"were selected on original element.</p>"
+            '<p>When using "Replace", resulting elements will be updated only if removed values '
+            "were selected on original element.</p>"
         )
         self.assertEqual(
             form.description,
-            u"This action will affect 2 element(s)." + required + replace,
+            "This action will affect 2 element(s)." + required + replace,
         )
         form.required = False
         self.assertEqual(
             form.description,
-            u"This action will affect 2 element(s)." + replace,
+            "This action will affect 2 element(s)." + replace,
         )
