@@ -52,7 +52,7 @@ def filter_on_permission(brains, perm='Modify portal content'):
 
 def listify_uids(uids):
     """ uids is received as a string separated by commas, turn it into a real list """
-    if (six.PY2 and isinstance(uids, basestring)) or (six.PY3 and isinstance(uids, str)):  # noqa: F821
+    if isinstance(uids, six.string_types):
         uids = uids.split(',')
     return uids
 
