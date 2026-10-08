@@ -68,6 +68,11 @@ collective_batch_actions.ajaxApply = function (modal) {
     // input buttons, Plone 6 forms have button elements
     var form = $('.modal-body form', modal.$modal);
     $('#form-buttons-apply', form).on('click', function () {
+        // the footer copy clicks this button (even disabled): no second post while posting
+        if (this.disabled) {
+            return;
+        }
+        var button = $(this).prop('disabled', true);
         var data = form.serializeArray();
         data.push({name: this.name, value: this.value}, {name: 'ajax_load', value: true});
         $.ajax({
@@ -80,6 +85,11 @@ collective_batch_actions.ajaxApply = function (modal) {
         }).done(function (data, textStatus, request) {
             modal.hide();
             submitFormHelperOnsuccessDefault(data, textStatus, request);
+        }).fail(function () {
+            // as submitFormHelper: reload the page
+            window.location.href = canonical_url();
+        }).always(function () {
+            button.prop('disabled', false);
         });
     });
 };

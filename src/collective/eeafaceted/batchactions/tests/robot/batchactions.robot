@@ -49,6 +49,8 @@ Open the folder
 The table is loaded
     Wait until page contains element  ${TABLE}
     Wait until element is not visible  css=.faceted-lock-overlay
+    # eea fades the results in after the query: hidden text is not seen
+    Wait until element is visible  ${TABLE}
 
 Mark the page
     [Documentation]  A flag in the window, lost when the page is reloaded
@@ -128,9 +130,15 @@ The state is
     ...  ${state}
 
 The table lists
+    [Documentation]  After a faceted refresh: retried until the new rows are shown (eea fades them in)
+    [Arguments]  @{titles}
+    Wait until keyword succeeds  10s  0.5s  The table shows  @{titles}
+
+The table shows
+    [Documentation]  Exactly the rows of @{titles}, visible
     [Arguments]  @{titles}
     ${count}=  Get length  ${titles}
-    Wait until keyword succeeds  10s  0.5s  The table has rows  ${count}
+    The table has rows  ${count}
     FOR  ${title}  IN  @{titles}
         Element should contain  ${TABLE}  ${title}
     END
