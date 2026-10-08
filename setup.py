@@ -15,7 +15,7 @@ long_description = read("README.rst") + "\n\n" + read("CHANGES.rst")
 
 setup(
     name="collective.eeafaceted.batchactions",
-    version="1.17.1.dev0",
+    version="2.0.0.dev0",
     description="This package provides batch actions for eea.facetednavigation dashboard",
     long_description=long_description,
     # Get more from http://pypi.python.org/pypi?%3Aaction=list_classifiers
