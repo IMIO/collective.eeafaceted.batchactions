@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 
+from collective.eeafaceted.batchactions.testing import LABELS_FUNCTIONAL
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from collective.eeafaceted.batchactions.utils import active_labels
+from collective.eeafaceted.batchactions.utils import cannot_modify_field_msg
 from ftw.labels.interfaces import ILabeling
 from ftw.labels.interfaces import ILabelJar
 from ftw.labels.interfaces import ILabelRoot
@@ -13,6 +15,8 @@ from zope.interface import alsoProvides
 
 
 class TestLabels(BaseTestCase):
+
+    layer = LABELS_FUNCTIONAL
 
     def setUp(self):
         """ """
@@ -43,8 +47,8 @@ class TestLabels(BaseTestCase):
         form.update()
         # labels are found
         self.assertListEqual(
-            form.widgets['added_values'].terms.terms.by_value.keys(),
-            ['pers3:', 'pers2:', 'pers1:', 'glob3', 'glob2', 'glob1'])
+            sorted(form.widgets['added_values'].terms.terms.by_value),
+            ['glob1', 'glob2', 'glob3', 'pers1:', 'pers2:', 'pers3:'])
         # no assigned label
         self.assertTupleEqual(active_labels(self.lab_doc1), ([], []))
         self.assertTupleEqual(active_labels(self.lab_doc2), ([], []))
@@ -112,3 +116,62 @@ class TestLabels(BaseTestCase):
         act_lab = active_labels(self.lab_doc1)
         self.assertSetEqual(set(act_lab[0]), set(['pers1']))
         self.assertSetEqual(set(act_lab[1]), set(['glob3']))
+
+    def test_LabelsBatchActionForm_get_labels_vocabulary(self):
+        """Global labels are only proposed (and changed) with "ftw.labels: Change Labels" on every element,
+           personal labels are marked with (*)."""
+        self.request.form['form.widgets.uids'] = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        form = self.eea_folder.restrictedTraverse('labels-batch-action')
+        form.update()
+        self.assertTrue(form.can_change_labels)
+        self.assertEqual(
+            sorted((term.value, term.token, term.title) for term in form.widgets['added_values'].terms.terms),
+            [('glob1', 'glob1', u'Glob1'), ('glob2', 'glob2', u'Glob2'), ('glob3', 'glob3', u'Glob3'),
+             ('pers1:', 'pers1', u'Pers1 (*)'), ('pers2:', 'pers2', u'Pers2 (*)'), ('pers3:', 'pers3', u'Pers3 (*)')])
+        self.assertEqual(form.p_labels, set(['pers1', 'pers2', 'pers3']))
+        self.assertEqual(sorted(form.g_labels), ['glob1', 'glob2', 'glob3'])
+        # without the permission on one element (Reader on doc2), only personal labels
+        api.user.create(email="test@test.org", username="new_user", password="secret123")
+        api.user.grant_roles(username="new_user", obj=self.eea_folder, roles=["Reader"])
+        api.user.grant_roles(username="new_user", obj=self.doc1, roles=["Editor"])
+        api.user.grant_roles(username="new_user", obj=self.doc2, roles=["Reader"])
+        for obj in (self.eea_folder, self.doc1, self.doc2):
+            obj.reindexObjectSecurity()
+        login(self.portal, "new_user")
+        form = self.eea_folder.restrictedTraverse('labels-batch-action')
+        form.update()
+        self.assertEqual(len(form.brains), 2)
+        self.assertFalse(form.can_change_labels)
+        self.assertEqual(sorted(form.widgets['added_values'].terms.terms.by_value),
+                         ['pers1:', 'pers2:', 'pers3:'])
+        # a global label is not applied
+        form.widgets.extract = lambda *a, **kw: ({'action_choice': 'add',
+                                                  'added_values': ['pers1:', 'glob1']}, [])
+        form.handleApply(form, None)
+        self.assertTupleEqual(active_labels(self.lab_doc1), (['pers1'], []))
+        self.assertTupleEqual(active_labels(self.lab_doc2), (['pers1'], []))
+
+    def test_LabelsBatchActionForm_may_apply(self):
+        """Can not be applied when an element does not support labels or no label is defined."""
+        doc3 = api.content.create(self.portal, 'Document', 'doc3')
+        self.request.form['form.widgets.uids'] = u"{0},{1}".format(self.doc1.UID(), doc3.UID())
+        form = self.eea_folder.restrictedTraverse('labels-batch-action')
+        form.update()
+        self.assertFalse(form.do_apply)
+        self.assertEqual(form.widgets['action_choice'].field.description, cannot_modify_field_msg)
+        self.assertNotIn('added_values', form.widgets)
+        self.assertNotIn('apply', form.actions)
+        # labelable elements
+        self.request.form['form.widgets.uids'] = u"{0},{1}".format(self.doc1.UID(), self.doc2.UID())
+        form = self.eea_folder.restrictedTraverse('labels-batch-action')
+        form.update()
+        self.assertTrue(form.do_apply)
+        self.assertIn('added_values', form.widgets)
+        # no label defined
+        jar = ILabelJar(self.portal)
+        for label in jar.list():
+            jar.remove(label['label_id'])
+        form = self.eea_folder.restrictedTraverse('labels-batch-action')
+        form.update()
+        self.assertFalse(form.do_apply)
+        self.assertNotIn('added_values', form.widgets)

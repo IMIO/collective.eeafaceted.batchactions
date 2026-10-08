@@ -6,7 +6,6 @@
     >
 
   <include file="configure.zcml" />
-  <include package="ftw.labels" />
   <include package="plone.formwidget.masterselect" />
 
   <genericsetup:registerProfile
@@ -32,16 +31,17 @@
       />
 
   <browser:page
-      name="labels-batch-action"
+      name="testing-other-section-batch-action"
       for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
-      class=".browser.views.LabelsBatchActionForm"
+      class=".tests.views.TestingOtherSectionBatchActionForm"
       permission="zope2.View"
       />
 
+  <!-- robot tests only: folders marked by the "Enable faceted table" keyword -->
   <browser:page
-      name="contact-batch-action"
-      for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
-      class=".tests.views.ContactBatchActionForm"
+      name="no-overlay-transition-batch-action"
+      for=".testing.IRobotBatchActionsMarker"
+      class=".testing.NoOverlayTransitionBatchActionForm"
       permission="zope2.View"
       />
 

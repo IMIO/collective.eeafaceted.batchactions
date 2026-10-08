@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from collective.contact.widget.schema import ContactChoice
-from collective.contact.widget.source import ContactSourceBinder
 from collective.eeafaceted.batchactions.browser.views import BaseARUOBatchActionForm
 from collective.eeafaceted.batchactions.browser.views import BaseBatchActionForm
-from collective.eeafaceted.batchactions.browser.views import ContactBaseBatchActionForm
 from imio.helpers.content import get_vocab
 
 
@@ -23,11 +20,11 @@ class TestingBatchActionForm(BaseBatchActionForm):
         return False
 
 
-class ContactBatchActionForm(ContactBaseBatchActionForm):
+class TestingOtherSectionBatchActionForm(BaseBatchActionForm):
+    """Custom overlay action shown by a viewlet of another section."""
 
-    available_permission = 'Manage portal'
-    attribute = 'related_organizations'
-    field_value_type = ContactChoice(source=ContactSourceBinder(portal_type="organization"))
+    section = 'other'
+    overlay = None
 
 
 class TestingARUOBatchActionForm(BaseARUOBatchActionForm):

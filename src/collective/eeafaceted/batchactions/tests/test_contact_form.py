@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
+from collective.eeafaceted.batchactions.testing import CONTACT_FUNCTIONAL
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
+from collective.eeafaceted.batchactions.utils import cannot_modify_field_msg
 from plone import api
 from plone.app.testing import login
+from plone.app.testing import logout
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
@@ -12,6 +15,8 @@ from zope.intid.interfaces import IIntIds
 
 
 class TestContactForm(BaseTestCase):
+
+    layer = CONTACT_FUNCTIONAL
 
     def setUp(self):
         """ """
@@ -41,6 +46,12 @@ class TestContactForm(BaseTestCase):
         setRoles(self.portal, TEST_USER_ID, [])
         self.assertNotIn('Manager', api.user.get_roles())
         self.assertFalse(form.available())
+        # the autocomplete search of the contact widgets calls update(), even as anonymous
+        self.request['ACTUAL_URL'] = '{0}/contact-batch-action/++widget++form.widgets.added_values/' \
+            '@@autocomplete-search'.format(self.eea_folder.absolute_url())
+        self.assertTrue(form.available())
+        logout()
+        self.assertTrue(form.available())
 
     def test_ContactBatchActionForm_apply(self):
         form = self.eea_folder.restrictedTraverse('contact-batch-action')
@@ -79,3 +90,19 @@ class TestContactForm(BaseTestCase):
         form.handleApply(form, None)
         self.assertEqual(self.to_objs(self.typ1.related_organizations), self.orgs[1:3])
         self.assertEqual(self.to_objs(self.typ2.related_organizations), self.orgs[1:3])
+
+    def test_ContactBatchActionForm_update(self):
+        """Without "Modify portal content" on every element, the action can not be applied."""
+        form = self.eea_folder.restrictedTraverse('contact-batch-action')
+        form.update()
+        self.assertTrue(form.do_apply)
+        self.assertEqual(form.widgets['action_choice'].field.description, u'')
+        self.assertEqual(sorted(form.widgets.keys()),
+                         ['action_choice', 'added_values', 'referer', 'removed_values', 'uids'])
+        self.typ2.manage_permission('Modify portal content', [], acquire=False)
+        form = self.eea_folder.restrictedTraverse('contact-batch-action')
+        form.update()
+        self.assertFalse(form.do_apply)
+        self.assertEqual(form.widgets['action_choice'].field.description, cannot_modify_field_msg)
+        self.assertEqual(sorted(form.widgets.keys()), ['action_choice', 'referer', 'uids'])
+        self.assertNotIn('apply', form.actions)

@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 """Base module for unittesting."""
+from collective.eeafaceted.batchactions.browser.views import TransitionBatchActionForm
+from collective.eeafaceted.batchactions.interfaces import IBatchActionsMarker
+from eea.facetednavigation.layout.interfaces import IFacetedLayout
+from plone import api
+from plone.app.robotframework.remote import RemoteLibrary
+from plone.app.robotframework.remote import RemoteLibraryLayer
 from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
+from plone.app.robotframework.utils import disableCSRFProtection
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
@@ -11,10 +18,18 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.testing import z2
+from zope.dottedname.resolve import resolve
 from zope.globalrequest import setLocal
+from zope.interface import alsoProvides
 
 import collective.eeafaceted.batchactions
 import pkg_resources
+
+
+try:
+    from plone.testing.zope import WSGI_SERVER_FIXTURE as SERVER_FIXTURE
+except ImportError:  # Plone 4
+    from plone.testing.z2 import ZSERVER_FIXTURE as SERVER_FIXTURE
 
 
 try:
@@ -70,9 +85,6 @@ class CollectiveEeafacetedBatchActionsLayer(NakedPloneLayer):
         # make sure we have a default workflow
         portal.portal_workflow.setDefaultChain('simple_publication_workflow')
 
-        # install ftw.labels
-        applyProfile(portal, 'ftw.labels:default')
-
         # pac is really installed ?
         if (HAS_PA_CONTENTTYPES
                 and portal.portal_setup.getLastVersionForProfile('plone.app.contenttypes:default') != 'unknown'):
@@ -96,7 +108,74 @@ FUNCTIONAL = FunctionalTesting(
 )
 
 
+class LabelsLayer(PloneSandboxLayer):
+    """Optional ftw.labels integration (LabelsBatchActionForm)."""
+
+    defaultBases = (FIXTURE,)
+
+    def setUpZope(self, app, configurationContext):
+        self.loadZCML(package=collective.eeafaceted.batchactions, name='testing_labels.zcml')
+
+    def setUpPloneSite(self, portal):
+        applyProfile(portal, 'ftw.labels:default')
+
+
+LABELS_FIXTURE = LabelsLayer(name="LABELS_FIXTURE")
+
+LABELS_FUNCTIONAL = FunctionalTesting(bases=(LABELS_FIXTURE,), name="LABELS_FUNCTIONAL")
+
+
+class ContactLayer(PloneSandboxLayer):
+    """Optional collective.contact.core/widget integration (ContactBaseBatchActionForm)."""
+
+    defaultBases = (FIXTURE,)
+
+    def setUpZope(self, app, configurationContext):
+        self.loadZCML(package=collective.eeafaceted.batchactions, name='testing_contact.zcml')
+
+    def setUpPloneSite(self, portal):
+        setLocal("request", portal.REQUEST)
+        applyProfile(portal, 'collective.contact.core:test_data')
+
+
+CONTACT_FIXTURE = ContactLayer(name="CONTACT_FIXTURE")
+
+CONTACT_FUNCTIONAL = FunctionalTesting(bases=(CONTACT_FIXTURE,), name="CONTACT_FUNCTIONAL")
+
+
+class IRobotBatchActionsMarker(IBatchActionsMarker):
+    """Robot folder also showing the no-overlay-transition-batch-action (testing.zcml)."""
+
+
+class NoOverlayTransitionBatchActionForm(TransitionBatchActionForm):
+    """The transition action opened as a page."""
+
+    overlay = False
+
+
+class BatchActionsKeywords(RemoteLibrary):
+
+    def enable_faceted_table(self, path, marker=''):
+        """Faceted navigation with the faceted-table-items layout on the folder at path
+        (from the site), providing the marker interface (dotted name) if any."""
+        disableCSRFProtection()
+        folder = api.content.get(path=path)
+        if marker:
+            alsoProvides(folder, resolve(marker))
+        folder.unrestrictedTraverse('@@faceted_subtyper').enable()
+        IFacetedLayout(folder).update_layout('faceted-table-items')
+        folder.reindexObject()
+        # enable() redirects: answer the XML-RPC call
+        self.REQUEST.response.setStatus(200)
+
+
+REMOTE_LIBRARY_FIXTURE = RemoteLibraryLayer(
+    bases=(PLONE_FIXTURE,),
+    libraries=REMOTE_LIBRARY_BUNDLE_FIXTURE.libraryBases[1:] + (BatchActionsKeywords,),
+    name="BatchActionsRemoteLibrary:RobotRemote")
+
+
 ACCEPTANCE = FunctionalTesting(bases=(FIXTURE,
-                                      REMOTE_LIBRARY_BUNDLE_FIXTURE,
-                                      z2.ZSERVER_FIXTURE),
+                                      REMOTE_LIBRARY_FIXTURE,
+                                      SERVER_FIXTURE),
                                name="ACCEPTANCE")

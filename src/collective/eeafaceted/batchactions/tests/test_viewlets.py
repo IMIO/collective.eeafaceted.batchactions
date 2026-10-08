@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from AccessControl import Unauthorized
+from collective.eeafaceted.batchactions.browser.viewlets import BatchActionsViewlet
 from collective.eeafaceted.batchactions.interfaces import IBatchActionsMarker
 from collective.eeafaceted.batchactions.tests.base import BaseTestCase
 from collective.eeafaceted.batchactions.tests.interfaces import IBatchActionsSpecificMarker
+from operator import itemgetter
 from plone import api
 from plone.app.testing import login
 from Products.Five.browser import BrowserView
@@ -11,8 +13,23 @@ from zope.component import getMultiAdapter
 from zope.interface import alsoProvides
 from zope.viewlet.interfaces import IViewletManager
 
+import lxml.html
+
+
+class OtherSectionViewlet(BatchActionsViewlet):
+    """The viewlet of another section of the same context."""
+
+    section = 'other'
+
 
 class TestViewlets(BaseTestCase):
+
+    def _assert_actions(self, actions, expected):
+        """Actions are sorted on weight, but those of equal weight come from a set:
+           compare them sorted on name."""
+        weights = [action['weight'] for action in actions]
+        self.assertEqual(weights, sorted(weights))
+        self.assertEqual(sorted(actions, key=itemgetter('weight', 'name')), expected)
 
     def _get_viewlet_manager(self, context):
         """ """
@@ -75,12 +92,17 @@ class TestViewlets(BaseTestCase):
         """This will return every found action names.
            We test here classical functionnality with actions registered for IBatchActionsMarker."""
         viewlet = self._get_viewlet(self.eea_folder)
+        # testing-other-section-batch-action is registered for IBatchActionsMarker too,
+        # but only listed by a viewlet of its section
         self.assertEqual(
             viewlet.get_batch_actions(),
             [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
-             {'name': 'labels-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 20},
-             {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30},
              {'name': 'testing-aruo-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 100}])
+        other_viewlet = OtherSectionViewlet(self.eea_folder, self.request, None, None)
+        self.assertEqual(
+            other_viewlet.get_batch_actions(),
+            [{'name': 'testing-other-section-batch-action', 'button_with_icon': False, 'overlay': None,
+              'weight': 100}])
         # returned action names are traversable to get the form
         for action in viewlet.get_batch_actions():
             form = self.eea_folder.restrictedTraverse(action['name'])
@@ -89,7 +111,7 @@ class TestViewlets(BaseTestCase):
         login(self.portal.aq_parent, "admin")
         self.assertEqual(
             sorted([dic['name'] for dic in viewlet.get_batch_actions()]),
-            ['contact-batch-action', 'delete-batch-action', 'labels-batch-action', 'testing-aruo-batch-action',
+            ['delete-batch-action', 'testing-aruo-batch-action',
              'transition-batch-action', 'update-wf-role-mappings-batch-action'])
 
     def test_get_batch_actions_available(self):
@@ -119,17 +141,13 @@ class TestViewlets(BaseTestCase):
         self.assertEqual(
             viewlet.get_batch_actions(),
             [{'button_with_icon': False, 'name': 'transition-batch-action', 'weight': 10, 'overlay': True},
-             {'button_with_icon': False, 'name': 'labels-batch-action', 'weight': 20, 'overlay': True},
-             {'button_with_icon': False, 'name': 'contact-batch-action', 'weight': 30, 'overlay': True},
              {'button_with_icon': False, 'name': 'testing-aruo-batch-action', 'weight': 100, 'overlay': True}])
 
         # mark with IBatchActionsSpecificMarker
         alsoProvides(folder, IBatchActionsSpecificMarker)
-        self.assertEqual(
+        self._assert_actions(
             viewlet.get_batch_actions(),
             [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
-             {'name': 'labels-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 20},
-             {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30},
              {'name': 'testing-aruo-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 100},
              {'name': 'testing-batch-action', 'button_with_icon': True, 'overlay': False, 'weight': 100}])
         # returned action names are traversable to get the form
@@ -142,6 +160,33 @@ class TestViewlets(BaseTestCase):
         self.assertEqual(
             viewlet.get_batch_actions(),
             [{'name': 'transition-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 10},
-             {'name': 'labels-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 20},
-             {'name': 'contact-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 30},
              {'name': 'testing-aruo-batch-action', 'button_with_icon': False, 'overlay': True, 'weight': 100}])
+
+    def test_render(self):
+        """One form per action, its class depends on overlay (True: do-overlay, None: custom-overlay,
+           False: none), its button gets batch-action-icon-but when button_with_icon."""
+        alsoProvides(self.eea_folder, IBatchActionsSpecificMarker)
+
+        def render(viewlet):
+            viewlet.update()
+            root = lxml.html.fromstring(viewlet.render())
+            self.assertEqual(root.get('data-select_item_name'), 'select_item')
+            return sorted((form.get('id'), form.get('action'), form.get('class'),
+                           form.xpath('input/@id')[0], form.xpath('input/@class')[0],
+                           form.xpath('input/@value')[0]) for form in root.xpath('form'))
+
+        self.assertEqual(
+            render(self._get_viewlet(self.eea_folder)),
+            [('testing-aruo-batch-action', 'testing-aruo-batch-action', 'batch-action-form do-overlay',
+              'testing-aruo-batch-action-but', 'button batch-action-but', 'testing-aruo-batch-action-but'),
+             ('testing-batch-action', 'testing-batch-action', 'batch-action-form',
+              'testing-batch-action-but', 'button batch-action-but batch-action-icon-but',
+              'testing-batch-action-but'),
+             ('transition-batch-action', 'transition-batch-action', 'batch-action-form do-overlay',
+              'transition-batch-action-but', 'button batch-action-but', 'Change state')])
+        manager = self._get_viewlet_manager(self.eea_folder)
+        self.assertEqual(
+            render(OtherSectionViewlet(self.eea_folder, self.request, manager.__parent__, manager)),
+            [('testing-other-section-batch-action', 'testing-other-section-batch-action',
+              'batch-action-form custom-overlay', 'testing-other-section-batch-action-but',
+              'button batch-action-but', 'testing-other-section-batch-action-but')])
