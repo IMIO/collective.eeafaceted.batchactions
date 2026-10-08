@@ -5,6 +5,9 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Migrated to Plone 6.2 / Python 3, based on the work started by @laulaz and
+  @chris-adam on `python3`.
+  [laulaz, chris-adam]
 - Migrated to Plone 6.2 (Python 3.13), Plone 4 support dropped: single `default` profile (bundle depending on the z3ctable and imio.helpers ones), hidden `uninstall` profile, old upgrade steps removed, overlays are Plone modals (`pat-plone-modal`), form actions are absolute URLs, `ftw.labels` replaced by `collective.labels`, batch actions of equal weight sorted on name, English text of the add/remove form warnings (their msgstr were empty).
   [chris-adam]
 
