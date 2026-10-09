@@ -1,9 +1,8 @@
-.. image:: https://coveralls.io/repos/github/IMIO/collective.eeafaceted.batchactions/badge.svg
-    :target: https://coveralls.io/github/IMIO/collective.eeafaceted.batchactions
-
 .. image:: https://github.com/IMIO/collective.eeafaceted.batchactions/actions/workflows/main.yml/badge.svg?branch=master
     :target: https://github.com/IMIO/collective.eeafaceted.batchactions/actions/workflows/main.yml
 
+.. image:: https://coveralls.io/repos/github/IMIO/collective.eeafaceted.batchactions/badge.svg
+    :target: https://coveralls.io/github/IMIO/collective.eeafaceted.batchactions
 
 .. image:: http://img.shields.io/pypi/v/collective.eeafaceted.batchactions.svg
    :alt: PyPI badge
