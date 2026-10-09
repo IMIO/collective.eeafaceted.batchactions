@@ -1,8 +1,9 @@
+.. image:: https://coveralls.io/repos/github/IMIO/collective.eeafaceted.batchactions/badge.svg
+    :target: https://coveralls.io/github/IMIO/collective.eeafaceted.batchactions
+
 .. image:: https://github.com/IMIO/collective.eeafaceted.batchactions/actions/workflows/main.yml/badge.svg?branch=master
     :target: https://github.com/IMIO/collective.eeafaceted.batchactions/actions/workflows/main.yml
 
-.. image:: https://coveralls.io/repos/IMIO/collective.eeafaceted.batchactions/badge.png?branch=master
-  :target: https://coveralls.io/r/IMIO/collective.eeafaceted.batchactions?branch=master
 
 .. image:: http://img.shields.io/pypi/v/collective.eeafaceted.batchactions.svg
    :alt: PyPI badge
@@ -16,7 +17,7 @@ This package gives the possibility to define batch actions on elements displayed
 
 * `Source code @ GitHub <https://github.com/IMIO/collective.eeafaceted.batchactions>`_
 * `Releases @ PyPI <http://pypi.python.org/pypi/collective.eeafaceted.batchactions>`_
-* `Continuous Integration @ Travis-CI <http://travis-ci.org/IMIO/collective.eeafaceted.batchactions>`_
+* `Continuous Integration @ GitHub Actions <https://github.com/IMIO/collective.eeafaceted.batchactions/actions/workflows/main.yml>`_
 
 How it works
 ============
