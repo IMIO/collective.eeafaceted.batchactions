@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.eeafaceted.batchactions"
+    >
+
+  <!-- CONTACT_FIXTURE (testing.py): optional collective.contact.core/widget integration -->
+  <include package="collective.contact.core" />
+
+  <browser:page
+      name="contact-batch-action"
+      for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
+      class=".tests.contact_views.ContactBatchActionForm"
+      permission="zope2.View"
+      />
+
+</configure>

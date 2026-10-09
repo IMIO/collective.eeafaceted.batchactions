@@ -1,0 +1,28 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.eeafaceted.batchactions"
+    >
+
+  <genericsetup:registerProfile
+      name="default"
+      title="collective.eeafaceted.batchactions"
+      description="Extension profile for collective.eeafaceted.batchactions."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/default"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="collective.eeafaceted.batchactions uninstall"
+      description="collective.eeafaceted.batchactions"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/uninstall"
+      />
+
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="collective.eeafaceted.batchactions"
+      />
+
+</configure>

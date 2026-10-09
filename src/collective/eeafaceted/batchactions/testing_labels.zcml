@@ -1,0 +1,17 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.eeafaceted.batchactions"
+    >
+
+  <!-- LABELS_FIXTURE (testing.py): optional collective.labels integration -->
+  <include package="collective.labels" />
+
+  <browser:page
+      name="labels-batch-action"
+      for="collective.eeafaceted.batchactions.interfaces.IBatchActionsMarker"
+      class=".browser.views.LabelsBatchActionForm"
+      permission="zope2.View"
+      />
+
+</configure>

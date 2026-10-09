@@ -4,7 +4,7 @@
      tal:condition="view/available">
   <form method="POST"
         tal:repeat="batch_action view/get_batch_actions"
-        tal:attributes="action batch_action/name;
+        tal:attributes="action string:${context/absolute_url}/${batch_action/name};
                         id batch_action/name;
                         class python: 'batch-action-form' + (batch_action['overlay'] is True and ' do-overlay' or '') + (batch_action['overlay'] is None and ' custom-overlay' or '')"
         >

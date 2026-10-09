@@ -23,3 +23,8 @@ include
 lib
 .idea
 pyvenv.cfg
+CACHEDIR.TAG
+.plone-version
+.plone*
+checkversion*.html
+.python-version
