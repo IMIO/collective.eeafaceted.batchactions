@@ -50,6 +50,11 @@ collective_batch_actions.initializeOverlays = function (ba_form) {
         ba_form.submit();
         return;
     }
+    // no second request (and modal) while the first one is loading
+    if ($(ba_form).data('loading')) {
+        return;
+    }
+    $(ba_form).data('loading', true);
     $.post(ba_form.action, $(ba_form).serialize() + '&ajax_load=1', function (html) {
         var trigger = $('<a href="#" />').hide().appendTo('body');
         trigger.on('hidden.plone-modal.patterns', function () { trigger.remove(); });
@@ -59,6 +64,11 @@ collective_batch_actions.initializeOverlays = function (ba_form) {
             onRender: collective_batch_actions.ajaxApply
         });
         trigger.click();
+    }).fail(function () {
+        // fall back to the action page
+        ba_form.submit();
+    }).always(function () {
+        $(ba_form).data('loading', false);
     });
 };
 
