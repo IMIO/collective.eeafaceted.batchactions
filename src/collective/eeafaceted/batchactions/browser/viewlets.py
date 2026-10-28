@@ -10,7 +10,7 @@ from zope.interface import Interface
 
 
 class BatchActionsViewlet(ViewletBase):
-    ''' '''
+    """ """
 
     index = ViewPageTemplateFile("templates/batch_actions_viewlet.pt")
 
@@ -21,20 +21,20 @@ class BatchActionsViewlet(ViewletBase):
     @property
     def select_item_name(self):
         """The name of the chekbox column, useful when displaying
-           several table on same page."""
+        several table on same page."""
         return "select_item"
 
     @property
     def section(self):
         """The name of the section, useful to manage batch actions
-           displayed on several views with same context."""
+        displayed on several views with same context."""
         return "default"
 
     def _get_marker_interfaces(self):
         """By default views are registered for the IBatchActionsMarker
-           interface, but in case it is needed to register different views,
-           it is possible to use a more specific marker interface that inherits
-           from IBatchActionsMarker."""
+        interface, but in case it is needed to register different views,
+        it is possible to use a more specific marker interface that inherits
+        from IBatchActionsMarker."""
         ifaces = [IBatchActionsMarker]
         # check if context is marked with an interface
         # inheriting from IBatchActionsMarker
@@ -45,7 +45,7 @@ class BatchActionsViewlet(ViewletBase):
 
     def get_batch_actions(self):
         """We return every views that are registered for
-           IBatchActionsMarker and sub interfaces."""
+        IBatchActionsMarker and sub interfaces."""
         # get the marker interfaces the views are registered for
         # as the viewlet is registered for IBatchActionsMarker, we will at least
         # get this interfaces in _get_marker_interfaces
@@ -54,9 +54,11 @@ class BatchActionsViewlet(ViewletBase):
         # get every views registered for the marker_interfaces
         gsm = getGlobalSiteManager()
         registered_actions = [
-            a for a in gsm.registeredAdapters()
-            if set(marker_interfaces).intersection(set(a.required)) and
-            a.provided == Interface]
+            a
+            for a in gsm.registeredAdapters()
+            if set(marker_interfaces).intersection(set(a.required))
+            and a.provided == Interface
+        ]
         # in case a view is registered several times for different interfaces,
         # we have the same name several times and we remove duplicates.
         # When getting the view, the ZCA will do the job
@@ -67,10 +69,13 @@ class BatchActionsViewlet(ViewletBase):
         for registered_action in registered_actions:
             form = getMultiAdapter((self.context, self.request), name=registered_action)
             if form.section == section and form.available():
-                actions.append({
-                    'name': registered_action,
-                    'button_with_icon': form.button_with_icon,
-                    'overlay': form.overlay,
-                    'weight': form.weight})
-        actions.sort(key=itemgetter('weight'))
+                actions.append(
+                    {
+                        "name": registered_action,
+                        "button_with_icon": form.button_with_icon,
+                        "overlay": form.overlay,
+                        "weight": form.weight,
+                    }
+                )
+        actions.sort(key=itemgetter("weight", "name"))
         return actions
